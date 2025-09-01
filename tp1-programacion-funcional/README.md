@@ -19,7 +19,23 @@ incierticalc> 10000 * 0.7∼0.8 + 2000∼5000
 ## Estructura del Proyecto
 
 ```
-Agregar
+├── app/
+│   └── Main.hs              # Punto de entrada de la aplicación
+├── src/
+│   ├── App.hs              # Aplicación interactiva (completo)
+│   ├── Expr/
+│   │   └── Parser.hs       # Parser String → Expr (completo)
+│   ├── Generador.hs        # Generador de números aleatorios (completo)
+│   ├── Util.hs            # Funciones auxiliares (ejercicios 1-2)
+│   ├── Histograma.hs      # Tipo abstracto Histograma (ejercicios 3-6)
+│   └── Expr.hs            # Expresiones y evaluación (ejercicios 7-11)
+├── test/
+│   └── Main.hs            # Tests unitarios
+├── .hlint.yaml            # Configuración de linter hlint
+├── incierticalc.cabal     # Configuración de Cabal
+├── Makefile               # Automatización de tareas
+├── .gitignore             
+└── README.md             # Este archivo
 ```
 
 ## Ejercicios Implementados
