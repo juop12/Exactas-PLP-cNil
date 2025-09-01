@@ -40,10 +40,13 @@ Cada trabajo práctico tiene su propio directorio con:
 
 ## Autor
 
-- Juop12
+* Federico Uriel Leonardis Ayala - FedeLeonardis - [1076/22]
+* Juan Diego Figari - Yarthax23 - [84/18]
+* Julián Melmer Stiefkens - Juop12 - [TBD / 108111]
+* Fran Straface - - []
 
 ## Notas Académicas
 
-Este repositorio contiene material académico desarrollado como parte del cursado de **Paradigmas de Lenguajes de Programación** en [Universidad/Institución]. 
+Este repositorio contiene material académico desarrollado como parte de la cursada de **Paradigmas de Lenguajes de Programación** en la **Facultad de Ciencias Exactas y Naturales de la Universidad de Buenos Aires**. 
 
 **Importante**: El código desarrollado es 100% propio de los estudiantes del grupo, siguiendo las pautas académicas de la materia.
