@@ -42,8 +42,8 @@ Cada trabajo práctico tiene su propio directorio con:
 
 * Federico Uriel Leonardis Ayala - FedeLeonardis - [1076/22]
 * Juan Diego Figari - Yarthax23 - [84/18]
-* Julián Melmer Stiefkens - Juop12 - [TBD / 108111]
-* Fran Straface - - []
+* Julián Melmer Stiefkens - Juop12 - [TBD - 108111]
+* Franco Agustin Straface - Franco3333 - [1225/21]
 
 ## Notas Académicas
 
