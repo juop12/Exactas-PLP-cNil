@@ -67,14 +67,14 @@ casPorcentaje (Casillero _ _ _ p) = p
 -- | Dado un histograma, devuelve la lista de casilleros con sus límites, cantidad y porcentaje.
 casilleros :: Histograma -> [Casillero]
 -- casilleros (Histograma inicio tamañoDelIntervalo [0, 0, 0, 0, 0]) = error "COMPLETAR EJERCICIO 6"
-casilleros (Histograma valorInicial tamIntervalo [0, 0, 0, 0]) =
-  [ Casillero infinitoNegativo 0.0 0 0.0,
-    Casillero 0.0 0.5 0 0.0,
-    Casillero 0.5 1.0 0 0.0,
-    Casillero 1.0 infinitoPositivo 0 0.0
-  ]
 casilleros (Histograma valorInicial tamIntervalo [0, 0, 0]) =
   [ Casillero infinitoNegativo valorInicial 0 0.0,
     Casillero valorInicial (valorInicial + tamIntervalo) 0 0.0,
     Casillero (valorInicial + tamIntervalo) infinitoPositivo 0 0.0
+  ]
+casilleros (Histograma valorInicial tamIntervalo [0, 0, 0, 0]) =
+  [ Casillero infinitoNegativo valorInicial 0 0.0,
+    Casillero valorInicial (valorInicial + tamIntervalo) 0 0.0,
+    Casillero (valorInicial + tamIntervalo) (valorInicial + tamIntervalo + tamIntervalo) 0 0.0,
+    Casillero (valorInicial + tamIntervalo + tamIntervalo) infinitoPositivo 0 0.0
   ]

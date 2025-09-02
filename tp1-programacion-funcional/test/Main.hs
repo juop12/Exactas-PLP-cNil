@@ -62,13 +62,13 @@ testsVacio =
         ~?= [ Casillero infinitoNegativo 0 0 0,
               Casillero 0 10 0 0,
               Casillero 10 infinitoPositivo 0 0
+            ],
+      casilleros (vacio 2 (0, 10))
+        ~?= [ Casillero infinitoNegativo 0 0 0,
+              Casillero 0 5 0 0,
+              Casillero 5 10 0 0,
+              Casillero 10 infinitoPositivo 0 0
             ]
-            {-casilleros (vacio 2 (0, 10))
-              ~?= [ Casillero infinitoNegativo 0 0 0,
-                    Casillero 0 5 0 0,
-                    Casillero 5 10 0 0,
-                    Casillero 10 infinitoPositivo 0 0
-                  ]-}
             {-casilleros (vacio 3 (0, 6))
               ~?= [ Casillero infinitoNegativo 0 0 0,
                     Casillero 0 2 0 0,
