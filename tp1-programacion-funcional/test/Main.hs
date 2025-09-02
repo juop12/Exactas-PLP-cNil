@@ -120,6 +120,11 @@ testsCasilleros =
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 0 0.0,
               Casillero 2.0 infinitoPositivo 0 0.0
+            ],
+      casilleros (vacio 1 (1, 2))
+        ~?= [ Casillero infinitoNegativo 1.0 0 0.0,
+              Casillero 1.0 2.0 0 0.0,
+              Casillero 2.0 infinitoPositivo 0 0.0
             ]
             {-casilleros (vacio 2 (0, 1))
               ~?= [ Casillero infinitoNegativo 0.0 0 0.0,

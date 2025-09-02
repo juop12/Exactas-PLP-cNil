@@ -71,3 +71,8 @@ casilleros (Histograma 0 tamIntervalo [0, 0, 0]) =
     Casillero 0.0 tamIntervalo 0 0.0,
     Casillero tamIntervalo infinitoPositivo 0 0.0
   ]
+casilleros (Histograma 1 tamIntervalo [0, 0, 0]) =
+  [ Casillero infinitoNegativo 1.0 0 0.0,
+    Casillero 1.0 (1.0 + tamIntervalo) 0 0.0,
+    Casillero (1.0 + tamIntervalo) infinitoPositivo 0 0.0
+  ]
