@@ -41,8 +41,8 @@ incierticalc> 10000 * 0.7∼0.8 + 2000∼5000
 ## Ejercicios Implementados
 
 ### Módulo Util
-- [] **Ejercicio 1**: `alinearDerecha` - Alineación de strings
-- [] **Ejercicio 2**: `actualizarElem` - Actualización de elementos en listas
+- [X] **Ejercicio 1**: `alinearDerecha` - Alineación de strings
+- [X] **Ejercicio 2**: `actualizarElem` - Actualización de elementos en listas
 
 ### Módulo Histograma
 - [] **Ejercicio 3**: `vacio` - Inicialización de histograma vacío
