@@ -45,10 +45,10 @@ incierticalc> 10000 * 0.7∼0.8 + 2000∼5000
 - [X] **Ejercicio 2**: `actualizarElem` - Actualización de elementos en listas
 
 ### Módulo Histograma
-- [] **Ejercicio 3**: `vacio` - Inicialización de histograma vacío
+- [X] **Ejercicio 3**: `vacio` - Inicialización de histograma vacío
 - [] **Ejercicio 4**: `agregar` - Agregar valores al histograma
 - [] **Ejercicio 5**: `histograma` - Construcción desde lista de valores
-- [] **Ejercicio 6**: `casilleros` - Observer para el tipo abstracto
+- [X] **Ejercicio 6**: `casilleros` - Observer para el tipo abstracto
 
 ### Módulo Expr
 - [] **Ejercicio 7**: `recrExpr` y `foldExpr` - Esquemas de recursión
@@ -134,8 +134,10 @@ Cada función implementada incluye casos de prueba que verifican:
 ## Estado del Proyecto
 
 - [] Ejercicios 1-11 implementados
+    - [] Refactorizar Ejercicio 6 
 - [] Demostración formal completada  
 - [] Tests unitarios agregados
 - [] Aplicación funcional
+
 
 **Fecha de entrega**: 16 de septiembre

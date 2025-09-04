@@ -24,6 +24,7 @@ module Histograma
 where
 
 import Util
+import Data.List (zipWith4)
 
 data Histograma = Histograma Float Float [Int]
   deriving (Show, Eq)
@@ -32,9 +33,8 @@ data Histograma = Histograma Float Float [Int]
 -- valores en el rango y 2 casilleros adicionales para los valores fuera del rango.
 -- Require que @l < u@ y @n >= 1@.
 vacio :: Int -> (Float, Float) -> Histograma
-vacio 1 (l, u) = Histograma l ((u - l) / fromIntegral 1) [0, 0, 0]
-vacio 2 (l, u) = Histograma l ((u - l) / fromIntegral 2) [0, 0, 0, 0]
-
+vacio n (l, u) = Histograma l ((u - l) / fromIntegral n ) [0 | i <- [1..(n+2)]]
+ 
 -- | Agrega un valor al histograma.
 agregar :: Float -> Histograma -> Histograma
 agregar x _ = error "COMPLETAR EJERCICIO 4"
@@ -67,7 +67,15 @@ casPorcentaje (Casillero _ _ _ p) = p
 -- | Dado un histograma, devuelve la lista de casilleros con sus límites, cantidad y porcentaje.
 casilleros :: Histograma -> [Casillero]
 -- casilleros (Histograma inicio tamañoDelIntervalo [0, 0, 0, 0, 0]) = error "COMPLETAR EJERCICIO 6"
-casilleros (Histograma valorInicial tamIntervalo [0, 0, 0]) =
+
+casilleros (Histograma inicial tam cant_per_bin) = zipWith4 Casillero f g h i 
+                                                   where 
+                                                        f = [infinitoNegativo] ++ [inicial + tam * (fromIntegral i) | i <- [0..(length cant_per_bin-2)]]
+                                                        g = [inicial + tam * (fromIntegral i) | i <- [0..(length cant_per_bin-2)]] ++ [infinitoPositivo]
+                                                        h = [0 | i <- [0..]]
+                                                        i = [0.0 | i <- [0..]]
+
+{- casilleros (Histograma valorInicial tamIntervalo [0, 0, 0]) =
   [ Casillero infinitoNegativo valorInicial 0 0.0,
     Casillero valorInicial (valorInicial + tamIntervalo) 0 0.0,
     Casillero (valorInicial + tamIntervalo) infinitoPositivo 0 0.0
@@ -78,3 +86,4 @@ casilleros (Histograma valorInicial tamIntervalo [0, 0, 0, 0]) =
     Casillero (valorInicial + tamIntervalo) (valorInicial + tamIntervalo + tamIntervalo) 0 0.0,
     Casillero (valorInicial + tamIntervalo + tamIntervalo) infinitoPositivo 0 0.0
   ]
+--}

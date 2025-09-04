@@ -68,15 +68,15 @@ testsVacio =
               Casillero 0 5 0 0,
               Casillero 5 10 0 0,
               Casillero 10 infinitoPositivo 0 0
+            ],
+      casilleros (vacio 3 (0, 6))
+        ~?= [ Casillero infinitoNegativo 0 0 0,
+              Casillero 0 2 0 0,
+              Casillero 2 4 0 0,
+              Casillero 4 6 0 0,
+              Casillero 6 infinitoPositivo 0 0
             ]
-            {-casilleros (vacio 3 (0, 6))
-              ~?= [ Casillero infinitoNegativo 0 0 0,
-                    Casillero 0 2 0 0,
-                    Casillero 2 4 0 0,
-                    Casillero 4 6 0 0,
-                    Casillero 6 infinitoPositivo 0 0
-                  ],
-            completar -}
+      --completar
     ]
 
 testsAgregar :: Test
@@ -137,21 +137,23 @@ testsCasilleros =
               Casillero 0.0 0.5 0 0.0,
               Casillero 0.5 1.0 0 0.0,
               Casillero 1.0 infinitoPositivo 0 0.0
+            ],
+      casilleros (vacio 3 (0, 6))
+        ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
+              Casillero 0.0 2.0 0 0.0,
+              Casillero 2.0 4.0 0 0.0,
+              Casillero 4.0 6.0 0 0.0,
+              Casillero 6.0 infinitoPositivo 0 0.0
             ]
-            {-casilleros (vacio 3 (0, 6))
-              ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
-                    Casillero 0.0 2.0 0 0.0,
-                    Casillero 2.0 4.0 0 0.0,
-                    Casillero 4.0 6.0 0 0.0,
-                    Casillero 6.0 infinitoPositivo 0 0.0
-                  ],
-            casilleros (agregar 2 (vacio 3 (0, 6)))
-              ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
-                    Casillero 0.0 2.0 0 0.0,
-                    Casillero 2.0 4.0 1 100.0,
-                    Casillero 4.0 6.0 0 0.0,
-                    Casillero 6.0 infinitoPositivo 0 0.0
-                  ]-}
+     {-  casilleros (agregar 2 (vacio 3 (0, 6)))
+        ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
+              Casillero 0.0 2.0 0 0.0,
+              Casillero 2.0 4.0 1 100.0,
+              Casillero 4.0 6.0 0 0.0,
+              Casillero 6.0 infinitoPositivo 0 0.0
+            ], 
+          -}
+      --completar
     ]
 
 testsRecr :: Test
