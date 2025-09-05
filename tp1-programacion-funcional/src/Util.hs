@@ -25,3 +25,14 @@ infinitoPositivo = 1 / 0
 -- | infinito negativo (Haskell no tiene literal para -infinito)
 infinitoNegativo :: Float
 infinitoNegativo = -(1 / 0)
+
+
+cantTotalDeNumeros :: [Int] -> Int
+cantTotalDeNumeros = foldl1 (+)
+
+porcentaje :: Int -> Int -> Float
+porcentaje _ 0 = 0
+porcentaje x y = (fromIntegral x/fromIntegral y) * 100
+
+calcularPorcentajes :: [Int] -> [Float]
+calcularPorcentajes xs = map (\x -> porcentaje x (cantTotalDeNumeros xs)) xs
