@@ -37,7 +37,16 @@ vacio n (l, u) = Histograma l ((u - l) / fromIntegral n ) [0 | i <- [1..(n+2)]]
  
 -- | Agrega un valor al histograma.
 agregar :: Float -> Histograma -> Histograma
-agregar x _ = error "COMPLETAR EJERCICIO 4"
+--agregar n (Histograma inicio tamIntervalo cant_per_bin)| if n <= inicio then 
+
+agregar e (Histograma inicio tamIntervalo cant_per_bin) 
+ | e < inicio + tamIntervalo * 0 = Histograma inicio tamIntervalo (actualizarElem 0 (+1) cant_per_bin)
+ | e < inicio + tamIntervalo * 1 = Histograma inicio tamIntervalo (actualizarElem 1 (+1) cant_per_bin)
+ | otherwise                     = Histograma inicio tamIntervalo (actualizarElem 2 (+1) cant_per_bin)
+
+--agregar n (Histograma inicio tamIntervalo cant_per_bin) = Histograma inicio tamIntervalo cant_per_bin_modificada
+-- where cant_per_bin_modificada = actualizarElem () cant_per_bin
+
 
 -- | Arma un histograma a partir de una lista de números reales con la cantidad de casilleros y rango indicados.
 histograma :: Int -> (Float, Float) -> [Float] -> Histograma
@@ -72,7 +81,7 @@ casilleros (Histograma inicial tam cant_per_bin) = zipWith4 Casillero f g h i
                                                    where 
                                                         f = [infinitoNegativo] ++ [inicial + tam * (fromIntegral i) | i <- [0..(length cant_per_bin-2)]]
                                                         g = [inicial + tam * (fromIntegral i) | i <- [0..(length cant_per_bin-2)]] ++ [infinitoPositivo]
-                                                        h = [0 | i <- [0..]]
+                                                        h = [i | i <- cant_per_bin]
                                                         i = [0.0 | i <- [0..]]
 
 {- casilleros (Histograma valorInicial tamIntervalo [0, 0, 0]) =

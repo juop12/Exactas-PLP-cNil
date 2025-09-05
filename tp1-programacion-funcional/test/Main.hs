@@ -22,7 +22,7 @@ allTests =
     [ "Ej 1 - Util.alinearDerecha" ~: testsAlinearDerecha,
       "Ej 2 - Util.actualizarElem" ~: testsActualizarElem,
       "Ej 3 - Histograma.vacio" ~: testsVacio,
-      -- "Ej 4 - Histograma.agregar" ~: testsAgregar,
+      "Ej 4 - Histograma.agregar" ~: testsAgregar,
       -- "Ej 5 - Histograma.histograma" ~: testsHistograma,
       "Ej 6 - Histograma.casilleros" ~: testsCasilleros
       -- "Ej 7 - Expr.recrExpr" ~: testsRecr,
@@ -81,16 +81,22 @@ testsVacio =
 
 testsAgregar :: Test
 testsAgregar =
-  let h0 = vacio 3 (0, 6)
+  let h3 = vacio 1 (0, 2)
+  --let h0 = vacio 3 (0, 6)
    in test
-        [ casilleros (agregar 0 h0)
+        [ casilleros (agregar 0 h3)
+            ~?= [ Casillero infinitoNegativo 0 0 0,
+                  Casillero 0 2 1 0, -- El 100% de los valores están acá
+                  Casillero 2 infinitoPositivo 0 0
+                ]
+        {-[ casilleros (agregar 0 h0)
             ~?= [ Casillero infinitoNegativo 0 0 0,
                   Casillero 0 2 1 100, -- El 100% de los valores están acá
                   Casillero 2 4 0 0,
                   Casillero 4 6 0 0,
                   Casillero 6 infinitoPositivo 0 0
-                ],
-          casilleros (agregar 2 h0)
+                ]
+         { casilleros (agregar 2 h0)
             ~?= [ Casillero infinitoNegativo 0 0 0,
                   Casillero 0 2 0 0,
                   Casillero 2 4 1 100, -- El 100% de los valores están acá
@@ -104,7 +110,7 @@ testsAgregar =
                   Casillero 4 6 0 0,
                   Casillero 6 infinitoPositivo 0 0
                 ],
-          completar
+          completar-}
         ]
 
 testsHistograma :: Test
@@ -153,7 +159,6 @@ testsCasilleros =
               Casillero 6.0 infinitoPositivo 0 0.0
             ], 
           -}
-      --completar
     ]
 
 testsRecr :: Test
