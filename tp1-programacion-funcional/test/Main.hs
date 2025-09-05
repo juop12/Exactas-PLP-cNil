@@ -86,7 +86,7 @@ testsAgregar =
    in test
         [ casilleros (agregar 0 h3)
             ~?= [ Casillero infinitoNegativo 0 0 0,
-                  Casillero 0 2 1 0, -- El 100% de los valores están acá
+                  Casillero 0 2 1 100, -- El 100% de los valores están acá
                   Casillero 2 infinitoPositivo 0 0
                 ]
         {-[ casilleros (agregar 0 h0)

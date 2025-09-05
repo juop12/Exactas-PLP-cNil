@@ -38,24 +38,22 @@ vacio n (l, u) = Histograma l ((u - l) / fromIntegral n ) [0 | i <- [1..(n+2)]]
 -- | Agrega un valor al histograma.
 -- Idea: modificar cant_per_bin con el elemento actualizado (+1 en el bucket que corresponda)
 -- Dificultad: encontrar el índice del bucket donde cae el float.
--- El auxiliar,  se podría simplificar?
--- FALTA agregar el cambio de porcentaje en Histograma
+-- Log: casilleros (agregar (vacio ...)) pisaba el agregado por cant_per_bin <- [0,0,0,...], arreglado.
+-- Log: idem anterior, pero no actualizaba el porcentaje, arreglado.
+--Falta hacer TESTs
 agregar :: Float -> Histograma -> Histograma
---agregar n (Histograma inicio tamIntervalo cant_per_bin)| if n <= inicio then 
-
---refactor: Agregamos auxiliar que calcula índice donde actualizar el elemento. Faltan tests y modificar porcentajes del Histograma
-
 agregar n (Histograma inicio tamIntervalo cant_per_bin) = 
   Histograma inicio tamIntervalo 
     (actualizarElem (calcularIndice n 0 (Histograma inicio tamIntervalo cant_per_bin)) (+1) cant_per_bin)
 
+-- Dado un real a buscar, donde comenzar y un histograma devuelve el índice del casillero donde cae el real
+-- Se puede simplificar? Es una estructura de recursión?
 calcularIndice :: Float -> Int -> Histograma -> Int
 calcularIndice n k (Histograma i t ls) = 
   if (n < i + t * fromIntegral k) || (k > limiteSuperior)
     then k else calcularIndice n (k+1) (Histograma i t ls)
      where limiteSuperior = length(ls) 
 
-     
 
 --agregar = foldl (\k x -> if (n < i + t * fromIntegral k) || (k > limiteSuperior) then k 
 -- else calcularIndice n (k+1) (Histograma i t ls)) 0 []
@@ -98,7 +96,7 @@ casilleros (Histograma inicial tam cant_per_bin) = zipWith4 Casillero f g h i
                                                         f = [infinitoNegativo] ++ [inicial + tam * (fromIntegral i) | i <- [0..(length cant_per_bin-2)]]
                                                         g = [inicial + tam * (fromIntegral i) | i <- [0..(length cant_per_bin-2)]] ++ [infinitoPositivo]
                                                         h = [i | i <- cant_per_bin]
-                                                        i = [0.0 | i <- [0..]]
+                                                        i = [i | i <- calcularPorcentajes cant_per_bin]
 
 {- casilleros (Histograma valorInicial tamIntervalo [0, 0, 0]) =
   [ Casillero infinitoNegativo valorInicial 0 0.0,
