@@ -36,13 +36,29 @@ vacio :: Int -> (Float, Float) -> Histograma
 vacio n (l, u) = Histograma l ((u - l) / fromIntegral n ) [0 | i <- [1..(n+2)]]
  
 -- | Agrega un valor al histograma.
+-- Idea: modificar cant_per_bin con el elemento actualizado (+1 en el bucket que corresponda)
+-- Dificultad: encontrar el índice del bucket donde cae el float.
+-- El auxiliar,  se podría simplificar?
+-- FALTA agregar el cambio de porcentaje en Histograma
 agregar :: Float -> Histograma -> Histograma
 --agregar n (Histograma inicio tamIntervalo cant_per_bin)| if n <= inicio then 
 
-agregar e (Histograma inicio tamIntervalo cant_per_bin) 
- | e < inicio + tamIntervalo * 0 = Histograma inicio tamIntervalo (actualizarElem 0 (+1) cant_per_bin)
- | e < inicio + tamIntervalo * 1 = Histograma inicio tamIntervalo (actualizarElem 1 (+1) cant_per_bin)
- | otherwise                     = Histograma inicio tamIntervalo (actualizarElem 2 (+1) cant_per_bin)
+--refactor: Agregamos auxiliar que calcula índice donde actualizar el elemento. Faltan tests y modificar porcentajes del Histograma
+
+agregar n (Histograma inicio tamIntervalo cant_per_bin) = 
+  Histograma inicio tamIntervalo 
+    (actualizarElem (calcularIndice n 0 (Histograma inicio tamIntervalo cant_per_bin)) (+1) cant_per_bin)
+
+calcularIndice :: Float -> Int -> Histograma -> Int
+calcularIndice n k (Histograma i t ls) = 
+  if (n < i + t * fromIntegral k) || (k > limiteSuperior)
+    then k else calcularIndice n (k+1) (Histograma i t ls)
+     where limiteSuperior = length(ls) 
+
+     
+
+--agregar = foldl (\k x -> if (n < i + t * fromIntegral k) || (k > limiteSuperior) then k 
+-- else calcularIndice n (k+1) (Histograma i t ls)) 0 []
 
 --agregar n (Histograma inicio tamIntervalo cant_per_bin) = Histograma inicio tamIntervalo cant_per_bin_modificada
 -- where cant_per_bin_modificada = actualizarElem () cant_per_bin
