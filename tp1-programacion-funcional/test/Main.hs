@@ -185,14 +185,21 @@ testsCasilleros =
               Casillero 2.0 4.0 1 50.0,
               Casillero 4.0 6.0 0 0.0,
               Casillero 6.0 infinitoPositivo 0 0.0
-            ]
-     {-"Agregar fuera de rango" ~: casilleros (agregar (-1) (agregar 10 (vacio 3 (0, 6))))
-        ~?= [ Casillero infinitoNegativo 0.0 1 50.0,
+            ],
+      "Agregar fuera de rango inferior" ~: casilleros (agregar (-1) (vacio 3 (0, 6)))
+        ~?= [ Casillero infinitoNegativo 0.0 1 100.0,
               Casillero 0.0 2.0 0 0.0,
               Casillero 2.0 4.0 0 0.0,
               Casillero 4.0 6.0 0 0.0,
-              Casillero 6.0 infinitoPositivo 1 50.0
-            ]-}
+              Casillero 6.0 infinitoPositivo 0 0.0
+            ],
+     "Agregar fuera de rango superior" ~: casilleros (agregar 100 (agregar 10 (vacio 3 (0, 6))))
+        ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
+              Casillero 0.0 2.0 0 0.0,
+              Casillero 2.0 4.0 0 0.0,
+              Casillero 4.0 6.0 0 0.0,
+              Casillero 6.0 infinitoPositivo 1 100.0
+            ]
     ]
 
 testsRecr :: Test
