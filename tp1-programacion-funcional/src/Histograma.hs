@@ -42,16 +42,11 @@ vacio n (l, u) = Histograma l ((u - l) / fromIntegral n ) [0 | i <- [1..(n+2)]]
 -- Log: idem anterior, pero no actualizaba el porcentaje, arreglado.
 --Falta hacer TESTs
 agregar :: Float -> Histograma -> Histograma
-agregar n (Histograma inicio tamIntervalo cant_per_bin) = Histograma inicio tamIntervalo 
-    (actualizarElem (calcularIndiceHist n listaDeLimitesSuperiores) (+1) cant_per_bin)
+agregar n (Histograma inicio tamIntervalo cant_per_bin) = Histograma inicio tamIntervalo nuevo_cant_per_bin
   where
-    listaDeLimitesSuperiores = [inicio, tamIntervalo .. (tamIntervalo * lenght cant_per_bin)]
-    -- Dado un real a buscar, donde comenzar y un histograma devuelve el índice del casillero donde cae el real
-    -- Se puede simplificar? Es una estructura de recursión?
-    --calcularIndice :: Float -> Int
-    calcularIndiceHist n = foldl (\limSuperior indice -> if n > limSuperior then indice else indice + 1) 0 
-
-
+    nuevo_cant_per_bin = (actualizarElem (calcularIndiceHist n listaDeLimitesSuperiores) (+1) cant_per_bin)
+    listaDeLimitesSuperiores = [inicio, inicio+tamIntervalo .. (inicio+tamIntervalo * (fromIntegral (length cant_per_bin)))]
+    calcularIndiceHist n = foldl (\indice limSuperior -> if n >= limSuperior then indice + 1 else indice) 0
 
 --agregar = foldl (\k x -> if (n < i + t * fromIntegral k) || (k > limiteSuperior) then k 
 -- else calcularIndice n (k+1) (Histograma i t ls)) 0 []

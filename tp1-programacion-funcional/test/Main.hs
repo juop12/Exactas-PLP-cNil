@@ -150,15 +150,14 @@ testsCasilleros =
               Casillero 2.0 4.0 0 0.0,
               Casillero 4.0 6.0 0 0.0,
               Casillero 6.0 infinitoPositivo 0 0.0
-            ]
-     {-  casilleros (agregar 2 (vacio 3 (0, 6)))
+            ],
+      casilleros (agregar 2 (vacio 3 (0, 6)))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 0 0.0,
               Casillero 2.0 4.0 1 100.0,
               Casillero 4.0 6.0 0 0.0,
               Casillero 6.0 infinitoPositivo 0 0.0
-            ], 
-          -}
+            ]
     ]
 
 testsRecr :: Test
