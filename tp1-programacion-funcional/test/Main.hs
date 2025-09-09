@@ -82,21 +82,21 @@ testsVacio =
 testsAgregar :: Test
 testsAgregar =
   let h3 = vacio 1 (0, 2)
-  --let h0 = vacio 3 (0, 6)
+      h0 = vacio 3 (0, 6)
    in test
         [ casilleros (agregar 0 h3)
             ~?= [ Casillero infinitoNegativo 0 0 0,
                   Casillero 0 2 1 100, -- El 100% de los valores están acá
                   Casillero 2 infinitoPositivo 0 0
-                ]
-        {-[ casilleros (agregar 0 h0)
+                ],
+          casilleros (agregar 0 h0)
             ~?= [ Casillero infinitoNegativo 0 0 0,
                   Casillero 0 2 1 100, -- El 100% de los valores están acá
                   Casillero 2 4 0 0,
                   Casillero 4 6 0 0,
                   Casillero 6 infinitoPositivo 0 0
-                ]
-         { casilleros (agregar 2 h0)
+                ],
+          casilleros (agregar 2 h0)
             ~?= [ Casillero infinitoNegativo 0 0 0,
                   Casillero 0 2 0 0,
                   Casillero 2 4 1 100, -- El 100% de los valores están acá
@@ -109,8 +109,7 @@ testsAgregar =
                   Casillero 2 4 0 0,
                   Casillero 4 6 0 0,
                   Casillero 6 infinitoPositivo 0 0
-                ],
-          completar-}
+                ]
         ]
 
     -- "nombre" ~: test ~?= valor,
@@ -132,40 +131,74 @@ testsHistograma =
 testsCasilleros :: Test
 testsCasilleros =
   test
-    [ casilleros (vacio 1 (0, 1))
-        ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
-              Casillero 0.0 1.0 0 0.0,
-              Casillero 1.0 infinitoPositivo 0 0.0
-            ],
-      casilleros (vacio 1 (0, 2))
+    [ "Histograma vacio casillero único tam 1" ~: casilleros (vacio 1 (0, 1))
+        ~?= [ Casillero infinitoNegativo  0.0              0   0.0,
+              Casillero 0.0               1.0              0   0.0,
+              Casillero 1.0               infinitoPositivo 0   0.0
+            ],"Histograma vacio 1_elem tam_1" ~: 
+      "Histograma vacio casillero único tam 2" ~: casilleros (vacio 1 (0, 2))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 0 0.0,
               Casillero 2.0 infinitoPositivo 0 0.0
             ],
-      casilleros (vacio 1 (1, 2))
+      "Histograma vacio casillero único inicio 1" ~: casilleros (vacio 1 (1, 2))
         ~?= [ Casillero infinitoNegativo 1.0 0 0.0,
               Casillero 1.0 2.0 0 0.0,
               Casillero 2.0 infinitoPositivo 0 0.0
             ],
-      casilleros (vacio 2 (0, 1))
+      "Histograma inicio negativo" ~: casilleros (vacio 2 ((-10), 10))
+        ~?= [ Casillero infinitoNegativo (-10.0) 0 0.0,
+              Casillero (-10.0)   0     0 0.0,
+              Casillero 0.0       10.0  0 0.0,
+              Casillero 10.0      infinitoPositivo 0 0.0
+            ],
+      "Histograma vacio _elem tam_1 inicio parametrizado" ~: casilleros (vacio 2 (0, 1))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 0.5 0 0.0,
               Casillero 0.5 1.0 0 0.0,
               Casillero 1.0 infinitoPositivo 0 0.0
             ],
-      casilleros (vacio 3 (0, 6))
+      "Histograma casilleros parametrizados" ~: casilleros (vacio 3 (0, 6))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 0 0.0,
               Casillero 2.0 4.0 0 0.0,
               Casillero 4.0 6.0 0 0.0,
               Casillero 6.0 infinitoPositivo 0 0.0
             ],
-      casilleros (agregar 2 (vacio 3 (0, 6)))
+      "Agregar un elemento" ~: casilleros (agregar 2 (vacio 3 (0, 6)))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 0 0.0,
               Casillero 2.0 4.0 1 100.0,
               Casillero 4.0 6.0 0 0.0,
               Casillero 6.0 infinitoPositivo 0 0.0
+            ],
+      "Agregar mismo elemento repetidamente" ~: casilleros (agregar 2 (agregar 2 (vacio 3 (0, 6))))
+        ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
+              Casillero 0.0 2.0 0 0.0,
+              Casillero 2.0 4.0 2 100.0,
+              Casillero 4.0 6.0 0 0.0,
+              Casillero 6.0 infinitoPositivo 0 0.0
+            ],
+      "Agregar elementos distintos" ~: casilleros (agregar 1 (agregar 2 (vacio 3 (0, 6))))
+        ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
+              Casillero 0.0 2.0 1 50.0,
+              Casillero 2.0 4.0 1 50.0,
+              Casillero 4.0 6.0 0 0.0,
+              Casillero 6.0 infinitoPositivo 0 0.0
+            ],
+      "Agregar fuera de rango inferior" ~: casilleros (agregar (-1) (vacio 3 (0, 6)))
+        ~?= [ Casillero infinitoNegativo 0.0 1 100.0,
+              Casillero 0.0 2.0 0 0.0,
+              Casillero 2.0 4.0 0 0.0,
+              Casillero 4.0 6.0 0 0.0,
+              Casillero 6.0 infinitoPositivo 0 0.0
+            ],
+     "Agregar fuera de rango superior" ~: casilleros (agregar 100 (agregar 10 (vacio 3 (0, 6))))
+        ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
+              Casillero 0.0 2.0 0 0.0,
+              Casillero 2.0 4.0 0 0.0,
+              Casillero 4.0 6.0 0 0.0,
+              Casillero 6.0 infinitoPositivo 1 100.0
             ]
     ]
 
