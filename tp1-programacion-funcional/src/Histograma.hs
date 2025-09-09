@@ -34,18 +34,18 @@ data Histograma = Histograma Float Float [Int]
 -- Require que @l < u@ y @n >= 1@.
 vacio :: Int -> (Float, Float) -> Histograma
 vacio n (l, u) = Histograma l ((u - l) / fromIntegral n ) [0 | i <- [1..(n+2)]]
- 
+
 -- | Agrega un valor al histograma.
 -- Idea: modificar cant_per_bin con el elemento actualizado (+1 en el bucket que corresponda)
 -- Dificultad: encontrar el índice del bucket donde cae el float.
 -- Log: casilleros (agregar (vacio ...)) pisaba el agregado por cant_per_bin <- [0,0,0,...], arreglado.
 -- Log: idem anterior, pero no actualizaba el porcentaje, arreglado.
---Falta hacer TESTs
+-- Falta hacer TESTs
 agregar :: Float -> Histograma -> Histograma
 agregar n (Histograma inicio tamIntervalo cant_per_bin) = Histograma inicio tamIntervalo nuevo_cant_per_bin
   where
-    nuevo_cant_per_bin = (actualizarElem (calcularIndiceHist n listaDeLimitesSuperiores) (+1) cant_per_bin)
-    listaDeLimitesSuperiores = [inicio, inicio+tamIntervalo .. (inicio+tamIntervalo * (fromIntegral (length cant_per_bin)))]
+    nuevo_cant_per_bin = actualizarElem (calcularIndiceHist n listaDeLimitesSuperiores) (+1) cant_per_bin
+    listaDeLimitesSuperiores = [inicio, inicio+tamIntervalo .. (inicio+tamIntervalo * fromIntegral (length cant_per_bin))]
     calcularIndiceHist n = foldl (\indice limSuperior -> if n >= limSuperior then indice + 1 else indice) 0
 
 --agregar = foldl (\k x -> if (n < i + t * fromIntegral k) || (k > limiteSuperior) then k 
@@ -57,7 +57,7 @@ agregar n (Histograma inicio tamIntervalo cant_per_bin) = Histograma inicio tamI
 
 -- | Arma un histograma a partir de una lista de números reales con la cantidad de casilleros y rango indicados.
 histograma :: Int -> (Float, Float) -> [Float] -> Histograma
-histograma n r xs = error "COMPLETAR EJERCICIO 5"
+histograma cantidadBins (inicio, fin) datos = foldr agregar (vacio cantidadBins (inicio, fin)) datos
 
 -- | Un `Casillero` representa un casillero del histograma con sus límites, cantidad y porcentaje.
 -- Invariante: Sea @Casillero m1 m2 c p@ entonces @m1 < m2@, @c >= 0@, @0 <= p <= 100@
@@ -84,8 +84,8 @@ casPorcentaje (Casillero _ _ _ p) = p
 casilleros :: Histograma -> [Casillero]
 -- casilleros (Histograma inicio tamañoDelIntervalo [0, 0, 0, 0, 0]) = error "COMPLETAR EJERCICIO 6"
 
-casilleros (Histograma inicial tam cant_per_bin) = zipWith4 Casillero f g h i 
-                                                   where 
+casilleros (Histograma inicial tam cant_per_bin) = zipWith4 Casillero f g h i
+                                                   where
                                                         f = infinitoNegativo : [inicial + tam * fromIntegral i | i <- [0..(length cant_per_bin-2)]]
                                                         g = [inicial + tam * fromIntegral i | i <- [0..(length cant_per_bin-2)]] ++ [infinitoPositivo]
                                                         h = cant_per_bin
