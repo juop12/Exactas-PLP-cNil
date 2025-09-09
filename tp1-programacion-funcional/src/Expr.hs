@@ -22,11 +22,39 @@ data Expr
   | Div Expr Expr
   deriving (Show, Eq)
 
--- recrExpr :: ... anotar el tipo ...
-recrExpr = error "COMPLETAR EJERCICIO 7"
+recrExpr :: (a->b)    --fConst
+        ->  (a->a->b) --fRango
+        ->  (Expr->b->Expr->b->b) --fSuma
+        ->  (Expr->b->Expr->b->b) --fResta
+        ->  (Expr->b->Expr->b->b) --fMult
+        ->  (Expr->b->Expr->b->b) --fDiv
+        ->  Expr      --estructura Expr
+        ->  b         --resultado
+recrExpr fConst fRango fSuma fResta fMul fDiv exp = case exp of
+  Const x     -> fConst x
+  Rango x y   -> fRango x y
+  Suma  e1 e2 -> fSuma  e1 (r e1) e2 (r e2)
+  Resta e1 e2 -> fResta e1 (r e1) e2 (r e2)
+  Mult  e1 e2 -> fMult  e1 (r e1) e2 (r e2)
+  Div   e1 e2 -> fDiv   e1 (r e1) e2 (r e2)
+  where r = recrExpr fConst fRango fSuma fResta fMul fDiv
 
--- foldExpr :: ... anotar el tipo ...
-foldExpr = error "COMPLETAR EJERCICIO 7"
+foldExpr :: (a->b)    --fConst
+        ->  (a->a->b) --fRango
+        ->  (b->b->b) --fSuma
+        ->  (b->b->b) --fResta
+        ->  (b->b->b) --fMult
+        ->  (b->b->b) --fDiv
+        ->  Expr      --estructura Expr
+        ->  b         --resultado
+foldExpr fConst fRango fSuma fResta fMul fDiv exp = case exp of
+  Const x     -> fConst x
+  Rango x y   -> fRango x y
+  Suma  e1 e2 -> fSuma  (r e1)  (r e2)
+  Resta e1 e2 -> fResta (r e1)  (r e2)
+  Mult  e1 e2 -> fMult  (r e1)  (r e2)
+  Div   e1 e2 -> fDiv   (r e1)  (r e2)
+  where r = foldExpr fConst fRango fSuma fResta fMul fDiv
 
 -- | Evaluar expresiones dado un generador de números aleatorios
 eval :: Expr -> G Float
