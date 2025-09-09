@@ -73,6 +73,7 @@ agregar valor (Histograma inicio tamIntervalo cant_por_casillero) =
 
 
 -- | Arma un histograma a partir de una lista de números reales con la cantidad de casilleros y rango indicados.
+-- | Requiere: inicio < fin y cantidadBins >= 1
 histograma :: Int -> (Float, Float) -> [Float] -> Histograma
 histograma cantidadBins (inicio, fin) datos = foldr agregar (vacio cantidadBins (inicio, fin)) datos
 
