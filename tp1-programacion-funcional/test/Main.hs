@@ -113,11 +113,20 @@ testsAgregar =
           completar-}
         ]
 
+    -- "nombre" ~: tes ~?= valor,
 testsHistograma :: Test
 testsHistograma =
   test
-    [ histograma 4 (1, 5) [1, 2, 3] ~?= agregar 3 (agregar 2 (agregar 1 (vacio 4 (1, 5)))),
-      completar
+    [ 
+      "Sin datos" ~: histograma 4 (1, 5) [] ~?= vacio 4 (1, 5),
+      "Intervalos con extremos positivos" ~: histograma 4 (1, 5) [1, 2, 3] ~?= agregar 3 (agregar 2 (agregar 1 (vacio 4 (1, 5)))),
+      "Intervalos con extremos negativos" ~: histograma 4 (-10, -3) [-10, -7, -2] ~?= agregar (-10) (agregar (-7) (agregar (-2) (vacio 4 (-10, -3)))),
+      "Intervalos con extremos de distinto signo" ~: histograma 4 (-10, 5) [-10, -7, 2] ~?= agregar (-10) (agregar (-7) (agregar 2 (vacio 4 (-10, -3)))),
+      "Intervalos con extremos decimales" ~: histograma 4 (1.5, 5.5) [1.5, 2.5, 3.5] ~?= agregar 3.5 (agregar 2.5 (agregar 1.5 (vacio 4 (1.5, 5.5)))),
+      "Intervalos con extremos iguales" ~: histograma 4 (1, 1) [1, 2, 4] ~?= agregar 4 (agregar 2 (agregar 1 (vacio 4 (1, 1)))), -- ! esto deberia dar error porque no puede ser un rango nulo
+      "Datos fuera del rango" ~: histograma 4 (1, 5) [-10, 0, 6, 10] ~?= agregar (-10) (agregar 0 (agregar 6 (agregar 10 (vacio 4 (1, 5))))),
+      "Datos en el mismo casillero" ~: histograma 4 (1, 5) [1, 1.5, 1.8] ~?= agregar 1.8 (agregar 1.5 (agregar 1 (vacio 4 (1, 5)))),
+      "Todos mis datos son el mismo" ~: histograma 4 (1, 5) [3, 3, 3, 3] ~?= agregar 3 (agregar 3 (agregar 3 (agregar 3 (vacio 4 (1, 5)))))      
     ]
 
 testsCasilleros :: Test
