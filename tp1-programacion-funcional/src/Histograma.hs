@@ -36,12 +36,24 @@ vacio :: Int -> (Float, Float) -> Histograma
 vacio n (l, u) = Histograma l ((u - l) / fromIntegral n ) [0 | i <- [1..(n+2)]]
 
 -- | Agrega un valor al histograma.
+agregar :: Float -> Histograma -> Histograma
+agregar valor (Histograma inicio tamIntervalo cant_por_casillero) =
+  Histograma inicio tamIntervalo nueva_cant_por_casillero
+  where
+    nueva_cant_por_casillero = actualizarElem indice_real (+1) cant_por_casillero
+    indice_real
+      | valor < inicio = 0
+      | valor >= tope = length cant_por_casillero-1
+      | otherwise = indice_candidato
+    indice_candidato = floor ((valor - inicio) / tamIntervalo) + 1
+    tope = inicio + tamIntervalo * fromIntegral (length cant_por_casillero-2)
+
 -- Idea: modificar cant_por_casillero con el elemento actualizado (+1 en el bucket que corresponda)
 -- Dificultad: encontrar el índice del bucket donde cae el float.
 -- Log: casilleros (agregar (vacio ...)) pisaba el agregado por cant_por_casillero <- [0,0,0,...], arreglado.
 -- Log: idem anterior, pero no actualizaba el porcentaje, arreglado.
 -- Falta hacer TESTs
-agregar2 :: Float -> Histograma -> Histograma
+{- agregar2 :: Float -> Histograma -> Histograma
 agregar2 n (Histograma inicio tamIntervalo cant_por_casillero) = Histograma inicio tamIntervalo nuevo_cant_por_casillero
   where
     nuevo_cant_por_casillero = actualizarElem (calcularIndiceHist n listaDeLimitesSuperiores) (+1) cant_por_casillero
@@ -49,28 +61,7 @@ agregar2 n (Histograma inicio tamIntervalo cant_por_casillero) = Histograma inic
     --calcularIndiceReal k = if k>len-2 then len-1 else k 
     calcularIndiceHist n = foldl (\indice limSuperior -> if n >= limSuperior then indice + 1 else indice) 0
     len = fromIntegral (length cant_por_casillero)
-
-
--- Transformamos el valor en su índice para pasarlo a actualizarElem
-agregar :: Float -> Histograma -> Histograma
-agregar valor (Histograma inicio tamIntervalo cant_por_casillero) =
-  Histograma inicio tamIntervalo nueva_cant_por_casillero
-  where
-    nueva_cant_por_casillero = actualizarElem (indice_real) (+1) cant_por_casillero
-    indice_real = if valor < inicio 
-      then 0
-      else (if valor >= inicio + tamIntervalo * fromIntegral (length(cant_por_casillero)-2)
-        then  length(cant_por_casillero)-1
-        else  indice_candidato)
-    indice_candidato = floor ((valor - inicio) / tamIntervalo) + 1
-    tope = length cant_por_casillero
-
---agregar = foldl (\k x -> if (n < i + t * fromIntegral k) || (k > limiteSuperior) then k 
--- else calcularIndice n (k+1) (Histograma i t ls)) 0 []
-
---agregar n (Histograma inicio tamIntervalo cant_por_casillero) = Histograma inicio tamIntervalo cant_por_casillero_modificada
--- where cant_por_casillero_modificada = actualizarElem () cant_por_casillero
-
+ -}
 
 -- | Arma un histograma a partir de una lista de números reales con la cantidad de casilleros y rango indicados.
 -- | Requiere: inicio < fin y cantidadBins >= 1
