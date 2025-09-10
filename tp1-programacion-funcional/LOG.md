@@ -2,12 +2,33 @@
 
 ## Hechos
 
-
+- [X] Terminar Ejercicio 4
+    - [X] Checkear que funcione insertar en el último casillero
+- [X] Terminar Ejercicio 5
+- [X] Terminar Ejercicio 6
+    - [X] Refactorizar
+    - [X] Emprolijar la funcion
 
 ## Pendientes
 
 - [] Recheckear todos los tests
     - [X] Ponerle nombre a todos los tests
+    - [] Checkear los tests testsAlinearDerecha Ej 1
+    - [] Checkear los tests testsActualizarElem Ej 2
+    - [] Checkear los tests testsVacio Ej 3
+    - [] Checkear los tests testsAgregar Ej 4
+    - [] Checkear los tests testsHistograma Ej 5
+        - [] Cambiar los tests para que usen casillero
+    - [] Checkear los tests testsCasilleros Ej 6
+    - [] Checkear los tests testsRecr Ej 7
+    - [] Checkear los tests testsFold Ej 7
+    - [] Checkear los tests testsEval Ej 8
+    - [] Checkear los tests testsArmarHistograma Ej 9
+    - [] Checkear los tests testsEvalHistograma Ej 10
+    - [] Checkear los tests testsMostrar Ej 11
+    - [] Checkear los tests testsParse 
+    - [] Checkear los tests testsMostrarFloat 
+    - [] Checkear los tests testsMostrarHistograma 
 
 - [] Conseguir lenguaje ubicuo
     - listas de valores de casillero tienen el sufijo "PorCasillero". Ejemplo: minimosPorCasillero, cantElemPorCasillero
@@ -20,17 +41,8 @@
 
 - [] Correr hlint
     - Aplique el linter a util y reduje calcularPorcentaje
+    - Aplique el linter a todos los archivos
 
-- [] Terminar Ejercicio 4
-    - [] Hacer tests mas exhaustivos
-    - [] Checkear que funcione insertar en el último casillero
-- [] Terminar Ejercicio 5
-    - [] Agregar tests
-    - [] Revisar casos bordes
-- [] Terminar Ejercicio 6
-    - [X] Refactorizar
-    - [] Emprolijar la funcion
-    - [] Agregar tests
 - [] Terminar Ejercicio 7
     - [X] Poner todo con Floats
     - [] Agregar tests y revisarlos

@@ -157,7 +157,7 @@ testsAgregar =
                   Casillero 6 infinitoPositivo 0 0
                 ],
           "Dado un histograma de tamanio 3 y un valor fuera del rango superior, Cuando se agrega el valor, Entonces el casillero de infinito positivo incrementa su cantidad"
-            ~: casilleros (agregar (7) histogramaDeTam3)
+            ~: casilleros (agregar 7 histogramaDeTam3)
             ~?= [ Casillero infinitoNegativo 0 0 0, 
                   Casillero 0 2 0 0,
                   Casillero 2 4 0 0,

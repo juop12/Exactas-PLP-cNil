@@ -46,8 +46,8 @@ incierticalc> 10000 * 0.7∼0.8 + 2000∼5000
 
 ### Módulo Histograma
 - [X] **Ejercicio 3**: `vacio` - Inicialización de histograma vacío
-- [] **Ejercicio 4**: `agregar` - Agregar valores al histograma
-- [] **Ejercicio 5**: `histograma` - Construcción desde lista de valores
+- [X] **Ejercicio 4**: `agregar` - Agregar valores al histograma
+- [X] **Ejercicio 5**: `histograma` - Construcción desde lista de valores
 - [X] **Ejercicio 6**: `casilleros` - Observer para el tipo abstracto
 
 ### Módulo Expr
