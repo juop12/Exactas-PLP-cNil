@@ -12,10 +12,11 @@ import Util
 main :: IO ()
 main = runTestTTAndExit allTests
 
--- | Función auxiliar para marcar tests como pendientes a completar
-completar :: HasCallStack => Test
+-- | Funcion auxiliar para marcar tests como pendientes a completar
+completar :: (HasCallStack) => Test
 completar = TestCase (assertFailure "COMPLETAR")
 
+-- "nombre" ~: test ~?= valor,
 allTests :: Test
 allTests =
   test
@@ -39,72 +40,117 @@ allTests =
 testsAlinearDerecha :: Test
 testsAlinearDerecha =
   test
-    [ alinearDerecha 6 "hola" ~?= "  hola",
-      alinearDerecha 10 "incierticalc" ~?= "incierticalc",
-      alinearDerecha 2 "" ~?= "  ", -- probando con una string vacio
-      alinearDerecha (-2) "hola" ~?= "hola" -- longitud de "hola" >= (-2) entonces devuelve "hola". Es decir, cada vez que se ponga un indice negativo devuelve el string original
+    [ "Dado una palabra mas corta que n, Cuando se alinea a la derecha, Entonces se agregan espacios adelante"
+        ~: alinearDerecha 6 "hola"
+        ~?= "  hola",
+      "Dado una palabra mas larga que n, Cuando se alinea a la derecha, Entonces se devuelve la palabra original"
+        ~: alinearDerecha 10 "incierticalc"
+        ~?= "incierticalc",
+      "Dado una cadena vacia, Cuando se alinea a la derecha con n=2, Entonces se obtienen dos espacios"
+        ~: alinearDerecha 2 ""
+        ~?= "  ",
+      "Dado n negativo, Cuando se alinea a la derecha, Entonces se devuelve la palabra original"
+        ~: alinearDerecha (-2) "hola"
+        ~?= "hola"
     ]
 
 testsActualizarElem :: Test
 testsActualizarElem =
   test
-    [ actualizarElem 0 (+ 10) [1, 2, 3] ~?= [11, 2, 3],
-      actualizarElem 1 (+ 10) [1, 2, 3] ~?= [1, 12, 3],
-      actualizarElem 3 (+ 10) [1, 2, 3] ~?= [1, 2, 3], -- probando con un indice mayor a la longitud de la lista
-      actualizarElem (-1) (+ 10) [1, 2, 3] ~?= [1, 2, 3], -- probando con un indice negativo
-      actualizarElem 3 ('t' :) ["s", "t", "r", "i", "n", "g"] ~?= ["s", "t", "r", "ti", "n", "g"] -- probando con una lista de strings para probar con otros tipos
+    [ "Dado una lista y un indice valido, Cuando se actualiza el primer elemento, Entonces el elemento se modifica"
+        ~: actualizarElem 0 (+ 10) [1, 2, 3]
+        ~?= [11, 2, 3],
+      "Dado una lista y un indice valido, Cuando se actualiza el segundo elemento, Entonces el elemento se modifica"
+        ~: actualizarElem 1 (+ 10) [1, 2, 3]
+        ~?= [1, 12, 3],
+      "Dado una lista y un indice mayor a la longitud, Cuando se intenta actualizar, Entonces la lista permanece igual"
+        ~: actualizarElem 3 (+ 10) [1, 2, 3]
+        ~?= [1, 2, 3],
+      "Dado una lista y un indice negativo, Cuando se intenta actualizar, Entonces la lista permanece igual"
+        ~: actualizarElem (-1) (+ 10) [1, 2, 3]
+        ~?= [1, 2, 3],
+      "Dado una lista de strings y un indice valido, Cuando se actualiza el cuarto elemento, Entonces el elemento se modifica"
+        ~: actualizarElem 3 ('t' :) ["s", "t", "r", "i", "n", "g"]
+        ~?= ["s", "t", "r", "ti", "n", "g"]
     ]
 
 testsVacio :: Test
 testsVacio =
   test
-    [ casilleros (vacio 1 (0, 10))
+    [ {-"Dado un histograma vacio con ningun casillero, Cuando se consulta los casilleros, Entonces se obtienen unicamente los extremos"
+        ~: casilleros (vacio 0 (0, 10))
+        ~?= [ Casillero infinitoNegativo 0 0 0,
+              Casillero 10 infinitoPositivo 0 0
+            ], -}
+      "Dado un histograma vacio con un casillero, Cuando se consulta los casilleros, Entonces se obtienen los extremos y el unico casillero"
+        ~: casilleros (vacio 1 (0, 10))
         ~?= [ Casillero infinitoNegativo 0 0 0,
               Casillero 0 10 0 0,
               Casillero 10 infinitoPositivo 0 0
             ],
-      casilleros (vacio 2 (0, 10))
+      "Dado un histograma vacio con dos casilleros, Cuando se consulta los casilleros, Entonces se obtienen los extremos y los dos casilleros con el tamanio correspondiente"
+        ~: casilleros (vacio 2 (0, 10))
         ~?= [ Casillero infinitoNegativo 0 0 0,
               Casillero 0 5 0 0,
               Casillero 5 10 0 0,
               Casillero 10 infinitoPositivo 0 0
             ],
-      casilleros (vacio 3 (0, 6))
+      "Dado un histograma vacio con tres casilleros, Cuando se consulta los casilleros, Entonces se obtienen los extremos y los tres casilleros con el tamanio correspondiente"
+        ~: casilleros (vacio 3 (0, 6))
         ~?= [ Casillero infinitoNegativo 0 0 0,
               Casillero 0 2 0 0,
               Casillero 2 4 0 0,
               Casillero 4 6 0 0,
               Casillero 6 infinitoPositivo 0 0
+            ],
+      "Dado un histograma vacio con tres casilleros y rango negativo, Cuando se consulta los casilleros, Entonces se obtienen los extremos y los tres casilleros con el tamanio correspondiente"
+        ~: casilleros (vacio 3 (-6, 0))
+        ~?= [ Casillero infinitoNegativo (-6) 0 0,
+              Casillero (-6) (-4) 0 0,
+              Casillero (-4) (-2) 0 0,
+              Casillero (-2) 0 0 0,
+              Casillero 0 infinitoPositivo 0 0
+            ],
+      "Dado un histograma vacio con tres casilleros y rango mixto, Cuando se consulta los casilleros, Entonces se obtienen los extremos y los tres casilleros con el tamanio correspondiente"
+        ~: casilleros (vacio 3 (-3, 3))
+        ~?= [ Casillero infinitoNegativo (-3) 0 0,
+              Casillero (-3) (-1) 0 0,
+              Casillero (-1) 1 0 0,
+              Casillero 1 3 0 0,
+              Casillero 3 infinitoPositivo 0 0
             ]
-      --completar
     ]
 
 testsAgregar :: Test
 testsAgregar =
-  let h3 = vacio 1 (0, 2)
-      h0 = vacio 3 (0, 6)
+  let histogramaDeTam1 = vacio 1 (0, 2)
+      histogramaDeTam3 = vacio 3 (0, 6)
    in test
-        [ casilleros (agregar 0 h3)
+        [ "Dado un histograma de tamanio 1 y un valor en el limite inferior, Cuando se agrega el valor, Entonces el casillero correspondiente incrementa su cantidad"
+            ~: casilleros (agregar 0 histogramaDeTam1)
             ~?= [ Casillero infinitoNegativo 0 0 0,
-                  Casillero 0 2 1 100, -- El 100% de los valores están acá
+                  Casillero 0 2 1 100, -- El 100% de los valores estan aca
                   Casillero 2 infinitoPositivo 0 0
                 ],
-          casilleros (agregar 0 h0)
+          "Dado un histograma de tamanio 3 y un valor en el limite inferior, Cuando se agrega el valor, Entonces el primer casillero incrementa su cantidad"
+            ~: casilleros (agregar 0 histogramaDeTam3)
             ~?= [ Casillero infinitoNegativo 0 0 0,
-                  Casillero 0 2 1 100, -- El 100% de los valores están acá
+                  Casillero 0 2 1 100, -- El 100% de los valores estan aca
                   Casillero 2 4 0 0,
                   Casillero 4 6 0 0,
                   Casillero 6 infinitoPositivo 0 0
                 ],
-          casilleros (agregar 2 h0)
+          "Dado un histograma de tamanio 3 y un valor en el segundo casillero, Cuando se agrega el valor, Entonces el segundo casillero incrementa su cantidad"
+            ~: casilleros (agregar 2 histogramaDeTam3)
             ~?= [ Casillero infinitoNegativo 0 0 0,
                   Casillero 0 2 0 0,
-                  Casillero 2 4 1 100, -- El 100% de los valores están acá
+                  Casillero 2 4 1 100, -- El 100% de los valores estan aca
                   Casillero 4 6 0 0,
                   Casillero 6 infinitoPositivo 0 0
                 ],
-          casilleros (agregar (-1) h0)
-            ~?= [ Casillero infinitoNegativo 0 1 100, -- El 100% de los valores están acá
+          "Dado un histograma de tamanio 3 y un valor fuera del rango inferior, Cuando se agrega el valor, Entonces el casillero de infinito negativo incrementa su cantidad"
+            ~: casilleros (agregar (-1) histogramaDeTam3)
+            ~?= [ Casillero infinitoNegativo 0 1 100, -- El 100% de los valores estan aca
                   Casillero 0 2 0 0,
                   Casillero 2 4 0 0,
                   Casillero 4 6 0 0,
@@ -112,101 +158,127 @@ testsAgregar =
                 ]
         ]
 
-    -- "nombre" ~: test ~?= valor,
 testsHistograma :: Test
 testsHistograma =
   test
-    [ 
-      "Sin datos" ~: histograma 4 (1, 5) [] ~?= vacio 4 (1, 5),
-      "Intervalos con extremos positivos" ~: histograma 4 (1, 5) [1, 2, 3] ~?= agregar 3 (agregar 2 (agregar 1 (vacio 4 (1, 5)))),
-      "Intervalos con extremos negativos" ~: histograma 4 (-10, -3) [-10, -7, -2] ~?= agregar (-10) (agregar (-7) (agregar (-2) (vacio 4 (-10, -3)))),
-      "Intervalos con extremos de distinto signo" ~: histograma 4 (-10, 5) [-10, -7, 2] ~?= agregar (-10) (agregar (-7) (agregar 2 (vacio 4 (-10, 5)))),
-      "Intervalos con extremos decimales" ~: histograma 4 (1.5, 5.5) [1.5, 2.5, 3.5] ~?= agregar 3.5 (agregar 2.5 (agregar 1.5 (vacio 4 (1.5, 5.5)))),
-      -- "Intervalos con extremos iguales" ~: histograma 4 (1, 1) [1, 2, 4] ~?= agregar 4 (agregar 2 (agregar 1 (vacio 4 (1, 1)))), -- ! esto deberia dar error porque no puede ser un rango nulo
-      "Datos fuera del rango" ~: histograma 4 (1, 5) [-10, 0, 6, 10] ~?= agregar (-10) (agregar 0 (agregar 6 (agregar 10 (vacio 4 (1, 5))))),
-      "Datos en el mismo casillero" ~: histograma 4 (1, 5) [1, 1.5, 1.8] ~?= agregar 1.8 (agregar 1.5 (agregar 1 (vacio 4 (1, 5)))),
-      "Todos mis datos son el mismo" ~: histograma 4 (1, 5) [3, 3, 3, 3] ~?= agregar 3 (agregar 3 (agregar 3 (agregar 3 (vacio 4 (1, 5)))))      
+    [ "Dado ningun dato, Cuando se genera el histograma, Entonces se obtiene el histograma vacio"
+        ~: histograma 4 (1, 5) [] 
+        ~?= vacio 4 (1, 5),
+      "Dado datos dentro de un rango positivo, Cuando se genera el histograma, Entonces los datos se agregan a los casilleros correspondientes"
+        ~: histograma 4 (1, 5) [1, 2, 3] 
+        ~?= agregar 3 (agregar 2 (agregar 1 (vacio 4 (1, 5)))),
+      "Dado datos dentro de un rango negativo, Cuando se genera el histograma, Entonces los datos se agregan a los casilleros correspondientes"
+        ~: histograma 4 (-10, -3) [-10, -7, -2] 
+        ~?= agregar (-10) (agregar (-7) (agregar (-2) (vacio 4 (-10, -3)))),
+      "Dado datos dentro de un rango mixto, Cuando se genera el histograma, Entonces los datos se agregan a los casilleros correspondientes"
+        ~: histograma 4 (-10, 5) [-10, -7, 2] 
+        ~?= agregar (-10) (agregar (-7) (agregar 2 (vacio 4 (-10, 5)))),
+      "Dado datos con extremos decimales, Cuando se genera el histograma, Entonces los datos se agregan a los casilleros correspondientes"
+        ~: histograma 4 (1.5, 5.5) [1.5, 2.5, 3.5] 
+        ~?= agregar 3.5 (agregar 2.5 (agregar 1.5 (vacio 4 (1.5, 5.5)))),
+      -- "Dado rango nulo, Cuando se genera el histograma, Entonces deberia dar error" -- test comentado
+      "Dado datos fuera del rango, Cuando se genera el histograma, Entonces los datos se agregan a los extremos"
+        ~: histograma 4 (1, 5) [-10, 0, 6, 10] 
+        ~?= agregar (-10) (agregar 0 (agregar 6 (agregar 10 (vacio 4 (1, 5))))),
+      "Dado varios datos en el mismo casillero, Cuando se genera el histograma, Entonces todos los datos se agregan al mismo casillero"
+        ~: histograma 4 (1, 5) [1, 1.5, 1.8] 
+        ~?= agregar 1.8 (agregar 1.5 (agregar 1 (vacio 4 (1, 5)))),
+      "Dado todos los datos iguales, Cuando se genera el histograma, Entonces todos los datos se agregan al mismo casillero"
+        ~: histograma 4 (1, 5) [3, 3, 3, 3] 
+        ~?= agregar 3 (agregar 3 (agregar 3 (agregar 3 (vacio 4 (1, 5)))))
     ]
 
 testsCasilleros :: Test
 testsCasilleros =
   test
-    [ "Histograma vacio casillero único tam 1" ~: casilleros (vacio 1 (0, 1))
-        ~?= [ Casillero infinitoNegativo  0.0              0   0.0,
-              Casillero 0.0               1.0              0   0.0,
-              Casillero 1.0               infinitoPositivo 0   0.0
-            ],"Histograma vacio 1_elem tam_1" ~: 
-      "Histograma vacio casillero único tam 2" ~: casilleros (vacio 1 (0, 2))
+    [ "Dado un histograma vacio de tamanio 1 y rango (0,1), Cuando se consulta los casilleros, Entonces se obtienen los extremos y el unico casillero"
+        ~: casilleros (vacio 1 (0, 1))
+        ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
+              Casillero 0.0 1.0 0 0.0,
+              Casillero 1.0 infinitoPositivo 0 0.0
+            ],
+      "Dado un histograma vacio de tamanio 1 y rango (0,2), Cuando se consulta los casilleros, Entonces se obtienen los extremos y el unico casillero"
+        ~: casilleros (vacio 1 (0, 2))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 0 0.0,
               Casillero 2.0 infinitoPositivo 0 0.0
             ],
-      "Histograma vacio casillero único inicio 1" ~: casilleros (vacio 1 (1, 2))
+      "Dado un histograma vacio de tamanio 1 y rango (1,2), Cuando se consulta los casilleros, Entonces se obtienen los extremos y el unico casillero"
+        ~: casilleros (vacio 1 (1, 2))
         ~?= [ Casillero infinitoNegativo 1.0 0 0.0,
               Casillero 1.0 2.0 0 0.0,
               Casillero 2.0 infinitoPositivo 0 0.0
             ],
-      "Histograma inicio negativo" ~: casilleros (vacio 2 (-10, 10))
+      "Dado un histograma vacio de tamanio 2 y rango (-10,10), Cuando se consulta los casilleros, Entonces se obtienen los extremos y los dos casilleros"
+        ~: casilleros (vacio 2 (-10, 10))
         ~?= [ Casillero infinitoNegativo (-10.0) 0 0.0,
-              Casillero (-10.0)   0     0 0.0,
-              Casillero 0.0       10.0  0 0.0,
-              Casillero 10.0      infinitoPositivo 0 0.0
+              Casillero (-10.0) 0 0 0.0,
+              Casillero 0.0 10.0 0 0.0,
+              Casillero 10.0 infinitoPositivo 0 0.0
             ],
-      "Histograma vacio _elem tam_1 inicio parametrizado" ~: casilleros (vacio 2 (0, 1))
+      "Dado un histograma vacio de tamanio 2 y rango (0,1), Cuando se consulta los casilleros, Entonces se obtienen los extremos y los dos casilleros"
+        ~: casilleros (vacio 2 (0, 1))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 0.5 0 0.0,
               Casillero 0.5 1.0 0 0.0,
               Casillero 1.0 infinitoPositivo 0 0.0
             ],
-      "Histograma casilleros parametrizados" ~: casilleros (vacio 3 (0, 6))
+      "Dado un histograma vacio de tamanio 3 y rango (0,6), Cuando se consulta los casilleros, Entonces se obtienen los extremos y los tres casilleros"
+        ~: casilleros (vacio 3 (0, 6))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 0 0.0,
               Casillero 2.0 4.0 0 0.0,
               Casillero 4.0 6.0 0 0.0,
               Casillero 6.0 infinitoPositivo 0 0.0
             ],
-      "Agregar un elemento" ~: casilleros (agregar 2 (vacio 3 (0, 6)))
+      "Dado un histograma vacio de tamanio 3 y rango (0,6), Cuando se agrega el valor 2, Entonces el casillero correspondiente incrementa su cantidad"
+        ~: casilleros (agregar 2 (vacio 3 (0, 6)))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 0 0.0,
               Casillero 2.0 4.0 1 100.0,
               Casillero 4.0 6.0 0 0.0,
               Casillero 6.0 infinitoPositivo 0 0.0
             ],
-      "Agregar mismo elemento repetidamente" ~: casilleros (agregar 2 (agregar 2 (vacio 3 (0, 6))))
+      "Dado un histograma vacio de tamanio 3 y rango (0,6), Cuando se agrega dos veces el valor 2, Entonces el casillero correspondiente incrementa su cantidad a 2"
+        ~: casilleros (agregar 2 (agregar 2 (vacio 3 (0, 6))))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 0 0.0,
               Casillero 2.0 4.0 2 100.0,
               Casillero 4.0 6.0 0 0.0,
               Casillero 6.0 infinitoPositivo 0 0.0
             ],
-      "Agregar elementos distintos" ~: casilleros (agregar 1 (agregar 2 (vacio 3 (0, 6))))
+      "Dado un histograma vacio de tamanio 3 y rango (0,6), Cuando se agrega los valores 1 y 2, Entonces los casilleros correspondientes incrementan su cantidad"
+        ~: casilleros (agregar 1 (agregar 2 (vacio 3 (0, 6))))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 1 50.0,
               Casillero 2.0 4.0 1 50.0,
               Casillero 4.0 6.0 0 0.0,
               Casillero 6.0 infinitoPositivo 0 0.0
             ],
-      "Agregar fuera de rango inferior" ~: casilleros (agregar (-1) (vacio 3 (0, 6)))
+      "Dado un histograma vacio de tamanio 3 y rango (0,6), Cuando se agrega un valor fuera del rango inferior, Entonces el casillero de infinito negativo incrementa su cantidad"
+        ~: casilleros (agregar (-1) (vacio 3 (0, 6)))
         ~?= [ Casillero infinitoNegativo 0.0 1 100.0,
               Casillero 0.0 2.0 0 0.0,
               Casillero 2.0 4.0 0 0.0,
               Casillero 4.0 6.0 0 0.0,
               Casillero 6.0 infinitoPositivo 0 0.0
             ],
-     "Agregar fuera de rango superior" ~: casilleros (agregar 7 (vacio 3 (0, 6)))
+      "Dado un histograma vacio de tamanio 3 y rango (0,6), Cuando se agrega un valor fuera del rango superior, Entonces el casillero de infinito positivo incrementa su cantidad"
+        ~: casilleros (agregar 7 (vacio 3 (0, 6)))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 0 0.0,
               Casillero 2.0 4.0 0 0.0,
               Casillero 4.0 6.0 0 0.0,
               Casillero 6.0 infinitoPositivo 1 100.0
             ],
-     "Agregar fuera de rango superior++" ~: casilleros (agregar 100 (vacio 3 (0, 6)))
+      "Dado un histograma vacio de tamanio 3 y rango (0,6), Cuando se agrega un valor muy fuera del rango superior, Entonces el casillero de infinito positivo incrementa su cantidad"
+        ~: casilleros (agregar 100 (vacio 3 (0, 6)))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 0 0.0,
               Casillero 2.0 4.0 0 0.0,
               Casillero 4.0 6.0 0 0.0,
               Casillero 6.0 infinitoPositivo 1 100.0
-            ]            
+            ]
     ]
 
 testsRecr :: Test
@@ -309,15 +381,15 @@ testsMostrarHistograma =
         [ lines (mostrarHistograma h123)
             ~?= [ "6.00 - +inf |",
                   "4.00 - 6.00 |",
-                  "2.00 - 4.00 |▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ 66.67%",
-                  "0.00 - 2.00 |▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒",
+                  "2.00 - 4.00 |░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ 66.67%",
+                  "0.00 - 2.00 |░░░░░░░░░░░░░░░",
                   "-inf - 0.00 |"
                 ],
           lines (mostrarHistograma (agregar 1 (vacio 3 (0, 1000))))
             ~?= [ "  1000.00 - +inf |",
                   "666.67 - 1000.00 |",
                   " 333.33 - 666.67 |",
-                  "   0.00 - 333.33 |▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ 100.00%",
+                  "   0.00 - 333.33 |░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ 100.00%",
                   "     -inf - 0.00 |"
                 ]
         ]

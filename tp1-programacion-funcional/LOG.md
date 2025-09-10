@@ -6,6 +6,9 @@
 
 ## Pendientes
 
+- [] Recheckear todos los tests
+    - [X] Ponerle nombre a todos los tests
+
 - [] Conseguir lenguaje ubicuo
     - listas de valores de casillero tienen el sufijo "PorCasillero". Ejemplo: minimosPorCasillero, cantElemPorCasillero
 
