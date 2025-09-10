@@ -25,9 +25,9 @@ allTests =
       "Ej 3 - Histograma.vacio" ~: testsVacio,
       "Ej 4 - Histograma.agregar" ~: testsAgregar,
       "Ej 5 - Histograma.histograma" ~: testsHistograma,
-      "Ej 6 - Histograma.casilleros" ~: testsCasilleros
+      "Ej 6 - Histograma.casilleros" ~: testsCasilleros,
       -- "Ej 7 - Expr.recrExpr" ~: testsRecr,
-      -- "Ej 7 - Expr.foldExpr" ~: testsFold,
+      "Ej 7 - Expr.foldExpr" ~: testsFold
       -- "Ej 8 - Expr.eval" ~: testsEval,
       -- "Ej 9 - Expr.armarHistograma" ~: testsArmarHistograma,
       -- "Ej 10 - Expr.evalHistograma" ~: testsEvalHistograma,
@@ -298,7 +298,15 @@ testsRecr =
 testsFold :: Test
 testsFold =
   test
-    [ completar
+    [ "Dado un expr Const 1, Cuando se aplica foldExpr, Entonces se obtiene Const 1"
+        ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Const 1)
+        ~?= 1,
+      "Dado un expr Rango 1 5, Cuando se aplica foldExpr, Entonces se obtiene 4"
+        ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Rango 1 5)
+        ~?= 4,
+      "Dado un expr Suma (Const 1) (Const 2), Cuando se aplica foldExpr, Entonces se obtiene 3"
+        ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Suma (Const 1) (Const 2))
+        ~?= 3
     ]
 
 testsEval :: Test
