@@ -33,40 +33,35 @@ data Histograma = Histograma Float Float [Int]
 -- valores en el rango y 2 casilleros adicionales para los valores fuera del rango.
 -- Require que @l < u@ y @n >= 1@.
 vacio :: Int -> (Float, Float) -> Histograma
-vacio n (l, u) = Histograma l ((u - l) / fromIntegral n) [0 | i <- [1 .. (n + 2)]]
+vacio cantDeCasilleros (inicioDeHist, finDeHist) = Histograma inicio tamIntervalo cantElemPorCasillero
+  where
+    inicio = inicioDeHist
+    tamIntervalo = (finDeHist - inicioDeHist) / fromIntegral cantDeCasilleros
+    cantElemPorCasillero = [0 | i <- [1 .. (cantDeCasilleros + 2)]] -- length [0,0,...,0] ~> cantDeCasilleros + 2
 
 -- | Agrega un valor al histograma.
 agregar :: Float -> Histograma -> Histograma
-agregar valor (Histograma inicio tamIntervalo cant_por_casillero) =
-  Histograma inicio tamIntervalo nueva_cant_por_casillero
+agregar valor (Histograma inicio tamIntervalo cantElemPorCasillero) =
+  Histograma inicio tamIntervalo nuevaCantElemPorCasillero
   where
-    nueva_cant_por_casillero = actualizarElem indice_real (+ 1) cant_por_casillero
-    indice_real
+    nuevaCantElemPorCasillero = actualizarElem indice (+ 1) cantElemPorCasillero
+    indice -- Se calcula el infice apartir de aritmetica
       | valor < inicio = 0
-      | valor >= tope = length cant_por_casillero - 1
-      | otherwise = indice_candidato
-    indice_candidato = floor ((valor - inicio) / tamIntervalo) + 1
-    tope = inicio + tamIntervalo * fromIntegral (length cant_por_casillero - 2)
-
--- Idea: modificar cant_por_casillero con el elemento actualizado (+1 en el bucket que corresponda)
--- Dificultad: encontrar el índice del bucket donde cae el float.
--- Log: casilleros (agregar (vacio ...)) pisaba el agregado por cant_por_casillero <- [0,0,0,...], arreglado.
--- Log: idem anterior, pero no actualizaba el porcentaje, arreglado.
--- Falta hacer TESTs
-{- agregar2 :: Float -> Histograma -> Histograma
-agregar2 n (Histograma inicio tamIntervalo cant_por_casillero) = Histograma inicio tamIntervalo nuevo_cant_por_casillero
-  where
-    nuevo_cant_por_casillero = actualizarElem (calcularIndiceHist n listaDeLimitesSuperiores) (+1) cant_por_casillero
-    listaDeLimitesSuperiores = [inicio, inicio+tamIntervalo .. (inicio+tamIntervalo * len)]
-    --calcularIndiceReal k = if k>len-2 then len-1 else k
-    calcularIndiceHist n = foldl (\indice limSuperior -> if n >= limSuperior then indice + 1 else indice) 0
-    len = fromIntegral (length cant_por_casillero)
- -}
+      | valor >= tope = length cantElemPorCasillero - 1
+      | otherwise = indiceCandidato
+    indiceCandidato = floor ((valor - inicio) / tamIntervalo) + 1
+    tope = inicio + tamIntervalo * fromIntegral (length cantElemPorCasillero - 2)
 
 -- | Arma un histograma a partir de una lista de números reales con la cantidad de casilleros y rango indicados.
 -- | Requiere: inicio < fin y cantidadBins >= 1
 histograma :: Int -> (Float, Float) -> [Float] -> Histograma
-histograma cantidadBins (inicio, fin) datos = foldr agregar (vacio cantidadBins (inicio, fin)) datos
+histograma cantDeCasilleros (inicioDeHist, finDeHist) datos = foldr agregar histVacio datos
+  where
+    histVacio = vacio cantDeCasilleros (inicioDeHist, finDeHist)
+
+-- =========================================================================
+-- Casillero
+-- =========================================================================
 
 -- | Un `Casillero` representa un casillero del histograma con sus límites, cantidad y porcentaje.
 -- Invariante: Sea @Casillero m1 m2 c p@ entonces @m1 < m2@, @c >= 0@, @0 <= p <= 100@
@@ -91,9 +86,10 @@ casPorcentaje (Casillero _ _ _ p) = p
 
 -- | Dado un histograma, devuelve la lista de casilleros con sus límites, cantidad y porcentaje.
 casilleros :: Histograma -> [Casillero]
-casilleros (Histograma inicial tam cant_por_casillero) = zipWith4 Casillero f g h i
+casilleros (Histograma inicial tamIntervalo cantElemPorCasillero) = zipWith4 Casillero minimosPorCasillero maximosPorCasillero cantPorCasillero porcentajesPorCasillero
   where
-    f = infinitoNegativo : [inicial + tam * fromIntegral i | i <- [0 .. (length cant_por_casillero - 2)]]
-    g = [inicial + tam * fromIntegral i | i <- [0 .. (length cant_por_casillero - 2)]] ++ [infinitoPositivo]
-    h = cant_por_casillero
-    i = calcularPorcentajes cant_por_casillero
+    indices = [0 .. (length cantElemPorCasillero - 2)] -- Se abstrae la lista de indices para crear los minimos y maximos
+    minimosPorCasillero = infinitoNegativo : [inicial + tamIntervalo * fromIntegral i | i <- indices]
+    maximosPorCasillero = [inicial + tamIntervalo * fromIntegral i | i <- indices] ++ [infinitoPositivo]
+    cantPorCasillero = cantElemPorCasillero
+    porcentajesPorCasillero = calcularPorcentajes cantElemPorCasillero

@@ -7,8 +7,16 @@
 ## Pendientes
 
 - [] Conseguir lenguaje ubicuo
+    - listas de valores de casillero tienen el sufijo "PorCasillero". Ejemplo: minimosPorCasillero, cantElemPorCasillero
+
+    - Histograma inicio tamIntervalo cantElemPorCasillero
+    - Casillero casMinimo casMaximo casCant casPorcentaje
+    
+    - vacio cantDeCasilleros (inicioHist, finHist) 
+    - histograma cantDeCasilleros (inicioHist, finHist) datos
 
 - [] Correr hlint
+    - Aplique el linter a util y reduje calcularPorcentaje
 
 - [] Terminar Ejercicio 4
     - [] Hacer tests mas exhaustivos
