@@ -134,7 +134,6 @@ Cada función implementada incluye casos de prueba que verifican:
 ## Estado del Proyecto
 
 - [] Ejercicios 1-11 implementados
-    - [] Refactorizar Ejercicio 6 
 - [] Demostración formal completada  
 - [] Tests unitarios agregados
 - [] Aplicación funcional

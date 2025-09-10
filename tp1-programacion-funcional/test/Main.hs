@@ -13,7 +13,7 @@ main :: IO ()
 main = runTestTTAndExit allTests
 
 -- | Función auxiliar para marcar tests como pendientes a completar
-completar :: (HasCallStack) => Test
+completar :: HasCallStack => Test
 completar = TestCase (assertFailure "COMPLETAR")
 
 allTests :: Test
@@ -146,7 +146,7 @@ testsCasilleros =
               Casillero 1.0 2.0 0 0.0,
               Casillero 2.0 infinitoPositivo 0 0.0
             ],
-      "Histograma inicio negativo" ~: casilleros (vacio 2 ((-10), 10))
+      "Histograma inicio negativo" ~: casilleros (vacio 2 (-10, 10))
         ~?= [ Casillero infinitoNegativo (-10.0) 0 0.0,
               Casillero (-10.0)   0     0 0.0,
               Casillero 0.0       10.0  0 0.0,
