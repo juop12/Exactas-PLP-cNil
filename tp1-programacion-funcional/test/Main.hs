@@ -158,7 +158,7 @@ testsAgregar =
                 ],
           "Dado un histograma de tamanio 3 y un valor fuera del rango superior, Cuando se agrega el valor, Entonces el casillero de infinito positivo incrementa su cantidad"
             ~: casilleros (agregar 7 histogramaDeTam3)
-            ~?= [ Casillero infinitoNegativo 0 0 0, 
+            ~?= [ Casillero infinitoNegativo 0 0 0,
                   Casillero 0 2 0 0,
                   Casillero 2 4 0 0,
                   Casillero 4 6 0 0,
@@ -170,29 +170,29 @@ testsHistograma :: Test
 testsHistograma =
   test
     [ "Dado ningun dato, Cuando se genera el histograma, Entonces se obtiene el histograma vacio"
-        ~: histograma 4 (1, 5) [] 
+        ~: histograma 4 (1, 5) []
         ~?= vacio 4 (1, 5),
       "Dado datos dentro de un rango positivo, Cuando se genera el histograma, Entonces los datos se agregan a los casilleros correspondientes"
-        ~: histograma 4 (1, 5) [1, 2, 3] 
+        ~: histograma 4 (1, 5) [1, 2, 3]
         ~?= agregar 3 (agregar 2 (agregar 1 (vacio 4 (1, 5)))),
       "Dado datos dentro de un rango negativo, Cuando se genera el histograma, Entonces los datos se agregan a los casilleros correspondientes"
-        ~: histograma 4 (-10, -3) [-10, -7, -2] 
+        ~: histograma 4 (-10, -3) [-10, -7, -2]
         ~?= agregar (-10) (agregar (-7) (agregar (-2) (vacio 4 (-10, -3)))),
       "Dado datos dentro de un rango mixto, Cuando se genera el histograma, Entonces los datos se agregan a los casilleros correspondientes"
-        ~: histograma 4 (-10, 5) [-10, -7, 2] 
+        ~: histograma 4 (-10, 5) [-10, -7, 2]
         ~?= agregar (-10) (agregar (-7) (agregar 2 (vacio 4 (-10, 5)))),
       "Dado datos con extremos decimales, Cuando se genera el histograma, Entonces los datos se agregan a los casilleros correspondientes"
-        ~: histograma 4 (1.5, 5.5) [1.5, 2.5, 3.5] 
+        ~: histograma 4 (1.5, 5.5) [1.5, 2.5, 3.5]
         ~?= agregar 3.5 (agregar 2.5 (agregar 1.5 (vacio 4 (1.5, 5.5)))),
       -- "Dado rango nulo, Cuando se genera el histograma, Entonces deberia dar error" -- test comentado
       "Dado datos fuera del rango, Cuando se genera el histograma, Entonces los datos se agregan a los extremos"
-        ~: histograma 4 (1, 5) [-10, 0, 6, 10] 
+        ~: histograma 4 (1, 5) [-10, 0, 6, 10]
         ~?= agregar (-10) (agregar 0 (agregar 6 (agregar 10 (vacio 4 (1, 5))))),
       "Dado varios datos en el mismo casillero, Cuando se genera el histograma, Entonces todos los datos se agregan al mismo casillero"
-        ~: histograma 4 (1, 5) [1, 1.5, 1.8] 
+        ~: histograma 4 (1, 5) [1, 1.5, 1.8]
         ~?= agregar 1.8 (agregar 1.5 (agregar 1 (vacio 4 (1, 5)))),
       "Dado todos los datos iguales, Cuando se genera el histograma, Entonces todos los datos se agregan al mismo casillero"
-        ~: histograma 4 (1, 5) [3, 3, 3, 3] 
+        ~: histograma 4 (1, 5) [3, 3, 3, 3]
         ~?= agregar 3 (agregar 3 (agregar 3 (agregar 3 (vacio 4 (1, 5)))))
     ]
 
@@ -291,13 +291,11 @@ testsCasilleros =
 
 testsRecr :: Test
 testsRecr =
-  let 
-    suma ex x ey y = x + y
-    resta ex x ey y = x - y
-    mult ex x ey y = x * y
-    div ex x ey y = x / y
-    in
-      test
+  let suma ex x ey y = x + y
+      resta ex x ey y = x - y
+      mult ex x ey y = x * y
+      div ex x ey y = x / y
+   in test
         [ "Dado un expr Const 1, Cuando se aplica recrExpr, Entonces se obtiene Const 1"
             ~: recrExpr id (\x y -> y - x) suma resta mult div (Const 1)
             ~?= 1,
@@ -335,7 +333,7 @@ testsFold =
         ~?= 4,
       "Dado un expr Suma (Const 1) (Const 2), Cuando se aplica foldExpr, Entonces se obtiene 3"
         ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Suma (Const 1) (Const 2))
-        ~?= 3
+        ~?= 3,
       "Dado un expr Resta (Const 5) (Const 2), Cuando se aplica foldExpr, Entonces se obtiene 3"
         ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Resta (Const 5) (Const 2))
         ~?= 3,
