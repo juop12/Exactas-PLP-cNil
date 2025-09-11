@@ -45,4 +45,5 @@
 
 - [] Terminar Ejercicio 7
     - [X] Poner todo con Floats
-    - [] Agregar tests y revisarlos
+    - [] Agregar tests recrExpr
+    - [X] Agregar tests foldExpr

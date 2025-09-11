@@ -297,7 +297,7 @@ testsRecr =
 
 testsFold :: Test
 testsFold =
-  test
+  test -- Estoy utilizando (\x y -> y - x) como fRango.
     [ "Dado un expr Const 1, Cuando se aplica foldExpr, Entonces se obtiene Const 1"
         ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Const 1)
         ~?= 1,
@@ -307,6 +307,21 @@ testsFold =
       "Dado un expr Suma (Const 1) (Const 2), Cuando se aplica foldExpr, Entonces se obtiene 3"
         ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Suma (Const 1) (Const 2))
         ~?= 3
+      "Dado un expr Resta (Const 5) (Const 2), Cuando se aplica foldExpr, Entonces se obtiene 3"
+        ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Resta (Const 5) (Const 2))
+        ~?= 3,
+      "Dado un expr Mult (Const 2) (Const 3), Cuando se aplica foldExpr, Entonces se obtiene 6"
+        ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Mult (Const 2) (Const 3))
+        ~?= 6,
+      "Dado un expr Div (Const 6) (Const 2), Cuando se aplica foldExpr, Entonces se obtiene 3"
+        ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Div (Const 6) (Const 2))
+        ~?= 3,
+      "Dado un expr Suma (Const 1) (Rango 1 5), Cuando se aplica foldExpr, Entonces se obtiene 5"
+        ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Suma (Const 1) (Rango 1 5))
+        ~?= 5,
+      "Dado un expr Suma (Rango 1 5) (Rango 1 5), Cuando se aplica foldExpr, Entonces se obtiene 8"
+        ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Suma (Rango 1 5) (Rango 1 5))
+        ~?= 8
     ]
 
 testsEval :: Test
