@@ -12,7 +12,7 @@
     - [X] Poner todo con Floats
     - [X] Agregar tests recrExpr
     - [X] Agregar tests foldExpr
-
+    
 ## Pendientes
 
 - [] Recheckear todos los tests
@@ -48,6 +48,7 @@
     - Aplique el linter a todos los archivos
 
 - [] Terminar Ejercicio 8
-    - [] Implementar
+    - [X] Plantearlo con recursion explicita
+    - [] Implementar con foldExpr
     - [] Agregar tests
     

@@ -62,14 +62,25 @@ foldExpr fConst fRango fSuma fResta fMult fDiv exp = case exp of
 
 -- | Evaluar expresiones dado un generador de números aleatorios
 eval :: Expr -> G Float
-eval expresion gen = foldExpr fConst fRango fSuma fResta fMult fDiv expresion
-  where
-    fConst x = dameUno (rango95 [x]) gen
-    fRango x y = dameUno (x, y) gen
-    fSuma (x, gen1) (y, gen2) = (x + y, gen1)
-    fResta (x, gen1) (y, gen2) = (x - y, gen1)
-    fMult (x, gen1) (y, gen2) = (x * y, gen1)
-    fDiv (x, gen1) (y, gen2) = (x / y, gen1)
+eval exp gen = case exp of
+                Const x         -> (x, gen)
+                Rango x y       -> dameUno (x, y) gen
+                Suma  exp1 exp2 -> (primerExp exp1 + segundaExp exp1 exp2, generadorFinal exp1 exp2)
+                Resta exp1 exp2 -> (primerExp exp1 - segundaExp exp1 exp2, generadorFinal exp1 exp2)
+                Mult  exp1 exp2 -> (primerExp exp1 * segundaExp exp1 exp2, generadorFinal exp1 exp2)
+                Div   exp1 exp2 -> (primerExp exp1 / segundaExp exp1 exp2, generadorFinal exp1 exp2)
+
+                where primerExp x = fst (eval x gen)
+                      segundaExp x y = fst (eval y (generadorSegundaExp x))
+                      generadorSegundaExp x = snd (eval x gen)
+                      generadorFinal x y = snd (eval y (generadorSegundaExp x))
+
+-- Reconozco que no es lo mas declarativo mis where, solo queria ver un patron. atte: Fede
+-- TODO operadorBinarioGen para generalizar y usar foldExpr ?? 
+
+-- >>> fst (eval (Suma (Rango 1 5) (Const 1)) genFijo)
+-- 4.0
+
 
 -- | @armarHistograma m n f g@ arma un histograma con @m@ casilleros
 -- a partir del resultado de tomar @n@ muestras de @f@ usando el generador @g@.
