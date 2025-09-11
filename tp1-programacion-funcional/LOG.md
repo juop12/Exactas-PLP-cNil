@@ -8,6 +8,10 @@
 - [X] Terminar Ejercicio 6
     - [X] Refactorizar
     - [X] Emprolijar la funcion
+- [X] Terminar Ejercicio 7
+    - [X] Poner todo con Floats
+    - [X] Agregar tests recrExpr
+    - [X] Agregar tests foldExpr
 
 ## Pendientes
 
@@ -43,7 +47,7 @@
     - Aplique el linter a util y reduje calcularPorcentaje
     - Aplique el linter a todos los archivos
 
-- [] Terminar Ejercicio 7
-    - [X] Poner todo con Floats
-    - [] Agregar tests recrExpr
-    - [X] Agregar tests foldExpr
+- [] Terminar Ejercicio 8
+    - [] Implementar
+    - [] Agregar tests
+    

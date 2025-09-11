@@ -291,9 +291,38 @@ testsCasilleros =
 
 testsRecr :: Test
 testsRecr =
-  test
-    [ completar
-    ]
+  let 
+    suma ex x ey y = x + y
+    resta ex x ey y = x - y
+    mult ex x ey y = x * y
+    div ex x ey y = x / y
+    in
+      test
+        [ "Dado un expr Const 1, Cuando se aplica recrExpr, Entonces se obtiene Const 1"
+            ~: recrExpr id (\x y -> y - x) suma resta mult div (Const 1)
+            ~?= 1,
+          "Dado un expr Rango 1 5, Cuando se aplica recrExpr, Entonces se obtiene 4"
+            ~: recrExpr id (\x y -> y - x) suma resta mult div (Rango 1 5)
+            ~?= 4,
+          "Dado un expr Suma (Const 1) (Const 2), Cuando se aplica recrExpr, Entonces se obtiene 3"
+            ~: recrExpr id (\x y -> y - x) suma resta mult div (Suma (Const 1) (Const 2))
+            ~?= 3,
+          "Dado un expr Resta (Const 5) (Const 2), Cuando se aplica recrExpr, Entonces se obtiene 3"
+            ~: recrExpr id (\x y -> y - x) suma resta mult div (Resta (Const 5) (Const 2))
+            ~?= 3,
+          "Dado un expr Mult (Const 2) (Const 3), Cuando se aplica recrExpr, Entonces se obtiene 6"
+            ~: recrExpr id (\x y -> y - x) suma resta mult div (Mult (Const 2) (Const 3))
+            ~?= 6,
+          "Dado un expr Div (Const 6) (Const 2), Cuando se aplica recrExpr, Entonces se obtiene 3"
+            ~: recrExpr id (\x y -> y - x) suma resta mult div (Div (Const 6) (Const 2))
+            ~?= 3,
+          "Dado un expr Suma (Const 1) (Rango 1 5), Cuando se aplica recrExpr, Entonces se obtiene 5"
+            ~: recrExpr id (\x y -> y - x) suma resta mult div (Suma (Const 1) (Rango 1 5))
+            ~?= 5,
+          "Dado un expr Suma (Rango 1 5) (Rango 1 5), Cuando se aplica recrExpr, Entonces se obtiene 8"
+            ~: recrExpr id (\x y -> y - x) suma resta mult div (Suma (Rango 1 5) (Rango 1 5))
+            ~?= 8
+        ]
 
 testsFold :: Test
 testsFold =
