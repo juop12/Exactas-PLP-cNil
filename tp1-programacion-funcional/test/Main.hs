@@ -357,10 +357,13 @@ testsEval =
     [ "Dado un expr Suma (Rango 1 5) (Const 1), Cuando se aplica fst . eval, Entonces se obtiene 4.0"
         ~: fst (eval (Suma (Rango 1 5) (Const 1)) genFijo)
         ~?= 4.0,
-      fst (eval (Suma (Rango 1 5) (Const 1)) (genNormalConSemilla 0)) ~?= 3.697074,
+      fst (eval (Const 1) (genNormalConSemilla 0)) ~?= 0.8990246, -- chequeo el valor que devuelve el genNormalConSemilla 0 para Const 1
+      fst (dameUno (rango95 [1]) (genNormalConSemilla 0)) ~?= 0.8990246,
       let (x, gen) = eval (Rango 1 5) (genNormalConSemilla 0) in (x, fst (eval (Rango 1 5) gen)) ~?= (2.7980492, 3.1250308), -- chequeo los valores que devuelve el genNormalConSemilla 0 para Rango 1 5
+      -- el primer rango evalua a 2.7980492 y el const a 0.8990246
+      fst (eval (Suma (Rango 1 5) (Const 1)) (genNormalConSemilla 0)) ~?= 3.6970738,
       -- el primer rango evalua a 2.7980492 y el segundo a 3.1250308
-      fst (eval (Suma (Rango 1 5) (Rango 1 5)) (genNormalConSemilla 0)) ~?= 5.5960984
+      fst (eval (Suma (Rango 1 5) (Rango 1 5)) (genNormalConSemilla 0)) ~?= 5.92308
     ]
 
 testsArmarHistograma :: Test

@@ -48,6 +48,6 @@
     - Aplique el linter a todos los archivos
 
 - [] Terminar Ejercicio 8
-    - [X] Implementar
+    - [] Implementar
     - [] Agregar tests
     
