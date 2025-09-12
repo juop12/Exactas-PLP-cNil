@@ -60,3 +60,9 @@
 - [] Terminar Ejercicio 10
     - [X] Implementar
     - [] Agregar tests
+
+- [] Terminar Ejercicio 12
+    - [X] Hacer la demostracio
+    - [] Agregar tests
+
+- [] Checkear si el gráfico del histograma es correcto ya que tiene la cola +inf muy pesada

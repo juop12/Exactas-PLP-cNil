@@ -30,11 +30,11 @@ allTests =
       "Ej 7 - Expr.foldExpr" ~: testsFold,
       "Ej 8 - Expr.eval" ~: testsEval,
       "Ej 9 - Expr.armarHistograma" ~: testsArmarHistograma,
-      "Ej 10 - Expr.evalHistograma" ~: testsEvalHistograma,
-      "Ej 11 - Expr.mostrar" ~: testsMostrar
-      -- "Expr.Parser.parse" ~: testsParse,
-      -- "App.mostrarFloat" ~: testsMostrarFloat,
-      -- "App.mostrarHistograma" ~: testsMostrarHistograma
+      -- "Ej 10 - Expr.evalHistograma" ~: testsEvalHistograma,
+      "Ej 11 - Expr.mostrar" ~: testsMostrar,
+      "Expr.Parser.parse" ~: testsParse,
+      "App.mostrarFloat" ~: testsMostrarFloat,
+      "App.mostrarHistograma" ~: testsMostrarHistograma
     ]
 
 testsAlinearDerecha :: Test
@@ -517,15 +517,18 @@ testsMostrarHistograma =
         [ lines (mostrarHistograma h123)
             ~?= [ "6.00 - +inf |",
                   "4.00 - 6.00 |",
-                  "2.00 - 4.00 |░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ 66.67%",
-                  "0.00 - 2.00 |░░░░░░░░░░░░░░░",
+                  "2.00 - 4.00 |▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ 66.67%",
+                  "0.00 - 2.00 |▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒",
                   "-inf - 0.00 |"
+
+
+                  
                 ],
           lines (mostrarHistograma (agregar 1 (vacio 3 (0, 1000))))
             ~?= [ "  1000.00 - +inf |",
                   "666.67 - 1000.00 |",
                   " 333.33 - 666.67 |",
-                  "   0.00 - 333.33 |░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ 100.00%",
+                  "   0.00 - 333.33 |▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ 100.00%",
                   "     -inf - 0.00 |"
                 ]
         ]
