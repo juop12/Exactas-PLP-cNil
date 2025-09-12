@@ -354,24 +354,54 @@ testsFold =
 testsEval :: Test
 testsEval =
   test
-    [ "Dado un expr Suma (Rango 1 5) (Const 1), Cuando se aplica fst . eval, Entonces se obtiene 4.0"
+    [ "Dado un expr Suma (Rango 1 5) (Const 1) con genFijo, Cuando se aplica fst . eval, Entonces se obtiene 4.0"
         ~: fst (eval (Suma (Rango 1 5) (Const 1)) genFijo)
         ~?= 4.0,
-      fst (eval (Suma (Rango 1 5) (Const 1)) (genNormalConSemilla 0)) ~?= 3.7980492,
-      -- el primer rango evalua a 2.7980492 y el segundo a 3.1250308
-      fst (eval (Suma (Rango 1 5) (Rango 1 5)) (genNormalConSemilla 0)) ~?= 5.92308
-      -- COMPLETAR
-    ]
+      "Dado un expr Suma (Rango 1 5) (Const 1) con genNormalConSemilla 0, Cuando se aplica fst . eval, Entonces se obtiene 3.7980492"
+        ~: fst (eval (Suma (Rango 1 5) (Const 1)) (genNormalConSemilla 0)) 
+        ~?= 3.7980492, -- el primer rango evalua a 2.7980492
+      "Dado un expr Suma (Rango 1 5) (Rango 1 5) con genNormalConSemilla 0, Cuando se aplica fst . eval, Entonces se obtiene 5.92308"
+        ~: fst (eval (Suma (Rango 1 5) (Rango 1 5)) (genNormalConSemilla 0)) 
+        ~?= 5.92308, -- el primer rango evalua a 2.7980492 y el segundo a 3.1250308
+      "Dado un expr Resta (Rango 1 5) (Rango 1 5) con genNormalConSemilla 0, Cuando se aplica fst . eval, Entonces se obtiene -0.32698154"
+        ~: fst (eval (Resta (Rango 1 5) (Rango 1 5)) (genNormalConSemilla 0)) 
+        ~?= -0.32698154,
+      
+      "Dado un expr Mult (Resta (Rango 1 5) (Rango 1 5)) (Rango 1 5) con genNormalConSemilla 0, Cuando se aplica fst . eval, Entonces se obtiene -1.7866315"
+        ~: fst (eval (Mult (Resta (Rango 1 5) (Rango 1 5)) (Rango 1 5)) (genNormalConSemilla 0)) 
+        ~?= -1.7866315, -- el primer rango evalua a 2.7980492, el segundo a 3.1250308 y el tercero a 5.464013
+      "Dado un expr Mult (Resta (Rango (-10) 10) (Rango (-10) 10)) (Rango 1 5) con genNormalConSemilla 0, Cuando se aplica fst . eval, Entonces se obtiene -1.7866315"
+        ~: fst (eval (Mult (Resta (Rango (-10) 10) (Rango 100 1000)) (Rango 1 5)) (genNormalConSemilla 0)) 
+        ~?= -3164.4377, -- el primer rango evalua a -1.0097542, el segundo a 578.1319 y el tercero a 5.464013
+        -- rango 1 5 recibe misma semilla 2
 
-{-    fst (eval (Const 1) (genNormalConSemilla 0)) ~?= 0.8990246, -- chequeo el valor que devuelve el genNormalConSemilla 0 para Const 1
-     -- fst (dameUno (rango95 [1]) (genNormalConSemilla 0)) ~?= 0.8990246,
-      let (x, gen) = eval (Rango 1 5) (genNormalConSemilla 0) in (x, fst (eval (Rango 1 5) gen)) ~?= (2.7980492, 3.1250308), -- chequeo los valores que devuelve el genNormalConSemilla 0 para Rango 1 5
-      -- el primer rango evalua a 2.7980492 y el const a 0.8990246 -}
+      let (x, gen) = eval (Rango (-10) 10) (genNormalConSemilla 0)
+          (y, gen') = eval (Rango 100 1000) gen
+          (z, gen'') = eval (Rango 1 5) gen'
+         in (x, y, z) ~?= (-1.0097542, 578.1319, 5.464013),
+
+      let (x, gen) = eval (Rango 1 5) (genNormalConSemilla 0)
+          (y, gen') = eval (Rango 1 5) gen
+          (z, gen'') = eval (Rango 1 5) gen'
+         in (x, y, z) ~?= (2.7980492, 3.1250308, 5.464013)
+    ]
 
 testsArmarHistograma :: Test
 testsArmarHistograma =
   test
-    [completar]
+    [completar
+    ]
+
+{-
+Casos:
+- lista vacio
+- lista de un solo numeros
+- m = 1
+- m = 0 ? 
+- 
+
+-}
+
 
 testsEvalHistograma :: Test
 testsEvalHistograma =

@@ -12,6 +12,10 @@
     - [X] Poner todo con Floats
     - [X] Agregar tests recrExpr
     - [X] Agregar tests foldExpr
+- [X] Terminar Ejercicio 8
+    - [X] Plantearlo con recursion explicita
+    - [X] Implementar con foldExpr
+    - [X] Agregar tests
     
 ## Pendientes
 
@@ -47,8 +51,6 @@
     - Aplique el linter a util y reduje calcularPorcentaje
     - Aplique el linter a todos los archivos
 
-- [] Terminar Ejercicio 8
-    - [X] Plantearlo con recursion explicita
-    - [X] Implementar con foldExpr
+- [] Terminar Ejercicio 9
+    - [] Implementar
     - [] Agregar tests
-    

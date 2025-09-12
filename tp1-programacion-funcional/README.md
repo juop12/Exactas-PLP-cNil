@@ -52,7 +52,7 @@ incierticalc> 10000 * 0.7∼0.8 + 2000∼5000
 
 ### Módulo Expr
 - [X] **Ejercicio 7**: `recrExpr` y `foldExpr` - Esquemas de recursión
-- [] **Ejercicio 8**: `eval` - Evaluación de expresiones con generadores
+- [X] **Ejercicio 8**: `eval` - Evaluación de expresiones con generadores
 - [] **Ejercicio 9**: `armarHistograma` - Construcción de histogramas desde generadores
 - [] **Ejercicio 10**: `evalHistograma` - Evaluación completa con histograma
 - [] **Ejercicio 11**: `mostrar` - Pretty printing de expresiones

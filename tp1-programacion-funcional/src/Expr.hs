@@ -64,20 +64,25 @@ recrExpr fConst fRango fSuma fResta fMult fDiv expr =
     where
       r = recrExpr fConst fRango fSuma fResta fMult fDiv
 
--- | @operadorBinarioGen operador g1 g2@ devuelve una función que al tomar un generador @gen@ aplica el operador binario @operador@
--- a los resultados de: la aplicación de @gen@ a @g1@ y la aplicación del generador @gen'@ (resultante de la aplicación anterior) a @g2@
+-- | @operadorBinarioGen operador g1 g2@ devuelve una función que al 
+-- tomar un generador @gen@ aplica el operador binario @operador@
+-- a los resultados de: la aplicación de @gen@ a @g1@ y la aplicación 
+-- del generador @gen'@ (resultante de la aplicación anterior) a @g2@
 operadorBinarioGen :: (a -> a -> a) -> G a -> G a -> G a
 operadorBinarioGen operador g1 g2 gen = let (x, gen') = g1 gen
                                             (y, gen'') = g2 gen' -- uso gen' para que no repetir generador
                                         in (operador x y, gen'')
 
--- ? Con o sin gen en la definición de operadorBinarioGen? Osea, dejo una lambda explicita o no. atte: Fede
--- ? Debemos testear que funciona? Caso positivo, debemos testear que funcionan las otras auxiliares que definimos en los otros ej? 
--- TODO: PREGUNTAR
-
 -- | Evaluar expresiones dado un generador de números aleatorios
 eval :: Expr -> G Float
-eval = foldExpr (,) (curry dameUno) (operadorBinarioGen (+)) (operadorBinarioGen (-))  (operadorBinarioGen (*)) (operadorBinarioGen (/))
+eval = foldExpr fConst fRango fSuma fResta fMult fDiv
+  where
+    fConst = (,)                      -- Const x gen ~> (x, gen)
+    fRango = curry dameUno            -- Rango x y gen ~> (Float \in (x,y), gen')
+    fSuma = operadorBinarioGen (+)    -- Suma e1 e2 gen ~> operadorBinarioGen (+) (foldExpr e1) (foldExpr e2) gen ~> (+) (foldExpr e1 gen) (foldExpr e2 gen') ~> (Float, gen'')
+    fResta = operadorBinarioGen (-)   -- Analogo fSuma
+    fMult = operadorBinarioGen (*)    -- Analogo fSuma
+    fDiv = operadorBinarioGen (/)     -- Analogo fSuma
 
 -- | @armarHistograma m n f g@ arma un histograma con @m@ casilleros
 -- a partir del resultado de tomar @n@ muestras de @f@ usando el generador @g@.

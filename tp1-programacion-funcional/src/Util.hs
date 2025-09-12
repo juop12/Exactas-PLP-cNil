@@ -4,7 +4,8 @@ module Util where
 -- Si @s@ ya tiene longitud @>= n@, devuelve @s@.
 alinearDerecha :: Int -> String -> String
 alinearDerecha longitudDeseada s = [ ' ' | _ <- [1 .. cantEspacios] ] ++ s -- [1 .. cantEspacios] == [] cuando cantEspacios < 1
-                                  where cantEspacios = longitudDeseada - length s
+  where 
+    cantEspacios = longitudDeseada - length s
 
 -- | Dado un índice y una función, actualiza el elemento en la posición del índice
 -- aplicando la función al valor actual. Si el índice está fuera de los límites
