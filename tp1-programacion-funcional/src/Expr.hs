@@ -70,7 +70,10 @@ operadorBinarioGen :: (a -> a -> a) -> G a -> G a -> G a
 operadorBinarioGen operador g1 g2 gen = let (x, gen') = g1 gen
                                             (y, gen'') = g2 gen' -- uso gen' para que no repetir generador
                                         in (operador x y, gen'')
--- ? Con o sin gen en la definición de operadorBinarioGen? Osea, dejo una lambda explicita o no. 
+
+-- ? Con o sin gen en la definición de operadorBinarioGen? Osea, dejo una lambda explicita o no. atte: Fede
+-- ? Debemos testear que funciona? Caso positivo, debemos testear que funcionan las otras auxiliares que definimos en los otros ej? 
+-- TODO: PREGUNTAR
 
 -- | Evaluar expresiones dado un generador de números aleatorios
 eval :: Expr -> G Float
@@ -80,12 +83,17 @@ eval = foldExpr (,) (curry dameUno) (operadorBinarioGen (+)) (operadorBinarioGen
 -- a partir del resultado de tomar @n@ muestras de @f@ usando el generador @g@.
 armarHistograma :: Int -> Int -> G Float -> G Histograma
 armarHistograma m n f g = error "COMPLETAR EJERCICIO 9"
+-- Idea Fede: 
+-- armarHistograma m n f g = let (datos, genFinal) = muestra f n g
+--                           in (histograma m (rango95 datos) datos, genFinal)
 
 -- | @evalHistograma m n e g@ evalúa la expresión @e@ usando el generador @g@ @n@ veces
 -- devuelve un histograma con @m@ casilleros y rango calculado con @rango95@ para abarcar el 95% de confianza de los valores.
 -- @n@ debe ser mayor que 0.
 evalHistograma :: Int -> Int -> Expr -> G Histograma
 evalHistograma m n expr = error "COMPLETAR EJERCICIO 10"
+-- (idea Fede) 
+-- evalHistograma m n expr = armarHistograma m n (eval expr)
 
 -- Podemos armar histogramas que muestren las n evaluaciones en m casilleros.
 -- >>> evalHistograma 11 10 (Suma (Rango 1 5) (Rango 100 105)) (genNormalConSemilla 0)
@@ -98,6 +106,7 @@ evalHistograma m n expr = error "COMPLETAR EJERCICIO 10"
 -- En particular queremos evitar paréntesis en sumas y productos anidados.
 mostrar :: Expr -> String
 mostrar = error "COMPLETAR EJERCICIO 11"
+
 
 data ConstructorExpr = CEConst | CERango | CESuma | CEResta | CEMult | CEDiv
   deriving (Show, Eq)
