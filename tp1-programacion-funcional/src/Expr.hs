@@ -6,6 +6,7 @@ module Expr
     armarHistograma,
     evalHistograma,
     mostrar,
+    operadorBinarioGen,
   )
 where
 
@@ -87,10 +88,8 @@ eval = foldExpr fConst fRango fSuma fResta fMult fDiv
 -- | @armarHistograma m n f g@ arma un histograma con @m@ casilleros
 -- a partir del resultado de tomar @n@ muestras de @f@ usando el generador @g@.
 armarHistograma :: Int -> Int -> G Float -> G Histograma
-armarHistograma m n f g = error "COMPLETAR EJERCICIO 9"
--- Idea Fede: 
--- armarHistograma m n f g = let (datos, genFinal) = muestra f n g
---                           in (histograma m (rango95 datos) datos, genFinal)
+armarHistograma m n f g = let (datos, genFinal) = muestra f n g
+                            in (histograma m (rango95 datos) datos, genFinal)
 
 -- | @evalHistograma m n e g@ evalúa la expresión @e@ usando el generador @g@ @n@ veces
 -- devuelve un histograma con @m@ casilleros y rango calculado con @rango95@ para abarcar el 95% de confianza de los valores.

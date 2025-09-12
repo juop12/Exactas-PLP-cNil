@@ -28,8 +28,8 @@ allTests =
       "Ej 6 - Histograma.casilleros" ~: testsCasilleros,
       "Ej 7 - Expr.recrExpr" ~: testsRecr,
       "Ej 7 - Expr.foldExpr" ~: testsFold,
-      "Ej 8 - Expr.eval" ~: testsEval
-      -- "Ej 9 - Expr.armarHistograma" ~: testsArmarHistograma,
+      "Ej 8 - Expr.eval" ~: testsEval,
+      "Ej 9 - Expr.armarHistograma" ~: testsArmarHistograma
       -- "Ej 10 - Expr.evalHistograma" ~: testsEvalHistograma,
       -- "Ej 11 - Expr.mostrar" ~: testsMostrar,
       -- "Expr.Parser.parse" ~: testsParse,
@@ -389,7 +389,56 @@ testsEval =
 testsArmarHistograma :: Test
 testsArmarHistograma =
   test
-    [completar
+    [ "Dado 1 casillero, 3 experimentos, funcion que use dameUno, Cuando se aplica armarHistograma, Entonces se obtiene casillero único completo" 
+        ~: casilleros (fst (armarHistograma 1 3 ((curry dameUno) 1 5) genFijo))
+        ~?= [ Casillero infinitoNegativo 2 0 0.0,
+              Casillero 2 4 3 100.0,  -- El 100% de los valores estan aca
+              Casillero 4 infinitoPositivo 0 0.0
+            ], -- el primer rango evalua a 3, el segundo a 3 y el tercero a 3
+      "Dado 3 casilleros, 10 experimentos, funcion que use dameUno, Cuando se aplica armarHistograma, Entonces se obtiene casillero fijo completo" 
+        ~: casilleros (fst (armarHistograma 3 10 ((curry dameUno) 1 5) genFijo))
+        ~?= [ Casillero infinitoNegativo  2 0 0.0,
+              Casillero 2         2.6666667 0 0.0,
+              Casillero 2.6666667 3.3333335 10 100.0, -- El 100% de los valores estan aca
+              Casillero 3.3333335 4         0 0.0,
+              Casillero 4 infinitoPositivo  0 0.0
+            ], -- el primer rango evalua a 3, el segundo a 3 y análogamente todos los experimentos
+      "Dado 1 casillero, 3 experimentos, funcion que use dameUno, Cuando se aplica armarHistograma, Entonces se obtiene -1.7866315" 
+        ~: casilleros (fst (armarHistograma 1 3 ((curry dameUno) 1 5) (genNormalConSemilla 0)))
+        ~?= [ Casillero infinitoNegativo  1.4687741 0 0.0,
+              Casillero 1.4687741         6.1226206 3 100.0, -- El 100% de los valores estan aca
+              Casillero 6.1226206 infinitoPositivo  0 0.0
+            ], -- el primer rango evalua a 2.7980492, el segundo a 3.1250308 y el tercero a 5.464013
+      "Dado 1 casillero, 1000 experimentos, funcion que use dameUno, Cuando se aplica armarHistograma, Entonces se obtiene muestras bien distribuidas" 
+        ~: casilleros (fst (armarHistograma 1 1000 ((curry dameUno) 1 5) (genNormalConSemilla 0)))
+        ~?= [ Casillero infinitoNegativo  1.0136857         25  2.5,
+              Casillero 1.0136857         4.966351          955 95.5, -- El ~95% de los valores estan aca
+              Casillero 4.966351          infinitoPositivo  20  2.0
+            ], 
+      "Dado 4 casilleros, 1000 experimentos, funcion que use dameUno, Cuando se aplica armarHistograma, Entonces vemos la distribución" 
+        ~: casilleros (fst (armarHistograma 4 1000 ((curry dameUno) 1 5) (genNormalConSemilla 0)))
+        ~?= [ Casillero infinitoNegativo 1.0136857  25  2.5, -- El ~2.5% de los valores estan aca
+              Casillero 1.0136857   2.001852    129 12.9,
+              Casillero 2.001852    2.9900184   338 33.8,
+              Casillero 2.9900184   3.9781847   347 34.7,
+              Casillero 3.9781847   4.966351    141 14.1,
+              Casillero 4.966351 infinitoPositivo   20  2.0 -- El ~2.5% de los valores estan aca
+            ],
+      "Dado 10 casilleros, 100000 experimentos, funcion que use dameUno, Cuando se aplica armarHistograma, Entonces vemos la distribución" 
+        ~: casilleros (fst (armarHistograma 10 100000 ((curry dameUno) 1 5) (genNormalConSemilla 0)))
+        ~?= [ Casillero infinitoNegativo  1.0097816 2464  2.464,  -- El ~2.5% de los valores estan aca
+              Casillero 1.0097816         1.4086598 3299  3.299,
+              Casillero 1.4086598         1.807538  6074  6.0740004,
+              Casillero 1.807538          2.2064161 9798  9.798,
+              Casillero 2.2064161         2.6052945 13276 13.276,
+              Casillero 2.6052945         3.0041728 15229 15.229,
+              Casillero 3.0041728         3.403051  15200 15.2,
+              Casillero 3.403051          3.8019292 13068 13.068,
+              Casillero 3.8019292         4.2008076 9608  9.608,
+              Casillero 4.2008076         4.5996857 6074  6.0740004,
+              Casillero 4.5996857         4.998564  3365  3.365,
+              Casillero 4.998564 infinitoPositivo   2545  2.545   -- El ~2.5% de los valores estan aca
+            ]
     ]
 
 {-
