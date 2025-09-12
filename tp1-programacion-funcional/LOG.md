@@ -49,6 +49,6 @@
 
 - [] Terminar Ejercicio 8
     - [X] Plantearlo con recursion explicita
-    - [] Implementar con foldExpr
+    - [X] Implementar con foldExpr
     - [] Agregar tests
     

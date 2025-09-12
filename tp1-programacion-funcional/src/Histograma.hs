@@ -37,21 +37,16 @@ vacio cantDeCasilleros (inicioDeHist, finDeHist) = Histograma inicio tamInterval
   where
     inicio = inicioDeHist
     tamIntervalo = (finDeHist - inicioDeHist) / fromIntegral cantDeCasilleros
-    cantElemPorCasillero = [0 | i <- [1 .. (cantDeCasilleros + 2)]] -- length [0,0,...,0] ~> cantDeCasilleros + 2
+    cantElemPorCasillero = [0 | i <- [1 .. (cantDeCasilleros + 2)]]               -- cantDeCasilleros + 2 pue debo contar los casilleros de -inf y +inf
 
 -- | Agrega un valor al histograma.
 agregar :: Float -> Histograma -> Histograma
-agregar valor (Histograma inicio tamIntervalo cantElemPorCasillero) =
-  Histograma inicio tamIntervalo nuevaCantElemPorCasillero
+agregar valor (Histograma inicio tamIntervalo cantElemPorCasillero) = Histograma inicio tamIntervalo nuevaCantElemPorCasillero
   where
     nuevaCantElemPorCasillero = actualizarElem indice (+ 1) cantElemPorCasillero
-    indice -- Se calcula el infice apartir de aritmetica
-      | valor < inicio = 0
-      | valor >= tope = length cantElemPorCasillero - 1
-      | otherwise = indiceCandidato
-    indiceCandidato = floor ((valor - inicio) / tamIntervalo) + 1
-    tope = inicio + tamIntervalo * fromIntegral (length cantElemPorCasillero - 2)
-
+    indice = max 0 (min (length cantElemPorCasillero - 1) indiceCandidato)        -- me aseguro que el indice esté entre 0 y la longitud de la lista - 1
+    indiceCandidato = floor ((valor - inicio) / tamIntervalo) + 1                 -- +1 porque el primer casillero es el de -inf
+      
 -- | Arma un histograma a partir de una lista de números reales con la cantidad de casilleros y rango indicados.
 -- | Requiere: inicio < fin y cantidadBins >= 1
 histograma :: Int -> (Float, Float) -> [Float] -> Histograma
@@ -86,10 +81,9 @@ casPorcentaje (Casillero _ _ _ p) = p
 
 -- | Dado un histograma, devuelve la lista de casilleros con sus límites, cantidad y porcentaje.
 casilleros :: Histograma -> [Casillero]
-casilleros (Histograma inicial tamIntervalo cantElemPorCasillero) = zipWith4 Casillero minimosPorCasillero maximosPorCasillero cantPorCasillero porcentajesPorCasillero
+casilleros (Histograma inicio tamIntervalo cantElemPorCasillero) = zipWith4 Casillero minimosPorCasillero maximosPorCasillero cantElemPorCasillero porcentajesPorCasillero
   where
-    indices = [0 .. (length cantElemPorCasillero - 2)] -- Se abstrae la lista de indices para crear los minimos y maximos
-    minimosPorCasillero = infinitoNegativo : [inicial + tamIntervalo * fromIntegral i | i <- indices]
-    maximosPorCasillero = [inicial + tamIntervalo * fromIntegral i | i <- indices] ++ [infinitoPositivo]
-    cantPorCasillero = cantElemPorCasillero
+    indices = [0 .. (length cantElemPorCasillero - 2)]                                                  -- Sea n+1 la longitud de indices entonces:
+    minimosPorCasillero = infinitoNegativo : [inicio + tamIntervalo * fromIntegral i | i <- indices]    -- [ -inf, inicio, inicio + tamIntervalo, ..., inicio + n * tamIntervalo ] 
+    maximosPorCasillero = [inicio + tamIntervalo * fromIntegral i | i <- indices] ++ [infinitoPositivo] -- [ inicio, inicio + tamIntervalo, ..., inicio + n * tamIntervalo, +inf ]
     porcentajesPorCasillero = calcularPorcentajes cantElemPorCasillero

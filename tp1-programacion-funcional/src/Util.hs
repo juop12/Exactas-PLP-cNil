@@ -3,11 +3,10 @@ module Util where
 -- | @alinearDerecha n s@ agrega espacios a la izquierda de @s@ hasta que su longitud sea @n@.
 -- Si @s@ ya tiene longitud @>= n@, devuelve @s@.
 alinearDerecha :: Int -> String -> String
-alinearDerecha indice s =
-  let cantEspacios = indice - length s
-   in if cantEspacios <= 0
-        then s
-        else [' ' | c <- [1 .. cantEspacios]] ++ s
+alinearDerecha indice s = let cantEspacios = indice - length s
+                          in if cantEspacios <= 0
+                             then s
+                             else [' ' | c <- [1 .. cantEspacios]] ++ s
 
 -- | Dado un índice y una función, actualiza el elemento en la posición del índice
 -- aplicando la función al valor actual. Si el índice está fuera de los límites
@@ -26,9 +25,13 @@ infinitoPositivo = 1 / 0
 infinitoNegativo :: Float
 infinitoNegativo = -(1 / 0)
 
+-- | @porcentaje x y@ calcula el porcentaje que representa @x@ sobre @y@.
+-- Si @y@ es 0, devuelve 0.
 porcentaje :: Int -> Int -> Float
 porcentaje _ 0 = 0
 porcentaje x y = (fromIntegral x / fromIntegral y) * 100
 
+-- | @calcularPorcentajes xs@ calcula los porcentajes que representa cada elemento de la lista @xs@ sobre la suma de todos los elementos.
+-- Si la suma es 0, todos los porcentajes son 0.
 calcularPorcentajes :: [Int] -> [Float]
 calcularPorcentajes xs = map (\x -> porcentaje x (sum xs)) xs

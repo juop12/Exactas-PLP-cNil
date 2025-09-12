@@ -22,65 +22,59 @@ data Expr
   | Div Expr Expr
   deriving (Show, Eq)
 
+-- | Esquema de recursión estructural sobre Expr
+foldExpr ::
+  (Float -> b) ->           -- fConst
+  (Float -> Float -> b) ->  -- fRango
+  (b -> b -> b) ->          -- fSuma
+  (b -> b -> b) ->          -- fResta
+  (b -> b -> b) ->          -- fMult
+  (b -> b -> b) ->          -- fDiv
+   Expr ->                  -- exp
+   b                        -- resultado
+foldExpr fConst fRango fSuma fResta fMult fDiv exp =
+  case exp of
+    Const x     -> fConst  x
+    Rango x y   -> fRango  x y
+    Suma  e1 e2 -> fSuma  (r e1) (r e2)
+    Resta e1 e2 -> fResta (r e1) (r e2)
+    Mult  e1 e2 -> fMult  (r e1) (r e2)
+    Div   e1 e2 -> fDiv   (r e1) (r e2)
+    where
+      r = foldExpr fConst fRango fSuma fResta fMult fDiv
+
+-- | Esquema de recursión primitiva sobre Expr
 recrExpr ::
-  (Float -> b) -> -- fConst
-  (Float -> Float -> b) -> -- fRango
+  (Float -> b) ->                  -- fConst
+  (Float -> Float -> b) ->         -- fRango
   (Expr -> b -> Expr -> b -> b) -> -- fSuma
   (Expr -> b -> Expr -> b -> b) -> -- fResta
   (Expr -> b -> Expr -> b -> b) -> -- fMult
   (Expr -> b -> Expr -> b -> b) -> -- fDiv
-  Expr -> -- estructura Expr
-  b -- resultado
-recrExpr fConst fRango fSuma fResta fMult fDiv exp = case exp of
-  Const x -> fConst x
-  Rango x y -> fRango x y
-  Suma e1 e2 -> fSuma e1 (r e1) e2 (r e2)
-  Resta e1 e2 -> fResta e1 (r e1) e2 (r e2)
-  Mult e1 e2 -> fMult e1 (r e1) e2 (r e2)
-  Div e1 e2 -> fDiv e1 (r e1) e2 (r e2)
-  where
-    r = recrExpr fConst fRango fSuma fResta fMult fDiv
+   Expr ->                         -- exp
+   b                               -- resultado
+recrExpr fConst fRango fSuma fResta fMult fDiv exp =
+  case exp of
+    Const x     -> fConst x
+    Rango x y   -> fRango x y
+    Suma  e1 e2 -> fSuma  e1 (r e1) e2 (r e2)
+    Resta e1 e2 -> fResta e1 (r e1) e2 (r e2)
+    Mult  e1 e2 -> fMult  e1 (r e1) e2 (r e2)
+    Div   e1 e2 -> fDiv   e1 (r e1) e2 (r e2)
+    where
+      r = recrExpr fConst fRango fSuma fResta fMult fDiv
 
-foldExpr ::
-  (Float -> b) -> -- fConst
-  (Float -> Float -> b) -> -- fRango
-  (b -> b -> b) -> -- fSuma
-  (b -> b -> b) -> -- fResta
-  (b -> b -> b) -> -- fMult
-  (b -> b -> b) -> -- fDiv
-  Expr -> -- estructura Expr
-  b -- resultado
-foldExpr fConst fRango fSuma fResta fMult fDiv exp = case exp of
-  Const x -> fConst x
-  Rango x y -> fRango x y
-  Suma e1 e2 -> fSuma (r e1) (r e2)
-  Resta e1 e2 -> fResta (r e1) (r e2)
-  Mult e1 e2 -> fMult (r e1) (r e2)
-  Div e1 e2 -> fDiv (r e1) (r e2)
-  where
-    r = foldExpr fConst fRango fSuma fResta fMult fDiv
+-- | @operadorBinarioGen operador g1 g2@ devuelve una función que al tomar un generador @gen@ aplica el operador binario @operador@
+-- a los resultados de: la aplicación de @gen@ a @g1@ y la aplicación del generador @gen'@ (resultante de la aplicación anterior) a @g2@
+operadorBinarioGen :: (a -> a -> a) -> G a -> G a -> G a
+operadorBinarioGen operador g1 g2 gen = let (x, gen') = g1 gen
+                                            (y, gen'') = g2 gen' -- uso gen' para que no repetir generador
+                                        in (operador x y, gen'')
+-- ? Con o sin gen en la definición de operadorBinarioGen? Osea, dejo una lambda explicita o no. 
 
 -- | Evaluar expresiones dado un generador de números aleatorios
 eval :: Expr -> G Float
-eval exp gen = case exp of
-                Const x         -> (x, gen)
-                Rango x y       -> dameUno (x, y) gen
-                Suma  exp1 exp2 -> (primerExp exp1 + segundaExp exp1 exp2, generadorFinal exp1 exp2)
-                Resta exp1 exp2 -> (primerExp exp1 - segundaExp exp1 exp2, generadorFinal exp1 exp2)
-                Mult  exp1 exp2 -> (primerExp exp1 * segundaExp exp1 exp2, generadorFinal exp1 exp2)
-                Div   exp1 exp2 -> (primerExp exp1 / segundaExp exp1 exp2, generadorFinal exp1 exp2)
-
-                where primerExp x = fst (eval x gen)
-                      segundaExp x y = fst (eval y (generadorSegundaExp x))
-                      generadorSegundaExp x = snd (eval x gen)
-                      generadorFinal x y = snd (eval y (generadorSegundaExp x))
-
--- Reconozco que no es lo mas declarativo mis where, solo queria ver un patron. atte: Fede
--- TODO operadorBinarioGen para generalizar y usar foldExpr ?? 
-
--- >>> fst (eval (Suma (Rango 1 5) (Const 1)) genFijo)
--- 4.0
-
+eval = foldExpr (,) (curry dameUno) (operadorBinarioGen (+)) (operadorBinarioGen (-))  (operadorBinarioGen (*)) (operadorBinarioGen (/))
 
 -- | @armarHistograma m n f g@ arma un histograma con @m@ casilleros
 -- a partir del resultado de tomar @n@ muestras de @f@ usando el generador @g@.
