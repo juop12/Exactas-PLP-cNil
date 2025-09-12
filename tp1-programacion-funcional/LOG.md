@@ -16,11 +16,17 @@
     - [X] Plantearlo con recursion explicita
     - [X] Implementar con foldExpr
     - [X] Agregar tests
+- [X] Terminar Ejercicio 9
+    - [X] Implementar
+    - [X] Agregar tests
+- [X] Terminar Ejercicio 11
+    - [X] Implementar
+    - [X] Agregar tests
     
 ## Pendientes
 
 - [] Recheckear todos los tests
-    - [X] Ponerle nombre a todos los tests
+    - [] Ponerle nombre a todos los tests
     - [] Checkear los tests testsAlinearDerecha Ej 1
     - [] Checkear los tests testsActualizarElem Ej 2
     - [] Checkear los tests testsVacio Ej 3
@@ -51,6 +57,6 @@
     - Aplique el linter a util y reduje calcularPorcentaje
     - Aplique el linter a todos los archivos
 
-- [] Terminar Ejercicio 9
-    - [] Implementar
+- [] Terminar Ejercicio 10
+    - [X] Implementar
     - [] Agregar tests

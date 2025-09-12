@@ -65,17 +65,17 @@ recrExpr fConst fRango fSuma fResta fMult fDiv expr =
     where
       r = recrExpr fConst fRango fSuma fResta fMult fDiv
 
--- | @operadorBinarioGen operador g1 g2@ devuelve una función que al 
+-- | @operadorBinarioGen operador r1 r2@ devuelve una función que al 
 -- tomar un generador @gen@ aplica el operador binario @operador@
--- a los resultados de: la aplicación de @gen@ a @g1@ y la aplicación 
--- del generador @gen'@ (resultante de la aplicación anterior) a @g2@
+-- a los resultados de: la aplicación de @gen@ a @r1@ y la aplicación 
+-- del generador @gen'@ (resultante de la aplicación anterior) a @r2@
 operadorBinarioGen :: (a -> a -> a) -> G a -> G a -> G a
-operadorBinarioGen operador g1 g2 gen = let (x, gen') = g1 gen
-                                            (y, gen'') = g2 gen' -- uso gen' para que no repetir generador
+operadorBinarioGen operador r1 r2 gen = let (x, gen') = r1 gen
+                                            (y, gen'') = r2 gen' -- uso gen' para que no repetir generador
                                         in (operador x y, gen'')
 
 -- | Evaluar expresiones dado un generador de números aleatorios
-eval :: Expr -> G Float
+eval :: Expr -> G Float -- Expr -> Gen -> (Float, Gen)
 eval = foldExpr fConst fRango fSuma fResta fMult fDiv
   where
     fConst = (,)                      -- Const x gen ~> (x, gen)
@@ -84,6 +84,10 @@ eval = foldExpr fConst fRango fSuma fResta fMult fDiv
     fResta = operadorBinarioGen (-)   -- Analogo fSuma
     fMult = operadorBinarioGen (*)    -- Analogo fSuma
     fDiv = operadorBinarioGen (/)     -- Analogo fSuma
+
+-- >>> eval (Const 1) genFijo
+-- >>> eval (Rango 1 5) genFijo
+-- >>> eval (Suma (Rango 1 5) (Const 1)) genFijo
 
 -- | @armarHistograma m n f g@ arma un histograma con @m@ casilleros
 -- a partir del resultado de tomar @n@ muestras de @f@ usando el generador @g@.
@@ -95,9 +99,7 @@ armarHistograma m n f g = let (datos, genFinal) = muestra f n g
 -- devuelve un histograma con @m@ casilleros y rango calculado con @rango95@ para abarcar el 95% de confianza de los valores.
 -- @n@ debe ser mayor que 0.
 evalHistograma :: Int -> Int -> Expr -> G Histograma
-evalHistograma m n expr = error "COMPLETAR EJERCICIO 10"
--- (idea Fede) 
--- evalHistograma m n expr = armarHistograma m n (eval expr)
+evalHistograma m n expr = armarHistograma m n (eval expr)
 
 -- Podemos armar histogramas que muestren las n evaluaciones en m casilleros.
 -- >>> evalHistograma 11 10 (Suma (Rango 1 5) (Rango 100 105)) (genNormalConSemilla 0)
@@ -105,12 +107,6 @@ evalHistograma m n expr = error "COMPLETAR EJERCICIO 10"
 
 -- >>> evalHistograma 11 10000 (Suma (Rango 1 5) (Rango 100 105)) (genNormalConSemilla 0)
 -- (Histograma 102.273895 0.5878462 [239,288,522,810,1110,1389,1394,1295,1076,793,520,310,254],<Gen>)
-
--- | Mostrar las expresiones, pero evitando algunos paréntesis innecesarios.
--- En particular queremos evitar paréntesis en sumas y productos anidados.
-mostrar :: Expr -> String
-mostrar = error "COMPLETAR EJERCICIO 11"
-
 
 data ConstructorExpr = CEConst | CERango | CESuma | CEResta | CEMult | CEDiv
   deriving (Show, Eq)
@@ -127,4 +123,18 @@ constructor (Div _ _) = CEDiv
 -- | Agrega paréntesis antes y después del string si el Bool es True.
 maybeParen :: Bool -> String -> String
 maybeParen True s = "(" ++ s ++ ")"
-maybeParen False s = s
+maybeParen False s = s            
+
+-- | Mostrar las expresiones, pero evitando algunos paréntesis innecesarios.
+-- En particular queremos evitar paréntesis en sumas y productos anidados.
+mostrar :: Expr -> String
+mostrar expr = recrExpr fConst fRango fSuma fResta fMult fDiv expr
+  where
+    fConst x             = show x
+    fRango x y           = show x ++ "~" ++ show y
+    fSuma e1 r1 e2 r2    = (maybeParenParaExpr e1 [CESuma])  r1 ++ " + " ++ (maybeParenParaExpr e2 [CESuma])  r2
+    fResta e1 r1 e2 r2   = (maybeParenParaExpr e1 [])        r1 ++ " - " ++ (maybeParenParaExpr e2 [])        r2
+    fMult e1 r1 e2 r2    = (maybeParenParaExpr e1 [CEMult])  r1 ++ " * " ++ (maybeParenParaExpr e2 [CEMult])  r2
+    fDiv  e1 r1 e2 r2    = (maybeParenParaExpr e1 [])        r1 ++ " / " ++ (maybeParenParaExpr e2 [])        r2
+    
+    maybeParenParaExpr expresion consExpr = maybeParen (not (constructor expresion `elem` ([CEConst, CERango] ++ consExpr)))

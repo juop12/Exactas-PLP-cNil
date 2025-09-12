@@ -53,9 +53,9 @@ incierticalc> 10000 * 0.7∼0.8 + 2000∼5000
 ### Módulo Expr
 - [X] **Ejercicio 7**: `recrExpr` y `foldExpr` - Esquemas de recursión
 - [X] **Ejercicio 8**: `eval` - Evaluación de expresiones con generadores
-- [] **Ejercicio 9**: `armarHistograma` - Construcción de histogramas desde generadores
-- [] **Ejercicio 10**: `evalHistograma` - Evaluación completa con histograma
-- [] **Ejercicio 11**: `mostrar` - Pretty printing de expresiones
+- [X] **Ejercicio 9**: `armarHistograma` - Construcción de histogramas desde generadores
+- [X] **Ejercicio 10**: `evalHistograma` - Evaluación completa con histograma
+- [X] **Ejercicio 11**: `mostrar` - Pretty printing de expresiones
 
 ### Demostración Formal
 - [] **Ejercicio 12**: Demostración por inducción estructural
@@ -133,7 +133,7 @@ Cada función implementada incluye casos de prueba que verifican:
 
 ## Estado del Proyecto
 
-- [] Ejercicios 1-11 implementados
+- [X] Ejercicios 1-11 implementados
 - [] Demostración formal completada  
 - [] Tests unitarios agregados
 - [] Aplicación funcional
