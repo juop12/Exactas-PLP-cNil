@@ -32,8 +32,8 @@ foldExpr ::
   (b -> b -> b) ->          -- fDiv
    Expr ->                  -- exp
    b                        -- resultado
-foldExpr fConst fRango fSuma fResta fMult fDiv exp =
-  case exp of
+foldExpr fConst fRango fSuma fResta fMult fDiv expr =
+  case expr of
     Const x     -> fConst  x
     Rango x y   -> fRango  x y
     Suma  e1 e2 -> fSuma  (r e1) (r e2)
@@ -51,10 +51,10 @@ recrExpr ::
   (Expr -> b -> Expr -> b -> b) -> -- fResta
   (Expr -> b -> Expr -> b -> b) -> -- fMult
   (Expr -> b -> Expr -> b -> b) -> -- fDiv
-   Expr ->                         -- exp
+   Expr ->                         -- expr
    b                               -- resultado
-recrExpr fConst fRango fSuma fResta fMult fDiv exp =
-  case exp of
+recrExpr fConst fRango fSuma fResta fMult fDiv expr =
+  case expr of
     Const x     -> fConst x
     Rango x y   -> fRango x y
     Suma  e1 e2 -> fSuma  e1 (r e1) e2 (r e2)
