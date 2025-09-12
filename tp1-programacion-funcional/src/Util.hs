@@ -3,10 +3,8 @@ module Util where
 -- | @alinearDerecha n s@ agrega espacios a la izquierda de @s@ hasta que su longitud sea @n@.
 -- Si @s@ ya tiene longitud @>= n@, devuelve @s@.
 alinearDerecha :: Int -> String -> String
-alinearDerecha indice s = let cantEspacios = indice - length s
-                          in if cantEspacios <= 0
-                             then s
-                             else [' ' | c <- [1 .. cantEspacios]] ++ s
+alinearDerecha longitudDeseada s = [ ' ' | _ <- [1 .. cantEspacios] ] ++ s -- [1 .. cantEspacios] == [] cuando cantEspacios < 1
+                                  where cantEspacios = longitudDeseada - length s
 
 -- | Dado un índice y una función, actualiza el elemento en la posición del índice
 -- aplicando la función al valor actual. Si el índice está fuera de los límites
