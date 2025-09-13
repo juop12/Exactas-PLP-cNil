@@ -32,7 +32,7 @@
     - [] Checkear los tests testsVacio Ej 3
     - [] Checkear los tests testsAgregar Ej 4
     - [] Checkear los tests testsHistograma Ej 5
-        - [] Cambiar los tests para que usen casillero
+        - [X] Cambiar los tests para que usen casillero
     - [] Checkear los tests testsCasilleros Ej 6
     - [] Checkear los tests testsRecr Ej 7
     - [] Checkear los tests testsFold Ej 7
