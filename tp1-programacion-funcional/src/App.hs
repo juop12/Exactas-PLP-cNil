@@ -55,7 +55,7 @@ cantidadDeMuestras :: Int
 cantidadDeMuestras = 100000
 
 cantidadDeCasilleros :: Int
-cantidadDeCasilleros = 20
+cantidadDeCasilleros = 11
 
 app :: Gen -> Sandbox Gen
 app g =

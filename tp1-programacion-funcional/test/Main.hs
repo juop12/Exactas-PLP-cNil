@@ -30,7 +30,7 @@ allTests =
       "Ej 7 - Expr.foldExpr" ~: testsFold,
       "Ej 8 - Expr.eval" ~: testsEval,
       "Ej 9 - Expr.armarHistograma" ~: testsArmarHistograma,
-      -- "Ej 10 - Expr.evalHistograma" ~: testsEvalHistograma,
+      "Ej 10 - Expr.evalHistograma" ~: testsEvalHistograma,
       "Ej 11 - Expr.mostrar" ~: testsMostrar,
       "Expr.Parser.parse" ~: testsParse,
       "App.mostrarFloat" ~: testsMostrarFloat,
@@ -40,16 +40,16 @@ allTests =
 testsAlinearDerecha :: Test
 testsAlinearDerecha =
   test
-    [ "Dado una palabra mas corta que n, Cuando se alinea a la derecha, Entonces se agregan espacios adelante"
+    [ "Dado una palabra mas corta que n, cuando se alinea a la derecha, entonces se agregan espacios adelante"
         ~: alinearDerecha 6 "hola"
         ~?= "  hola",
-      "Dado una palabra mas larga que n, Cuando se alinea a la derecha, Entonces se devuelve la palabra original"
+      "Dado una palabra mas larga que n, cuando se alinea a la derecha, entonces se devuelve la palabra original"
         ~: alinearDerecha 10 "incierticalc"
         ~?= "incierticalc",
-      "Dado una cadena vacia, Cuando se alinea a la derecha con n=2, Entonces se obtienen dos espacios"
+      "Dado una cadena vacia, cuando se alinea a la derecha con n=2, entonces se obtienen dos espacios"
         ~: alinearDerecha 2 ""
         ~?= "  ",
-      "Dado n negativo, Cuando se alinea a la derecha, Entonces se devuelve la palabra original"
+      "Dado n negativo, cuando se alinea a la derecha, entonces se devuelve la palabra original"
         ~: alinearDerecha (-2) "hola"
         ~?= "hola"
     ]
@@ -57,19 +57,19 @@ testsAlinearDerecha =
 testsActualizarElem :: Test
 testsActualizarElem =
   test
-    [ "Dado una lista y un indice valido, Cuando se actualiza el primer elemento, Entonces el elemento se modifica"
+    [ "Dado una lista y un indice valido, cuando se actualiza el primer elemento, entonces el elemento se modifica"
         ~: actualizarElem 0 (+ 10) [1, 2, 3]
         ~?= [11, 2, 3],
-      "Dado una lista y un indice valido, Cuando se actualiza el segundo elemento, Entonces el elemento se modifica"
+      "Dado una lista y un indice valido, cuando se actualiza el segundo elemento, entonces el elemento se modifica"
         ~: actualizarElem 1 (+ 10) [1, 2, 3]
         ~?= [1, 12, 3],
-      "Dado una lista y un indice mayor a la longitud, Cuando se intenta actualizar, Entonces la lista permanece igual"
+      "Dado una lista y un indice mayor a la longitud, cuando se intenta actualizar, entonces la lista permanece igual"
         ~: actualizarElem 3 (+ 10) [1, 2, 3]
         ~?= [1, 2, 3],
-      "Dado una lista y un indice negativo, Cuando se intenta actualizar, Entonces la lista permanece igual"
+      "Dado una lista y un indice negativo, cuando se intenta actualizar, entonces la lista permanece igual"
         ~: actualizarElem (-1) (+ 10) [1, 2, 3]
         ~?= [1, 2, 3],
-      "Dado una lista de strings y un indice valido, Cuando se actualiza el cuarto elemento, Entonces el elemento se modifica"
+      "Dado una lista de strings y un indice valido, cuando se actualiza el cuarto elemento, entonces el elemento se modifica"
         ~: actualizarElem 3 ('t' :) ["s", "t", "r", "i", "n", "g"]
         ~?= ["s", "t", "r", "ti", "n", "g"]
     ]
@@ -77,25 +77,25 @@ testsActualizarElem =
 testsVacio :: Test
 testsVacio =
   test
-    [ {-"Dado un histograma vacio con ningun casillero, Cuando se consulta los casilleros, Entonces se obtienen unicamente los extremos"
+    [ {-"Dado un histograma vacio con ningun casillero, cuando se consulta los casilleros, entonces se obtienen unicamente los extremos"
         ~: casilleros (vacio 0 (0, 10))
         ~?= [ Casillero infinitoNegativo 0 0 0,
               Casillero 10 infinitoPositivo 0 0
             ], -}
-      "Dado un histograma vacio con un casillero, Cuando se consulta los casilleros, Entonces se obtienen los extremos y el unico casillero"
+      "Dado un histograma vacio con un casillero, cuando se consulta los casilleros, entonces se obtienen los extremos y el unico casillero"
         ~: casilleros (vacio 1 (0, 10))
         ~?= [ Casillero infinitoNegativo 0 0 0,
               Casillero 0 10 0 0,
               Casillero 10 infinitoPositivo 0 0
             ],
-      "Dado un histograma vacio con dos casilleros, Cuando se consulta los casilleros, Entonces se obtienen los extremos y los dos casilleros con el tamanio correspondiente"
+      "Dado un histograma vacio con dos casilleros, cuando se consulta los casilleros, entonces se obtienen los extremos y los dos casilleros con el tamanio correspondiente"
         ~: casilleros (vacio 2 (0, 10))
         ~?= [ Casillero infinitoNegativo 0 0 0,
               Casillero 0 5 0 0,
               Casillero 5 10 0 0,
               Casillero 10 infinitoPositivo 0 0
             ],
-      "Dado un histograma vacio con tres casilleros, Cuando se consulta los casilleros, Entonces se obtienen los extremos y los tres casilleros con el tamanio correspondiente"
+      "Dado un histograma vacio con tres casilleros, cuando se consulta los casilleros, entonces se obtienen los extremos y los tres casilleros con el tamanio correspondiente"
         ~: casilleros (vacio 3 (0, 6))
         ~?= [ Casillero infinitoNegativo 0 0 0,
               Casillero 0 2 0 0,
@@ -103,7 +103,7 @@ testsVacio =
               Casillero 4 6 0 0,
               Casillero 6 infinitoPositivo 0 0
             ],
-      "Dado un histograma vacio con tres casilleros y rango negativo, Cuando se consulta los casilleros, Entonces se obtienen los extremos y los tres casilleros con el tamanio correspondiente"
+      "Dado un histograma vacio con tres casilleros y rango negativo, cuando se consulta los casilleros, entonces se obtienen los extremos y los tres casilleros con el tamanio correspondiente"
         ~: casilleros (vacio 3 (-6, 0))
         ~?= [ Casillero infinitoNegativo (-6) 0 0,
               Casillero (-6) (-4) 0 0,
@@ -111,7 +111,7 @@ testsVacio =
               Casillero (-2) 0 0 0,
               Casillero 0 infinitoPositivo 0 0
             ],
-      "Dado un histograma vacio con tres casilleros y rango mixto, Cuando se consulta los casilleros, Entonces se obtienen los extremos y los tres casilleros con el tamanio correspondiente"
+      "Dado un histograma vacio con tres casilleros y rango mixto, cuando se consulta los casilleros, entonces se obtienen los extremos y los tres casilleros con el tamanio correspondiente"
         ~: casilleros (vacio 3 (-3, 3))
         ~?= [ Casillero infinitoNegativo (-3) 0 0,
               Casillero (-3) (-1) 0 0,
@@ -126,13 +126,13 @@ testsAgregar =
   let histogramaDeTam1 = vacio 1 (0, 2)
       histogramaDeTam3 = vacio 3 (0, 6)
    in test
-        [ "Dado un histograma de tamanio 1 y un valor en el limite inferior, Cuando se agrega el valor, Entonces el casillero correspondiente incrementa su cantidad"
+        [ "Dado un histograma de tamanio 1 y un valor en el limite inferior, cuando se agrega el valor, entonces el casillero correspondiente incrementa su cantidad"
             ~: casilleros (agregar 0 histogramaDeTam1)
             ~?= [ Casillero infinitoNegativo 0 0 0,
                   Casillero 0 2 1 100, -- El 100% de los valores estan aca
                   Casillero 2 infinitoPositivo 0 0
                 ],
-          "Dado un histograma de tamanio 3 y un valor en el limite inferior, Cuando se agrega el valor, Entonces el primer casillero incrementa su cantidad"
+          "Dado un histograma de tamanio 3 y un valor en el limite inferior, cuando se agrega el valor, entonces el primer casillero incrementa su cantidad"
             ~: casilleros (agregar 0 histogramaDeTam3)
             ~?= [ Casillero infinitoNegativo 0 0 0,
                   Casillero 0 2 1 100, -- El 100% de los valores estan aca
@@ -140,7 +140,7 @@ testsAgregar =
                   Casillero 4 6 0 0,
                   Casillero 6 infinitoPositivo 0 0
                 ],
-          "Dado un histograma de tamanio 3 y un valor en el segundo casillero, Cuando se agrega el valor, Entonces el segundo casillero incrementa su cantidad"
+          "Dado un histograma de tamanio 3 y un valor en el segundo casillero, cuando se agrega el valor, entonces el segundo casillero incrementa su cantidad"
             ~: casilleros (agregar 2 histogramaDeTam3)
             ~?= [ Casillero infinitoNegativo 0 0 0,
                   Casillero 0 2 0 0,
@@ -148,7 +148,7 @@ testsAgregar =
                   Casillero 4 6 0 0,
                   Casillero 6 infinitoPositivo 0 0
                 ],
-          "Dado un histograma de tamanio 3 y un valor fuera del rango inferior, Cuando se agrega el valor, Entonces el casillero de infinito negativo incrementa su cantidad"
+          "Dado un histograma de tamanio 3 y un valor fuera del rango inferior, cuando se agrega el valor, entonces el casillero de infinito negativo incrementa su cantidad"
             ~: casilleros (agregar (-1) histogramaDeTam3)
             ~?= [ Casillero infinitoNegativo 0 1 100, -- El 100% de los valores estan aca
                   Casillero 0 2 0 0,
@@ -156,7 +156,7 @@ testsAgregar =
                   Casillero 4 6 0 0,
                   Casillero 6 infinitoPositivo 0 0
                 ],
-          "Dado un histograma de tamanio 3 y un valor fuera del rango superior, Cuando se agrega el valor, Entonces el casillero de infinito positivo incrementa su cantidad"
+          "Dado un histograma de tamanio 3 y un valor fuera del rango superior, cuando se agrega el valor, entonces el casillero de infinito positivo incrementa su cantidad"
             ~: casilleros (agregar 7 histogramaDeTam3)
             ~?= [ Casillero infinitoNegativo 0 0 0,
                   Casillero 0 2 0 0,
@@ -169,69 +169,118 @@ testsAgregar =
 testsHistograma :: Test
 testsHistograma =
   test
-    [ "Dado ningun dato, Cuando se genera el histograma, Entonces se obtiene el histograma vacio"
-        ~: histograma 4 (1, 5) []
-        ~?= vacio 4 (1, 5),
-      "Dado datos dentro de un rango positivo, Cuando se genera el histograma, Entonces los datos se agregan a los casilleros correspondientes"
-        ~: histograma 4 (1, 5) [1, 2, 3]
-        ~?= agregar 3 (agregar 2 (agregar 1 (vacio 4 (1, 5)))),
-      "Dado datos dentro de un rango negativo, Cuando se genera el histograma, Entonces los datos se agregan a los casilleros correspondientes"
-        ~: histograma 4 (-10, -3) [-10, -7, -2]
-        ~?= agregar (-10) (agregar (-7) (agregar (-2) (vacio 4 (-10, -3)))),
-      "Dado datos dentro de un rango mixto, Cuando se genera el histograma, Entonces los datos se agregan a los casilleros correspondientes"
-        ~: histograma 4 (-10, 5) [-10, -7, 2]
-        ~?= agregar (-10) (agregar (-7) (agregar 2 (vacio 4 (-10, 5)))),
-      "Dado datos con extremos decimales, Cuando se genera el histograma, Entonces los datos se agregan a los casilleros correspondientes"
-        ~: histograma 4 (1.5, 5.5) [1.5, 2.5, 3.5]
-        ~?= agregar 3.5 (agregar 2.5 (agregar 1.5 (vacio 4 (1.5, 5.5)))),
-      -- "Dado rango nulo, Cuando se genera el histograma, Entonces deberia dar error" -- test comentado
-      "Dado datos fuera del rango, Cuando se genera el histograma, Entonces los datos se agregan a los extremos"
-        ~: histograma 4 (1, 5) [-10, 0, 6, 10]
-        ~?= agregar (-10) (agregar 0 (agregar 6 (agregar 10 (vacio 4 (1, 5))))),
-      "Dado varios datos en el mismo casillero, Cuando se genera el histograma, Entonces todos los datos se agregan al mismo casillero"
-        ~: histograma 4 (1, 5) [1, 1.5, 1.8]
-        ~?= agregar 1.8 (agregar 1.5 (agregar 1 (vacio 4 (1, 5)))),
-      "Dado todos los datos iguales, Cuando se genera el histograma, Entonces todos los datos se agregan al mismo casillero"
-        ~: histograma 4 (1, 5) [3, 3, 3, 3]
-        ~?= agregar 3 (agregar 3 (agregar 3 (agregar 3 (vacio 4 (1, 5)))))
+    [ "Dado ningun dato, cuando se genera el histograma, entonces se obtiene el histograma vacio"
+        ~: casilleros (histograma 4 (1, 5) [])
+        ~?= [ Casillero infinitoNegativo 1 0 0,
+              Casillero 1 2 0 0,
+              Casillero 2 3 0 0,
+              Casillero 3 4 0 0,
+              Casillero 4 5 0 0,
+              Casillero 5 infinitoPositivo 0 0 
+            ],
+      "Dado datos dentro de un rango positivo, cuando se genera el histograma, entonces los datos se agregan a los casilleros correspondientes"
+        ~: casilleros(histograma 4 (1, 5) [1, 2, 3])
+        ~?= [ Casillero infinitoNegativo 1 0 0,
+              Casillero 1 2 1 33.333336,
+              Casillero 2 3 1 33.333336,
+              Casillero 3 4 1 33.333336,
+              Casillero 4 5 0 0,
+              Casillero 5 infinitoPositivo 0 0 
+            ],
+      "Dado datos dentro de un rango negativo, cuando se genera el histograma, entonces los datos se agregan a los casilleros correspondientes"
+        ~: casilleros (histograma 4 (-11, -3) [-10, -7, -2])
+        ~?= [ Casillero infinitoNegativo (-11) 0 0,
+              Casillero (-11) (-9) 1 33.333336,
+              Casillero (-9)  (-7) 0 0,
+              Casillero (-7)  (-5) 1 33.333334,
+              Casillero (-5)  (-3) 0 0,
+              Casillero (-3) infinitoPositivo 1 33.333336 
+            ],
+      "Dado datos dentro de un rango mixto, cuando se genera el histograma, entonces los datos se agregan a los casilleros correspondientes"
+        ~: casilleros (histograma 5 (-10, 5) [-10, -7, 2])
+        ~?= [ Casillero infinitoNegativo (-10) 0 0,
+              Casillero (-10) (-7) 1 33.333336,
+              Casillero (-7)  (-4) 1 33.333336,
+              Casillero (-4)  (-1) 0 0,
+              Casillero (-1)    2  0 0,
+              Casillero   2     5  1 33.333336,
+              Casillero   5   infinitoPositivo 0 0 
+            ],
+      "Dado datos con extremos decimales, cuando se genera el histograma, entonces los datos se agregan a los casilleros correspondientes"
+        ~: casilleros (histograma 4 (1.5, 5.5) [1.5, 2.5, 3.5])
+        ~?= [ Casillero infinitoNegativo 1.5 0 0,
+              Casillero 1.5 2.5 1 33.333336,
+              Casillero 2.5 3.5 1 33.333336,
+              Casillero 3.5 4.5 1 33.333336,
+              Casillero 4.5 5.5 0 0,
+              Casillero 5.5 infinitoPositivo 0 0 
+            ],
+      -- "Dado rango nulo, cuando se genera el histograma, entonces deberia dar error" -- test comentado
+      "Dado datos fuera del rango, cuando se genera el histograma, entonces los datos se agregan a los extremos"
+        ~: casilleros (histograma 4 (1, 5) [-10, 0, 6, 10])
+        ~?= [ Casillero infinitoNegativo 1 2 50,
+              Casillero 1 2 0 0,
+              Casillero 2 3 0 0,
+              Casillero 3 4 0 0,
+              Casillero 4 5 0 0,
+              Casillero 5 infinitoPositivo 2 50 
+            ],
+      "Dado varios datos en el mismo casillero, cuando se genera el histograma, entonces todos los datos se agregan al mismo casillero"
+        ~: casilleros (histograma 4 (1, 5) [1, 1.5, 1.8])
+        ~?= [ Casillero infinitoNegativo 1 0 0,
+              Casillero 1 2 3 100,
+              Casillero 2 3 0 0,
+              Casillero 3 4 0 0,
+              Casillero 4 5 0 0,
+              Casillero 5 infinitoPositivo 0 0 
+            ],
+      "Dado todos los datos iguales, cuando se genera el histograma, entonces todos los datos se agregan al mismo casillero"
+        ~: casilleros (histograma 4 (1, 5) [3, 3, 3, 3])
+        ~?= [ Casillero infinitoNegativo 1 0 0,
+              Casillero 1 2 0 0,
+              Casillero 2 3 0 0,
+              Casillero 3 4 4 100,
+              Casillero 4 5 0 0,
+              Casillero 5 infinitoPositivo 0 0 
+            ]
     ]
 
 testsCasilleros :: Test
 testsCasilleros =
   test
-    [ "Dado un histograma vacio de tamanio 1 y rango (0,1), Cuando se consulta los casilleros, Entonces se obtienen los extremos y el unico casillero"
+    [ "Dado un histograma vacio de tamanio 1 y rango (0,1), cuando se consulta los casilleros, entonces se obtienen los extremos y el unico casillero"
         ~: casilleros (vacio 1 (0, 1))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 1.0 0 0.0,
               Casillero 1.0 infinitoPositivo 0 0.0
             ],
-      "Dado un histograma vacio de tamanio 1 y rango (0,2), Cuando se consulta los casilleros, Entonces se obtienen los extremos y el unico casillero"
+      "Dado un histograma vacio de tamanio 1 y rango (0,2), cuando se consulta los casilleros, entonces se obtienen los extremos y el unico casillero"
         ~: casilleros (vacio 1 (0, 2))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 0 0.0,
               Casillero 2.0 infinitoPositivo 0 0.0
             ],
-      "Dado un histograma vacio de tamanio 1 y rango (1,2), Cuando se consulta los casilleros, Entonces se obtienen los extremos y el unico casillero"
+      "Dado un histograma vacio de tamanio 1 y rango (1,2), cuando se consulta los casilleros, entonces se obtienen los extremos y el unico casillero"
         ~: casilleros (vacio 1 (1, 2))
         ~?= [ Casillero infinitoNegativo 1.0 0 0.0,
               Casillero 1.0 2.0 0 0.0,
               Casillero 2.0 infinitoPositivo 0 0.0
             ],
-      "Dado un histograma vacio de tamanio 2 y rango (-10,10), Cuando se consulta los casilleros, Entonces se obtienen los extremos y los dos casilleros"
+      "Dado un histograma vacio de tamanio 2 y rango (-10,10), cuando se consulta los casilleros, entonces se obtienen los extremos y los dos casilleros"
         ~: casilleros (vacio 2 (-10, 10))
         ~?= [ Casillero infinitoNegativo (-10.0) 0 0.0,
               Casillero (-10.0) 0 0 0.0,
               Casillero 0.0 10.0 0 0.0,
               Casillero 10.0 infinitoPositivo 0 0.0
             ],
-      "Dado un histograma vacio de tamanio 2 y rango (0,1), Cuando se consulta los casilleros, Entonces se obtienen los extremos y los dos casilleros"
+      "Dado un histograma vacio de tamanio 2 y rango (0,1), cuando se consulta los casilleros, entonces se obtienen los extremos y los dos casilleros"
         ~: casilleros (vacio 2 (0, 1))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 0.5 0 0.0,
               Casillero 0.5 1.0 0 0.0,
               Casillero 1.0 infinitoPositivo 0 0.0
             ],
-      "Dado un histograma vacio de tamanio 3 y rango (0,6), Cuando se consulta los casilleros, Entonces se obtienen los extremos y los tres casilleros"
+      "Dado un histograma vacio de tamanio 3 y rango (0,6), cuando se consulta los casilleros, entonces se obtienen los extremos y los tres casilleros"
         ~: casilleros (vacio 3 (0, 6))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 0 0.0,
@@ -239,7 +288,7 @@ testsCasilleros =
               Casillero 4.0 6.0 0 0.0,
               Casillero 6.0 infinitoPositivo 0 0.0
             ],
-      "Dado un histograma vacio de tamanio 3 y rango (0,6), Cuando se agrega el valor 2, Entonces el casillero correspondiente incrementa su cantidad"
+      "Dado un histograma vacio de tamanio 3 y rango (0,6), cuando se agrega el valor 2, entonces el casillero correspondiente incrementa su cantidad"
         ~: casilleros (agregar 2 (vacio 3 (0, 6)))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 0 0.0,
@@ -247,7 +296,7 @@ testsCasilleros =
               Casillero 4.0 6.0 0 0.0,
               Casillero 6.0 infinitoPositivo 0 0.0
             ],
-      "Dado un histograma vacio de tamanio 3 y rango (0,6), Cuando se agrega dos veces el valor 2, Entonces el casillero correspondiente incrementa su cantidad a 2"
+      "Dado un histograma vacio de tamanio 3 y rango (0,6), cuando se agrega dos veces el valor 2, entonces el casillero correspondiente incrementa su cantidad a 2"
         ~: casilleros (agregar 2 (agregar 2 (vacio 3 (0, 6))))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 0 0.0,
@@ -255,7 +304,7 @@ testsCasilleros =
               Casillero 4.0 6.0 0 0.0,
               Casillero 6.0 infinitoPositivo 0 0.0
             ],
-      "Dado un histograma vacio de tamanio 3 y rango (0,6), Cuando se agrega los valores 1 y 2, Entonces los casilleros correspondientes incrementan su cantidad"
+      "Dado un histograma vacio de tamanio 3 y rango (0,6), cuando se agrega los valores 1 y 2, entonces los casilleros correspondientes incrementan su cantidad"
         ~: casilleros (agregar 1 (agregar 2 (vacio 3 (0, 6))))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 1 50.0,
@@ -263,7 +312,7 @@ testsCasilleros =
               Casillero 4.0 6.0 0 0.0,
               Casillero 6.0 infinitoPositivo 0 0.0
             ],
-      "Dado un histograma vacio de tamanio 3 y rango (0,6), Cuando se agrega un valor fuera del rango inferior, Entonces el casillero de infinito negativo incrementa su cantidad"
+      "Dado un histograma vacio de tamanio 3 y rango (0,6), cuando se agrega un valor fuera del rango inferior, entonces el casillero de infinito negativo incrementa su cantidad"
         ~: casilleros (agregar (-1) (vacio 3 (0, 6)))
         ~?= [ Casillero infinitoNegativo 0.0 1 100.0,
               Casillero 0.0 2.0 0 0.0,
@@ -271,7 +320,7 @@ testsCasilleros =
               Casillero 4.0 6.0 0 0.0,
               Casillero 6.0 infinitoPositivo 0 0.0
             ],
-      "Dado un histograma vacio de tamanio 3 y rango (0,6), Cuando se agrega un valor fuera del rango superior, Entonces el casillero de infinito positivo incrementa su cantidad"
+      "Dado un histograma vacio de tamanio 3 y rango (0,6), cuando se agrega un valor fuera del rango superior, entonces el casillero de infinito positivo incrementa su cantidad"
         ~: casilleros (agregar 7 (vacio 3 (0, 6)))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 0 0.0,
@@ -279,7 +328,7 @@ testsCasilleros =
               Casillero 4.0 6.0 0 0.0,
               Casillero 6.0 infinitoPositivo 1 100.0
             ],
-      "Dado un histograma vacio de tamanio 3 y rango (0,6), Cuando se agrega un valor muy fuera del rango superior, Entonces el casillero de infinito positivo incrementa su cantidad"
+      "Dado un histograma vacio de tamanio 3 y rango (0,6), cuando se agrega un valor muy fuera del rango superior, entonces el casillero de infinito positivo incrementa su cantidad"
         ~: casilleros (agregar 100 (vacio 3 (0, 6)))
         ~?= [ Casillero infinitoNegativo 0.0 0 0.0,
               Casillero 0.0 2.0 0 0.0,
@@ -296,28 +345,28 @@ testsRecr =
       mult ex x ey y = x * y
       div ex x ey y = x / y
    in test
-        [ "Dado un expr Const 1, Cuando se aplica recrExpr, Entonces se obtiene Const 1"
+        [ "Dado un expr Const 1, cuando se aplica recrExpr, entonces se obtiene Const 1"
             ~: recrExpr id (\x y -> y - x) suma resta mult div (Const 1)
             ~?= 1,
-          "Dado un expr Rango 1 5, Cuando se aplica recrExpr, Entonces se obtiene 4"
+          "Dado un expr Rango 1 5, cuando se aplica recrExpr, entonces se obtiene 4"
             ~: recrExpr id (\x y -> y - x) suma resta mult div (Rango 1 5)
             ~?= 4,
-          "Dado un expr Suma (Const 1) (Const 2), Cuando se aplica recrExpr, Entonces se obtiene 3"
+          "Dado un expr Suma (Const 1) (Const 2), cuando se aplica recrExpr, entonces se obtiene 3"
             ~: recrExpr id (\x y -> y - x) suma resta mult div (Suma (Const 1) (Const 2))
             ~?= 3,
-          "Dado un expr Resta (Const 5) (Const 2), Cuando se aplica recrExpr, Entonces se obtiene 3"
+          "Dado un expr Resta (Const 5) (Const 2), cuando se aplica recrExpr, entonces se obtiene 3"
             ~: recrExpr id (\x y -> y - x) suma resta mult div (Resta (Const 5) (Const 2))
             ~?= 3,
-          "Dado un expr Mult (Const 2) (Const 3), Cuando se aplica recrExpr, Entonces se obtiene 6"
+          "Dado un expr Mult (Const 2) (Const 3), cuando se aplica recrExpr, entonces se obtiene 6"
             ~: recrExpr id (\x y -> y - x) suma resta mult div (Mult (Const 2) (Const 3))
             ~?= 6,
-          "Dado un expr Div (Const 6) (Const 2), Cuando se aplica recrExpr, Entonces se obtiene 3"
+          "Dado un expr Div (Const 6) (Const 2), cuando se aplica recrExpr, entonces se obtiene 3"
             ~: recrExpr id (\x y -> y - x) suma resta mult div (Div (Const 6) (Const 2))
             ~?= 3,
-          "Dado un expr Suma (Const 1) (Rango 1 5), Cuando se aplica recrExpr, Entonces se obtiene 5"
+          "Dado un expr Suma (Const 1) (Rango 1 5), cuando se aplica recrExpr, entonces se obtiene 5"
             ~: recrExpr id (\x y -> y - x) suma resta mult div (Suma (Const 1) (Rango 1 5))
             ~?= 5,
-          "Dado un expr Suma (Rango 1 5) (Rango 1 5), Cuando se aplica recrExpr, Entonces se obtiene 8"
+          "Dado un expr Suma (Rango 1 5) (Rango 1 5), cuando se aplica recrExpr, entonces se obtiene 8"
             ~: recrExpr id (\x y -> y - x) suma resta mult div (Suma (Rango 1 5) (Rango 1 5))
             ~?= 8
         ]
@@ -325,28 +374,28 @@ testsRecr =
 testsFold :: Test
 testsFold =
   test -- Estoy utilizando (\x y -> y - x) como fRango.
-    [ "Dado un expr Const 1, Cuando se aplica foldExpr, Entonces se obtiene Const 1"
+    [ "Dado un expr Const 1, cuando se aplica foldExpr, entonces se obtiene Const 1"
         ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Const 1)
         ~?= 1,
-      "Dado un expr Rango 1 5, Cuando se aplica foldExpr, Entonces se obtiene 4"
+      "Dado un expr Rango 1 5, cuando se aplica foldExpr, entonces se obtiene 4"
         ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Rango 1 5)
         ~?= 4,
-      "Dado un expr Suma (Const 1) (Const 2), Cuando se aplica foldExpr, Entonces se obtiene 3"
+      "Dado un expr Suma (Const 1) (Const 2), cuando se aplica foldExpr, entonces se obtiene 3"
         ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Suma (Const 1) (Const 2))
         ~?= 3,
-      "Dado un expr Resta (Const 5) (Const 2), Cuando se aplica foldExpr, Entonces se obtiene 3"
+      "Dado un expr Resta (Const 5) (Const 2), cuando se aplica foldExpr, entonces se obtiene 3"
         ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Resta (Const 5) (Const 2))
         ~?= 3,
-      "Dado un expr Mult (Const 2) (Const 3), Cuando se aplica foldExpr, Entonces se obtiene 6"
+      "Dado un expr Mult (Const 2) (Const 3), cuando se aplica foldExpr, entonces se obtiene 6"
         ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Mult (Const 2) (Const 3))
         ~?= 6,
-      "Dado un expr Div (Const 6) (Const 2), Cuando se aplica foldExpr, Entonces se obtiene 3"
+      "Dado un expr Div (Const 6) (Const 2), cuando se aplica foldExpr, entonces se obtiene 3"
         ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Div (Const 6) (Const 2))
         ~?= 3,
-      "Dado un expr Suma (Const 1) (Rango 1 5), Cuando se aplica foldExpr, Entonces se obtiene 5"
+      "Dado un expr Suma (Const 1) (Rango 1 5), cuando se aplica foldExpr, entonces se obtiene 5"
         ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Suma (Const 1) (Rango 1 5))
         ~?= 5,
-      "Dado un expr Suma (Rango 1 5) (Rango 1 5), Cuando se aplica foldExpr, Entonces se obtiene 8"
+      "Dado un expr Suma (Rango 1 5) (Rango 1 5), cuando se aplica foldExpr, entonces se obtiene 8"
         ~: foldExpr id (\x y -> y - x) (+) (-) (*) (/) (Suma (Rango 1 5) (Rango 1 5))
         ~?= 8
     ]
@@ -354,29 +403,32 @@ testsFold =
 testsEval :: Test
 testsEval =
   test
-    [ "Dado un expr Suma (Rango 1 5) (Const 1) con genFijo, Cuando se aplica fst . eval, Entonces se obtiene 4.0"
+    [ "Dado un expr Suma (Rango 1 5) (Const 1) con genFijo, cuando se aplica fst . eval, entonces se obtiene 4.0"
         ~: fst (eval (Suma (Rango 1 5) (Const 1)) genFijo)
         ~?= 4.0,
-      "Dado un expr Suma (Rango 1 5) (Const 1) con genNormalConSemilla 0, Cuando se aplica fst . eval, Entonces se obtiene 3.7980492"
+      "Dado un expr Suma (Rango 1 5) (Const 1) con genNormalConSemilla 0, cuando se aplica fst . eval, entonces se obtiene 3.7980492"
         ~: fst (eval (Suma (Rango 1 5) (Const 1)) (genNormalConSemilla 0))
         ~?= 3.7980492, -- el primer rango evalua a 2.7980492
-      "Dado un expr Suma (Rango 1 5) (Rango 1 5) con genNormalConSemilla 0, Cuando se aplica fst . eval, Entonces se obtiene 5.92308"
+      "Dado un expr Suma (Rango 1 5) (Rango 1 5) con genNormalConSemilla 0, cuando se aplica fst . eval, entonces se obtiene 5.92308"
         ~: fst (eval (Suma (Rango 1 5) (Rango 1 5)) (genNormalConSemilla 0))
         ~?= 5.92308, -- el primer rango evalua a 2.7980492 y el segundo a 3.1250308
-      "Dado un expr Resta (Rango 1 5) (Rango 1 5) con genNormalConSemilla 0, Cuando se aplica fst . eval, Entonces se obtiene -0.32698154"
+      "Dado un expr Resta (Rango 1 5) (Rango 1 5) con genNormalConSemilla 0, cuando se aplica fst . eval, entonces se obtiene -0.32698154"
         ~: fst (eval (Resta (Rango 1 5) (Rango 1 5)) (genNormalConSemilla 0))
         ~?= -0.32698154,
-      "Dado un expr Mult (Resta (Rango 1 5) (Rango 1 5)) (Rango 1 5) con genNormalConSemilla 0, Cuando se aplica fst . eval, Entonces se obtiene -1.7866315"
+      "Dado un expr Mult (Resta (Rango 1 5) (Rango 1 5)) (Rango 1 5) con genNormalConSemilla 0, cuando se aplica fst . eval, entonces se obtiene -1.7866315"
         ~: fst (eval (Mult (Resta (Rango 1 5) (Rango 1 5)) (Rango 1 5)) (genNormalConSemilla 0))
         ~?= -1.7866315, -- el primer rango evalua a 2.7980492, el segundo a 3.1250308 y el tercero a 5.464013
-      "Dado un expr Mult (Resta (Rango (-10) 10) (Rango (-10) 10)) (Rango 1 5) con genNormalConSemilla 0, Cuando se aplica fst . eval, Entonces se obtiene -1.7866315"
+      "Dado un expr Mult (Resta (Rango (-10) 10) (Rango 100 1000) (Rango 1 5) con genNormalConSemilla 0, cuando se aplica fst . eval, entonces se obtiene -1.7866315"
         ~: fst (eval (Mult (Resta (Rango (-10) 10) (Rango 100 1000)) (Rango 1 5)) (genNormalConSemilla 0))
         ~?= -3164.4377, -- el primer rango evalua a -1.0097542, el segundo a 578.1319 y el tercero a 5.464013
         -- rango 1 5 recibe misma semilla 2
+        
+      --"Dados rangos con genNormalConSemilla 0, cuando se aplica eval, entonces se obtiene el generador esperado."
       let (x, gen) = eval (Rango (-10) 10) (genNormalConSemilla 0)
           (y, gen') = eval (Rango 100 1000) gen
           (z, gen'') = eval (Rango 1 5) gen'
        in (x, y, z) ~?= (-1.0097542, 578.1319, 5.464013),
+       
       let (x, gen) = eval (Rango 1 5) (genNormalConSemilla 0)
           (y, gen') = eval (Rango 1 5) gen
           (z, gen'') = eval (Rango 1 5) gen'
@@ -386,13 +438,13 @@ testsEval =
 testsArmarHistograma :: Test
 testsArmarHistograma =
   test
-    [ "Dado 1 casillero, 3 experimentos, funcion que use dameUno con generador Fijo, Cuando se aplica armarHistograma, Entonces se obtiene casillero único completo"
+    [ "Dado 1 casillero, 3 experimentos, funcion que use dameUno con generador Fijo, cuando se aplica armarHistograma, entonces se obtiene casillero único completo"
         ~: casilleros (fst (armarHistograma 1 3 (curry dameUno 1 5) genFijo))
         ~?= [ Casillero infinitoNegativo 2 0 0.0,
               Casillero 2 4 3 100.0, -- El 100% de los valores estan aca
               Casillero 4 infinitoPositivo 0 0.0
             ], -- el primer rango evalua a 3, el segundo a 3 y el tercero a 3
-      "Dado 3 casilleros, 10 experimentos, funcion que use dameUno con generador Fijo, Cuando se aplica armarHistograma, Entonces se obtiene un casillero completo"
+      "Dado 3 casilleros, 10 experimentos, funcion que use dameUno con generador Fijo, cuando se aplica armarHistograma, entonces se obtiene un casillero completo"
         ~: casilleros (fst (armarHistograma 3 10 (curry dameUno 1 5) genFijo))
         ~?= [ Casillero infinitoNegativo 2 0 0.0,
               Casillero 2 2.6666667 0 0.0,
@@ -400,19 +452,27 @@ testsArmarHistograma =
               Casillero 3.3333335 4 0 0.0,
               Casillero 4 infinitoPositivo 0 0.0
             ], -- el primer rango evalua a 3, el segundo a 3 y análogamente todos los experimentos
-      "Dado 1 casillero, 3 experimentos, funcion que use dameUno con generador Normal con Semilla, Cuando se aplica armarHistograma, Entonces se obtiene "
+      "Dado 1 casillero, 3 experimentos, funcion que use dameUno con generador Normal con Semilla, cuando se aplica armarHistograma, entonces se obtiene "
         ~: casilleros (fst (armarHistograma 1 3 (curry dameUno 1 5) (genNormalConSemilla 0)))
         ~?= [ Casillero infinitoNegativo 1.4687741 0 0.0,
               Casillero 1.4687741 6.1226206 3 100.0, -- El 100% de los valores estan aca (pocas muestras)
               Casillero 6.1226206 infinitoPositivo 0 0.0
             ], -- el primer rango evalua a 2.7980492, el segundo a 3.1250308 y el tercero a 5.464013
-      "Dado 1 casillero, 1000 experimentos, funcion que use dameUno, Cuando se aplica armarHistograma, Entonces se obtiene muestras bien distribuidas"
+      "Dado 1 casillero, 20 experimentos, funcion que use dameUno con generador Normal con Semilla, cuando se aplica armarHistograma, entonces se obtiene "
+        ~: casilleros (fst (armarHistograma 1 20 (curry dameUno 1 5) (genNormalConSemilla 0)))
+        ~?= [ Casillero infinitoNegativo 0.9621854 0 0.0,
+              Casillero 0.9621854 5.279082 19 95.0,
+              Casillero 5.279082 infinitoPositivo 1 5.0
+            ]
+    
+    
+      {- "Dado 1 casillero, 1000 experimentos, funcion que use dameUno, cuando se aplica armarHistograma, entonces se obtiene muestras bien distribuidas"
         ~: casilleros (fst (armarHistograma 1 1000 (curry dameUno 1 5) (genNormalConSemilla 0)))
         ~?= [ Casillero infinitoNegativo 1.0136857 25 2.5,
               Casillero 1.0136857 4.966351 955 95.5, -- El ~95% de los valores estan aca (bastantes muestras)
               Casillero 4.966351 infinitoPositivo 20 2.0
             ],
-      "Dado 4 casilleros, 1000 experimentos, funcion que use dameUno, Cuando se aplica armarHistograma, Entonces vemos la distribución"
+      "Dado 4 casilleros, 1000 experimentos, funcion que use dameUno, cuando se aplica armarHistograma, entonces vemos la distribución"
         ~: casilleros (fst (armarHistograma 4 1000 (curry dameUno 1 5) (genNormalConSemilla 0)))
         ~?= [ Casillero infinitoNegativo 1.0136857 25 2.5, -- El ~2.5% de los valores estan aca
               Casillero 1.0136857 2.001852 129 12.9,
@@ -421,7 +481,7 @@ testsArmarHistograma =
               Casillero 3.9781847 4.966351 141 14.1,
               Casillero 4.966351 infinitoPositivo 20 2.0 -- El ~2.5% de los valores estan aca
             ],
-      "Dado 11 casilleros, 100000 experimentos, funcion que use dameUno, Cuando se aplica armarHistograma, Entonces vemos la distribución"
+      "Dado 11 casilleros, 100000 experimentos, funcion que use dameUno, cuando se aplica armarHistograma, entonces vemos la distribución"
         ~: casilleros (fst (armarHistograma 10 100000 (curry dameUno 1 5) (genNormalConSemilla 0)))
         ~?= [ Casillero infinitoNegativo 1.0097816 2464 2.464, -- El ~2.5% de los valores estan aca
               Casillero 1.0097816 1.4086598 3299 3.299,
@@ -435,8 +495,8 @@ testsArmarHistograma =
               Casillero 4.2008076 4.5996857 6074 6.0740004,
               Casillero 4.5996857 4.998564 3365 3.365,
               Casillero 4.998564 infinitoPositivo 2545 2.545 -- El ~2.5% de los valores estan aca
-            ]
-    {-  "Dado 11 casilleros, 100000 experimentos, funcion que use dameUno, Cuando se aplica armarHistograma, Entonces vemos la distribución"
+            ] -}
+    {-  "Dado 11 casilleros, 100000 experimentos, funcion que use dameUno, cuando se aplica armarHistograma, entonces vemos la distribución"
         ~: casilleros (fst (armarHistograma 10 100000 (operadorBinarioGen (*) (curry dameUno 1 5) (curry dameUno 5 30)) (genNormalConSemilla 0)))
         ~?= [ Casillero infinitoNegativo 1.0097816 2464 2.464, -- El ~2.5% de los valores estan aca
               Casillero 0 0 0 0,
@@ -447,7 +507,47 @@ testsArmarHistograma =
 testsEvalHistograma :: Test
 testsEvalHistograma =
   test
-    [completar]
+    [""
+     ~: casilleros (fst (evalHistograma 1 1000 (Mult (Rango 1 5) (Const 2)) (genNormalConSemilla 0)))
+     ~?= [Casillero infinitoNegativo 2.0273714 25 2.5,Casillero 2.0273714 9.932702 955 95.5,Casillero 9.932702 infinitoPositivo 20 2.0]
+     ]
+     
+
+
+{- Casos de test posibles:
+
+- Considerar Expresiones, cantCasilleros, cantidadDeMuestras y generador
+
+-- Expresión sin rango    
+      -- Probarlo con un genFijo y un genConSemilla
+      -- Cantidad de casilleros es indistinta
+
+      -- Solamente un const 
+      evalHistograma 1 5 (Const 2) genFijo
+      evalHistograma 1 5 (Const 2) (genNormalConSemilla 0) 
+
+      -- Cuenta con solo const 
+      evalHistograma 7 5 (Suma (Const 2) (Const 10)) genFijo
+
+-- Solamente un rango -> Deberia devolver un histograma como los de ArmarHistograma (agarrar un ejemplo de ahi) (aca testear tambien con varios casilleros)
+evalHistograma 1 10 (Rango 1 5) (genNormalConSemilla 0)
+evalHistograma 1 5  (Rango -10 10) (genNormalConSemilla 0)
+
+-- De aca en adelante testear con 7 casilleros, 1 5 10 15 muestras 
+-- Una multiplicacion entre rango y una constante usando genConSemilla 
+evalHstograma 1 1 (Mult (Rango 1 5) (Const 2)) (genNormalconSemilla 0)
+evalHstograma 1 10 (Mult (Rango 1 5) (Const 2)) (genNormalconSemilla 0)
+
+-- Una suma 
+
+-- Una resta 
+
+-- Un div
+
+-- Calculo muy largo (final) este (1.0~5.0 + (3.0 * 100.0~105.0)) / 2.0? 
+
+
+ -}
 
 testsParse :: Test
 testsParse =
@@ -521,7 +621,9 @@ testsMostrarHistograma =
                   "0.00 - 2.00 |▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒",
                   "-inf - 0.00 |"
 
-
+  -- En el Test original estaba mal el caracter : esperaba \9618 pero obtenía \9617
+  -- \9617 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+  -- \9618 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
                   
                 ],
           lines (mostrarHistograma (agregar 1 (vacio 3 (0, 1000))))

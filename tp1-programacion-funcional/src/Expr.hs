@@ -128,13 +128,13 @@ maybeParen False s = s
 -- | Mostrar las expresiones, pero evitando algunos paréntesis innecesarios.
 -- En particular queremos evitar paréntesis en sumas y productos anidados.
 mostrar :: Expr -> String
-mostrar expr = recrExpr fConst fRango fSuma fResta fMult fDiv expr
+mostrar = recrExpr fConst fRango fSuma fResta fMult fDiv
   where
     fConst x             = show x
     fRango x y           = show x ++ "~" ++ show y
-    fSuma e1 r1 e2 r2    = (maybeParenParaExpr e1 [CESuma])  r1 ++ " + " ++ (maybeParenParaExpr e2 [CESuma])  r2
-    fResta e1 r1 e2 r2   = (maybeParenParaExpr e1 [])        r1 ++ " - " ++ (maybeParenParaExpr e2 [])        r2
-    fMult e1 r1 e2 r2    = (maybeParenParaExpr e1 [CEMult])  r1 ++ " * " ++ (maybeParenParaExpr e2 [CEMult])  r2
-    fDiv  e1 r1 e2 r2    = (maybeParenParaExpr e1 [])        r1 ++ " / " ++ (maybeParenParaExpr e2 [])        r2
+    fSuma e1 r1 e2 r2    = maybeParenParaExpr e1 [CESuma]  r1 ++ " + " ++ maybeParenParaExpr e2 [CESuma]  r2
+    fResta e1 r1 e2 r2   = maybeParenParaExpr e1 []        r1 ++ " - " ++ maybeParenParaExpr e2 []        r2
+    fMult e1 r1 e2 r2    = maybeParenParaExpr e1 [CEMult]  r1 ++ " * " ++ maybeParenParaExpr e2 [CEMult]  r2
+    fDiv  e1 r1 e2 r2    = maybeParenParaExpr e1 []        r1 ++ " / " ++ maybeParenParaExpr e2 []        r2
     
-    maybeParenParaExpr expresion consExpr = maybeParen (not (constructor expresion `elem` ([CEConst, CERango] ++ consExpr)))
+    maybeParenParaExpr expresion consExpr = maybeParen (constructor expresion `notElem` ([CEConst, CERango] ++ consExpr))
