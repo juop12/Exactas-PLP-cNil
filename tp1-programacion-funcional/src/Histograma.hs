@@ -31,7 +31,7 @@ data Histograma = Histograma Float Float [Int]
 
 -- | Inicializa un histograma vacío con @n@ casilleros para representar
 -- valores en el rango y 2 casilleros adicionales para los valores fuera del rango.
--- Require que @l < u@ y @n >= 1@.
+-- Require que @limiteInferior < limiteSuperior@ y @n >= 1@.
 vacio :: Int -> (Float, Float) -> Histograma
 vacio cantDeCasilleros (inicioDeHist, finDeHist) = Histograma inicio tamIntervalo cantElemPorCasillero
   where

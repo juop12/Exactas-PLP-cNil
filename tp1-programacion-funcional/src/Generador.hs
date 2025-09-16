@@ -93,21 +93,21 @@ genNormalConSemilla :: Int -> Gen
 genNormalConSemilla s = fromList (RN.mkNormals s)
 
 -- | Dados un rango y un generador devuelve un número que está dentro del rango con un 95% de confianza.
--- Es una función total @dameUno (l, u)@ con u < l equivale a @dameUno (u, l)@.
--- Si @l == u@ devuelve @l@.
+-- Es una función total @dameUno (limiteInferior, limiteSuperior)@ con limiteSuperior < limiteInferior equivale a @dameUno (limiteSuperior, limiteInferior)@.
+-- Si @limiteInferior == limiteSuperior@ devuelve @limiteInferior@.
 dameUno :: (Float, Float) -> G Float
-dameUno (l, u) g =
-  let (x, siguienteGen) = siguiente g
-      s = (u - l) / 2.0
-      medio = l + s
+dameUno (limiteInferior, limiteSuperior) gen =
+  let (x, siguienteGen) = siguiente gen
+      s = (limiteSuperior - limiteInferior) / 2.0
+      medio = limiteInferior + s
    in (medio + s / 1.96 * x, siguienteGen)
 
 -- | Aplica una función múltiples veces a un generador.
 muestra :: G a -> Int -> G [a]
-muestra _ 0 g = ([], g)
-muestra f n g = (x : xs, sf)
+muestra _ 0 gen = ([], gen)
+muestra f n gen = (x : xs, sf)
   where
-    (x, s1) = f g
+    (x, s1) = f gen
     (xs, sf) = muestra f (n - 1) s1
 
 fromList :: [Float] -> Gen
@@ -127,7 +127,7 @@ rango95 xs = (promedio - s, promedio + s)
     s = if desviacion == 0 then 1 else desviacion * 1.96
 
 testRango95 :: (Float, Float) -> Int -> Gen -> (Float, Float)
-testRango95 (l, u) n g = rango95 $ fst $ muestra (dameUno (l, u)) n g
+testRango95 (limiteInferior, limiteSuperior) n gen = rango95 $ fst $ muestra (dameUno (limiteInferior, limiteSuperior)) n gen
 
 -- >>> conGenNormal (testRango95 (1, 5) 100000)
 -- (0.9996053,4.9987354)
