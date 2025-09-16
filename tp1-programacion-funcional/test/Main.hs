@@ -420,6 +420,9 @@ testsEval =
       "Dado un expr Resta (Rango 1 5) (Rango 1 5) con genNormalConSemilla 0, cuando se aplica fst . eval, entonces se obtiene -0.32698154"
         ~: fst (eval (Resta (Rango 1 5) (Rango 1 5)) (genNormalConSemilla 0))
         ~?= -0.32698154,
+      "Dado un expr Div (Rango 1 5) (Rango 1 5) con genNormalConSemilla 0, cuando se aplica fst . eval, entonces se obtiene 0.8953669192636"
+        ~: fst (eval (Div (Rango 1 5) (Rango 1 5)) (genNormalConSemilla 0))
+        ~?= 0.8953669192636,
       "Dado un expr Mult (Resta (Rango 1 5) (Rango 1 5)) (Rango 1 5) con genNormalConSemilla 0, cuando se aplica fst . eval, entonces se obtiene -1.7866315"
         ~: fst (eval (Mult (Resta (Rango 1 5) (Rango 1 5)) (Rango 1 5)) (genNormalConSemilla 0))
         ~?= -1.7866315, -- el primer rango evalua a 2.7980492, el segundo a 3.1250308 y el tercero a 5.464013
@@ -428,16 +431,17 @@ testsEval =
         ~?= -3164.4377, -- el primer rango evalua a -1.0097542, el segundo a 578.1319 y el tercero a 5.464013
         -- rango 1 5 recibe misma semilla 2
         
-      --"Dados rangos con genNormalConSemilla 0, cuando se aplica eval, entonces se obtiene el generador esperado."
-      let (x, gen) = eval (Rango (-10) 10) (genNormalConSemilla 0)
-          (y, gen') = eval (Rango 100 1000) gen
-          (z, gen'') = eval (Rango 1 5) gen'
-       in (x, y, z) ~?= (-1.0097542, 578.1319, 5.464013),
-       
-      let (x, gen) = eval (Rango 1 5) (genNormalConSemilla 0)
-          (y, gen') = eval (Rango 1 5) gen
-          (z, gen'') = eval (Rango 1 5) gen'
-       in (x, y, z) ~?= (2.7980492, 3.1250308, 5.464013)
+      "Dado tres rangos distintos con genNormalConSemilla 0, cuando se aplica eval en cadena, entonces se obtienen los valores esperados"
+        ~: let  (x, gen)  = eval (Rango (-10) 10) (genNormalConSemilla 0)
+                (y, gen') = eval (Rango 100 1000) gen
+                (z, gen'')= eval (Rango 1 5) gen'
+           in (x, y, z) ~?= (-1.0097542, 578.1319, 5.464013),
+
+      "Dado tres rangos iguales con genNormalConSemilla 0, cuando se aplica eval en cadena, entonces se obtienen los valores esperados"
+        ~: let  (x, gen)  = eval (Rango 1 5) (genNormalConSemilla 0)
+                (y, gen') = eval (Rango 1 5) gen
+                (z, gen'')= eval (Rango 1 5) gen'
+           in (x, y, z) ~?= (2.7980492, 3.1250308, 5.464013)
     ]
 
 testsArmarHistograma :: Test

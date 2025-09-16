@@ -48,7 +48,7 @@
     - [X] Checkear los tests testsCasilleros Ej 6
     - [X] Checkear los tests testsRecr Ej 7
     - [X] Checkear los tests testsFold Ej 7
-    - [] Checkear los tests testsEval Ej 8
+    - [X] Checkear los tests testsEval Ej 8
     - [] Checkear los tests testsArmarHistograma Ej 9
     - [] Checkear los tests testsEvalHistograma Ej 10
     - [] Checkear los tests testsMostrar Ej 11
