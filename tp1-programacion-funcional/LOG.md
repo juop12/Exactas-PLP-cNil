@@ -62,7 +62,8 @@
     - [] Agregar tests
 
 - [] Terminar Ejercicio 12
-    - [X] Hacer la demostracio
-    - [] Agregar tests
+    - [X] Hacer la demostracion
+    - [] Chequear la demostración
+    - [] Agregar tests ?
 
 - [] Checkear si el gráfico del histograma es correcto ya que tiene la cola +inf muy pesada
