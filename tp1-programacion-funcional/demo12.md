@@ -1,3 +1,9 @@
+---
+title: Esquema de Inducción
+author: Grupo cNil
+date: 2025-09-16
+---
+
 ## Ejercicio 12
 ### Descripción del problema de demostracion
 Necesitamos demostrar que *toda la expresión tiene un literal más que su cantidad de operadores*. Los literales son las constantes y los rangos. Para esto se dispone de las siguientes definiciones.
@@ -26,12 +32,15 @@ cantOp (Mult a b) = S (suma (cantOp a) (cantOp b))  -- {O5}
 cantOp (Div a b) = S (suma (cantOp a) (cantOp b))   -- {O6}
 ```
 
-Y del siguiente lema que podemos asumir como válido. No hace falta demostrarlo:
+Y del siguiente lema que podemos asumir como válido.\
+No hace falta demostrarlo:
 
-```haskell
-{CONMUT} ∀n, m :: Nat · suma n m = suma m n
-```
 
+$\quad\{CONMUT\}\quad \forall n,\ m ::Nat\ ·\ suma\ \ n\ \ m = suma\ \ m\ \ n$
+
+\
+\
+\
 Dado que `cantList` y `cantOp` reciben un tipo de dato `Expr` haríamos bien en recordar cómo está compuesta su estructura.
 
 #### Expr
@@ -45,14 +54,15 @@ data Expr = Const Float
 ```
 
 #### Propiedad a Demostrar
-```haskell
-∀e :: Expr · cantLit e = S (cantOp e)
-```
+
+$\quad\forall e :: Expr\ ·\ cantLit\ \ e=S\ \ (cantOp\ \ e)$
+
 
 ### Demostración
 #### a) Predicado Unario
 Dado que la propiedad opera sobre expresiones `Expr` tiene sentido definir el *predicadio unario* correspondiente a la demostracion por induccion estructural en una expresión `e 
-:: Expr`. Queda definido como: $P(e):=cantList e = S (cantOp e)$
+:: Expr`. Queda definido como: $P(e):=\ cantList\ \ e=S\ \ (cantOp\ \ e)$
+
 #### b) Esquema formal de induccion estructural
 Por el principio de inducción estructural sobre `Expr` **[declarar teorema]**, **si**
 
@@ -82,11 +92,7 @@ $$
 cantList (Const x) = S Z -- {L1} por un lado
 S cantOp (Const x) = S Z -- {O1} por otro. 
 ```
-
-<div align="right">
-
-$\square$
-</div>
+\makebox[\linewidth][r]{$\square$}
 
 ---
 
@@ -103,10 +109,7 @@ $$
 cantList (Rango x y) = S Z -- {L2} por un lado
 S cantOp (Rango x y) = S Z -- {O2} por otro. 
 ```
-<div align="right">
-
-$\square$
-</div>
+\makebox[\linewidth][r]{$\square$}
 
 ---
 
@@ -129,15 +132,10 @@ cantList (Suma e1 e2) = suma (cantList e1) (cantList e2)        -- {L3}
                       = S (cantOp (Suma e1 e2))                 -- {O3} 
                       -- Como se quería probar.
 ```
-<div align="right">
-
-$\square$
-</div>
+\makebox[\linewidth][r]{$\square$}
 
 Los demás casos inductivos son análogos a este último (cambiar "Suma" por "Mult", "Resta" y "Div" usando {L4}, {L5}, {L6} y {O4}, {O5}, {O6} en vez de {L3} y {O3} respectivamente en cada caso).
 
 Por lo tanto. $\forall\ e::Expr.\ P(e).$
-<div align="right">
 
-$\blacksquare$
-</div>
+\makebox[\linewidth][r]{$\blacksquare$}
