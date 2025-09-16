@@ -492,7 +492,9 @@ testsEvalHistograma =
      ~: casilleros (fst (evalHistograma 1 1000 (Mult (Rango 1 5) (Const 2)) (genNormalConSemilla 0)))
      ~?= [Casillero infinitoNegativo 2.0273714 25 2.5,Casillero 2.0273714 9.932702 955 95.5,Casillero 9.932702 infinitoPositivo 20 2.0]
      ]
-     
+
+
+
 {- Casos de test posibles:
 
 - Considerar Expresiones, cantCasilleros, cantidadDeMuestras y generador
