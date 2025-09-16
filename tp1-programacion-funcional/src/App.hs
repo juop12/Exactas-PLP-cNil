@@ -10,8 +10,8 @@ import Util
 
 -- | Función auxiliar para probar el histograma con generadores de números aleatorios.
 probarHistograma :: (Float, Float) -> Int -> Gen -> Histograma
-probarHistograma rango cantidadMuestras g =
-  fst $ armarHistograma cantidadDeCasilleros cantidadMuestras (dameUno rango) g
+probarHistograma rango cantDeMuestras g =
+  fst $ armarHistograma cantDeCasilleros cantDeMuestras (dameUno rango) g
 
 -- Desde el repl
 --
@@ -51,11 +51,11 @@ probarHistograma rango cantidadMuestras g =
 -- ghci> conGenNormal (mostrarHistograma . probarHistograma (1, 5) 100) >>= putStrLn
 -- ghci> conGenNormal (mostrarHistograma . probarHistograma (1, 5) 100000) >>= putStrLn
 
-cantidadDeMuestras :: Int
-cantidadDeMuestras = 100000
+cantDeMuestras :: Int
+cantDeMuestras = 100000
 
-cantidadDeCasilleros :: Int
-cantidadDeCasilleros = 11
+cantDeCasilleros :: Int
+cantDeCasilleros = 11
 
 app :: Gen -> Sandbox Gen
 app g =
@@ -68,7 +68,7 @@ app g =
           else case parseEither input of
             Left _ -> (g, "Error en la expresión", Continue)
             Right expr ->
-              let (h, g') = evalHistograma cantidadDeCasilleros cantidadDeMuestras expr g
+              let (h, g') = evalHistograma cantDeCasilleros cantDeMuestras expr g
                in (g', mostrarHistograma h, Continue)
     }
 
