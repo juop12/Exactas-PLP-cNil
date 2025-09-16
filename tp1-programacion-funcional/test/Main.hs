@@ -43,6 +43,9 @@ testsAlinearDerecha =
     [ "Dado una palabra mas corta que n, cuando se alinea a la derecha, entonces se agregan espacios adelante"
         ~: alinearDerecha 6 "hola"
         ~?= "  hola",
+      "Dado una palabra igual de larga que n, cuando se alinea a la derecha, entonces no agrega nada"
+        ~: alinearDerecha 4 "hola"
+        ~?= "hola",
       "Dado una palabra mas larga que n, cuando se alinea a la derecha, entonces se devuelve la palabra original"
         ~: alinearDerecha 10 "incierticalc"
         ~?= "incierticalc",
