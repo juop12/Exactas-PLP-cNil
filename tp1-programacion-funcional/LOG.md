@@ -2,6 +2,15 @@
 
 ## Hechos
 
+- [X] Conseguir lenguaje ubicuo
+    - listas de valores de casillero tienen el sufijo "PorCasillero". Ejemplo: minimosPorCasillero, cantElemPorCasillero
+
+    - Histograma inicio tamIntervalo cantElemPorCasillero
+    - Casillero casMinimo casMaximo casCant casPorcentaje
+    
+    - vacio cantDeCasilleros (inicioHist, finHist) 
+    - histograma cantDeCasilleros (inicioHist, finHist) datos
+
 - [X] Terminar Ejercicio 4
     - [X] Checkear que funcione insertar en el último casillero
 - [X] Terminar Ejercicio 5
@@ -23,6 +32,9 @@
     - [X] Implementar
     - [X] Agregar tests
     
+- [X] Checkear si el grafico del histograma es correcto ya que tiene la cola +inf muy pesada
+    - Es correcto segun correctores.
+
 ## Pendientes
 
 - [] Recheckear todos los tests
@@ -44,15 +56,6 @@
     - [] Checkear los tests testsMostrarFloat 
     - [] Checkear los tests testsMostrarHistograma 
 
-- [] Conseguir lenguaje ubicuo
-    - listas de valores de casillero tienen el sufijo "PorCasillero". Ejemplo: minimosPorCasillero, cantElemPorCasillero
-
-    - Histograma inicio tamIntervalo cantElemPorCasillero
-    - Casillero casMinimo casMaximo casCant casPorcentaje
-    
-    - vacio cantDeCasilleros (inicioHist, finHist) 
-    - histograma cantDeCasilleros (inicioHist, finHist) datos
-
 - [] Correr hlint
     - Aplique el linter a util y reduje calcularPorcentaje
     - Aplique el linter a todos los archivos
@@ -64,6 +67,3 @@
 - [] Terminar Ejercicio 12
     - [X] Hacer la demostracion
     - [] Chequear la demostración
-    - [] Agregar tests ?
-
-- [] Checkear si el gráfico del histograma es correcto ya que tiene la cola +inf muy pesada
