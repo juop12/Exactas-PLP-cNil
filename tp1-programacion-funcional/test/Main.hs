@@ -485,10 +485,56 @@ testsArmarHistograma =
 testsEvalHistograma :: Test
 testsEvalHistograma =
   test
-    [ ""
-        ~: casilleros (fst (evalHistograma 1 1000 (Mult (Rango 1 5) (Const 2)) (genNormalConSemilla 0)))
-        ~?= [Casillero infinitoNegativo 2.0273714 25 2.5, Casillero 2.0273714 9.932702 955 95.5, Casillero 9.932702 infinitoPositivo 20 2.0]
-
+    [ "Dado un Const y genFijo, cuando se evalúa el histograma, entonces todos los valores caen en el casillero central"
+        ~: casilleros (fst (evalHistograma 1 5 (Const 2) genFijo))
+        ~?= [ Casillero infinitoNegativo 1.0 0 0.0,
+              Casillero 1.0 3.0 5 100.0,
+              Casillero 3.0 infinitoPositivo 0 0.0
+            ],
+      "Dado un Const y genNormalConSemilla, cuando se evalúa el histograma, entonces todos los valores caen en el casillero central"
+        ~: casilleros (fst (evalHistograma 1 5 (Const 2) (genNormalConSemilla 0)))
+        ~?= [ Casillero infinitoNegativo 1.0 0 0.0,
+              Casillero 1.0 3.0 5 100.0,
+              Casillero 3.0 infinitoPositivo 0 0.0
+            ],
+      "Dado una suma de Const y genFijo, cuando se evalúa el histograma, entonces todos los valores caen en el casillero correspondiente"
+        ~: casilleros (fst (evalHistograma 7 5 (Suma (Const 2) (Const 10)) genFijo))
+        ~?= [ Casillero infinitoNegativo 11.0 0 0.0,
+              Casillero 11.0 11.285714 0 0.0,
+              Casillero 11.285714 11.571428 0 0.0,
+              Casillero 11.571428 11.857143 0 0.0,
+              Casillero 11.857143 12.142858 5 100.0,
+              Casillero 12.142858 12.428572 0 0.0,
+              Casillero 12.428572 12.714286 0 0.0,
+              Casillero 12.714286 13.0 0 0.0,
+              Casillero 13.0 infinitoPositivo 0 0.0
+            ],
+      "Dado un Rango 1~5 y genNormalConSemilla, cuando se evalúa el histograma con 10 muestras, entonces todos los valores caen en el casillero central"
+        ~: casilleros (fst (evalHistograma 1 10 (Rango 1 5) (genNormalConSemilla 0)))
+        ~?= [ Casillero infinitoNegativo 0.57067895 0 0.0,
+              Casillero 0.57067895 5.790039 10 100.0,
+              Casillero 5.790039 infinitoPositivo 0 0.0
+            ],
+      "Dado un Rango -10~10 y genNormalConSemilla, cuando se evalúa el histograma con 5 muestras, entonces todos los valores caen en el casillero central"
+        ~: casilleros (fst (evalHistograma 1 5 (Rango (-10) 10) (genNormalConSemilla 0)))
+        ~?= [ Casillero infinitoNegativo (-11.117321) 0 0.0,
+              Casillero (-11.117321) 13.978207 5 100.0,
+              Casillero 13.978207 infinitoPositivo 0 0.0
+            ],
+      "Dado una multiplicación entre Rango y Const y genNormalConSemilla, cuando se evalúa el histograma con 10 muestras, entonces todos los valores caen en el casillero central"
+        ~: casilleros (fst (evalHistograma 1 10 (Mult (Rango 1 5) (Const 2)) (genNormalConSemilla 0)))
+        ~?= [ Casillero infinitoNegativo 1.1413579 0 0.0,
+              Casillero 1.1413579 11.580078 10 100.0,
+              Casillero 11.580078 infinitoPositivo 0 0.0
+            ],
+      "Dado una suma entre Rango y Const y genNormalConSemilla, cuando se evalúa el histograma con 3 casilleros y 10 muestras, entonces los valores se distribuyen en los casilleros"
+        ~: casilleros (fst (evalHistograma 3 10 (Suma (Rango 1 5) (Const 2)) (genNormalConSemilla 0)))
+        ~?= [ Casillero infinitoNegativo 2.5706792 0 0.0,
+              Casillero 2.5706792 4.310466 3 30.000002,
+              Casillero 4.310466 6.050253 4 40.0,
+              Casillero 6.050253 7.7900395 3 30.000002,
+              Casillero 7.7900395 infinitoPositivo 0 0.0
+            ]
     ]
 
 {- Casos de test posibles:

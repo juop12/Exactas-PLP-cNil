@@ -31,14 +31,19 @@
 - [X] Terminar Ejercicio 11
     - [X] Implementar
     - [X] Agregar tests
+- [X] Terminar Ejercicio 10
+    - [X] Implementar
+    - [X] Agregar tests
+
+- [X] Terminar Ejercicio 12
+    - [X] Hacer la demostracion
+    - [x] Chequear la demostración
     
 - [X] Checkear si el grafico del histograma es correcto ya que tiene la cola +inf muy pesada
     - Es correcto segun correctores.
 
-## Pendientes
-
-- [] Recheckear todos los tests
-    - [] Ponerle nombre a todos los tests
+- [X] Recheckear todos los tests
+    - [X] Ponerle nombre a todos los tests
     - [X] Checkear los tests testsAlinearDerecha Ej 1
     - [X] Checkear los tests testsActualizarElem Ej 2
     - [X] Checkear los tests testsVacio Ej 3
@@ -50,20 +55,15 @@
     - [X] Checkear los tests testsFold Ej 7
     - [X] Checkear los tests testsEval Ej 8
     - [X] Checkear los tests testsArmarHistograma Ej 9
-    - [] Checkear los tests testsEvalHistograma Ej 10
+    - [X] Checkear los tests testsEvalHistograma Ej 10
     - [X] Checkear los tests testsMostrar Ej 11
     - [X] Checkear los tests testsParse 
     - [X] Checkear los tests testsMostrarFloat 
     - [X] Checkear los tests testsMostrarHistograma 
 
-- [] Correr hlint
+- [X] Correr hlint
     - Aplique el linter a util y reduje calcularPorcentaje
     - Aplique el linter a todos los archivos
 
-- [] Terminar Ejercicio 10
-    - [X] Implementar
-    - [] Agregar tests
+## Pendientes
 
-- [] Terminar Ejercicio 12
-    - [X] Hacer la demostracion
-    - [x] Chequear la demostración
