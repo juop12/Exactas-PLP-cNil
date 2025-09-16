@@ -124,13 +124,19 @@ testsAgregar =
   let histogramaDeTam1 = vacio 1 (0, 2)
       histogramaDeTam3 = vacio 3 (0, 6)
    in test
-        [ "Dado un histograma de tamanio 1 y un valor en el limite inferior, cuando se agrega el valor, entonces el casillero correspondiente incrementa su cantidad"
+        [ "Dado un histograma de tamanio 1 y un valor en el limite inferior, cuando se agrega el valor, entonces el segundo casillero incrementa su cantidad"
             ~: casilleros (agregar 0 histogramaDeTam1)
             ~?= [ Casillero infinitoNegativo 0 0 0,
                   Casillero 0 2 1 100, -- El 100% de los valores estan aca
                   Casillero 2 infinitoPositivo 0 0
                 ],
-          "Dado un histograma de tamanio 3 y un valor en el limite inferior, cuando se agrega el valor, entonces el primer casillero incrementa su cantidad"
+          "Dado un histograma de tamanio 1 y un valor en el limite superior, cuando se agrega el valor, entonces el último casillero incrementa su cantidad"
+            ~: casilleros (agregar 2 histogramaDeTam1)
+            ~?= [ Casillero infinitoNegativo 0 0 0,
+                  Casillero 0 2 0 0, 
+                  Casillero 2 infinitoPositivo 1 100 -- El 100% de los valores estan aca
+                ],
+          "Dado un histograma de tamanio 3 y un valor en el limite inferior, cuando se agrega el valor, entonces el segundo casillero incrementa su cantidad"
             ~: casilleros (agregar 0 histogramaDeTam3)
             ~?= [ Casillero infinitoNegativo 0 0 0,
                   Casillero 0 2 1 100, -- El 100% de los valores estan aca
@@ -138,7 +144,7 @@ testsAgregar =
                   Casillero 4 6 0 0,
                   Casillero 6 infinitoPositivo 0 0
                 ],
-          "Dado un histograma de tamanio 3 y un valor en el segundo casillero, cuando se agrega el valor, entonces el segundo casillero incrementa su cantidad"
+          "Dado un histograma de tamanio 3 y un valor en el segundo casillero, cuando se agrega el valor, entonces el tercer casillero incrementa su cantidad"
             ~: casilleros (agregar 2 histogramaDeTam3)
             ~?= [ Casillero infinitoNegativo 0 0 0,
                   Casillero 0 2 0 0,
@@ -146,7 +152,7 @@ testsAgregar =
                   Casillero 4 6 0 0,
                   Casillero 6 infinitoPositivo 0 0
                 ],
-          "Dado un histograma de tamanio 3 y un valor fuera del rango inferior, cuando se agrega el valor, entonces el casillero de infinito negativo incrementa su cantidad"
+          "Dado un histograma de tamanio 3 y un valor fuera del rango inferior, cuando se agrega el valor, entonces el primer casillero (infinito negativo) incrementa su cantidad"
             ~: casilleros (agregar (-1) histogramaDeTam3)
             ~?= [ Casillero infinitoNegativo 0 1 100, -- El 100% de los valores estan aca
                   Casillero 0 2 0 0,
@@ -154,7 +160,7 @@ testsAgregar =
                   Casillero 4 6 0 0,
                   Casillero 6 infinitoPositivo 0 0
                 ],
-          "Dado un histograma de tamanio 3 y un valor fuera del rango superior, cuando se agrega el valor, entonces el casillero de infinito positivo incrementa su cantidad"
+          "Dado un histograma de tamanio 3 y un valor fuera del rango superior, cuando se agrega el valor, entonces el último casillero (infinito positivo) incrementa su cantidad"
             ~: casilleros (agregar 7 histogramaDeTam3)
             ~?= [ Casillero infinitoNegativo 0 0 0,
                   Casillero 0 2 0 0,
