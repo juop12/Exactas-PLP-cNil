@@ -29,7 +29,7 @@
     - [] Ponerle nombre a todos los tests
     - [X] Checkear los tests testsAlinearDerecha Ej 1
     - [X] Checkear los tests testsActualizarElem Ej 2
-    - [] Checkear los tests testsVacio Ej 3
+    - [X] Checkear los tests testsVacio Ej 3
     - [] Checkear los tests testsAgregar Ej 4
     - [] Checkear los tests testsHistograma Ej 5
         - [X] Cambiar los tests para que usen casillero

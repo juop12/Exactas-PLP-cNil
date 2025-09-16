@@ -80,12 +80,7 @@ testsActualizarElem =
 testsVacio :: Test
 testsVacio =
   test
-    [ {-"Dado un histograma vacio con ningun casillero, cuando se consulta los casilleros, entonces se obtienen unicamente los extremos"
-        ~: casilleros (vacio 0 (0, 10))
-        ~?= [ Casillero infinitoNegativo 0 0 0,
-              Casillero 10 infinitoPositivo 0 0
-            ], -}
-      "Dado un histograma vacio con un casillero, cuando se consulta los casilleros, entonces se obtienen los extremos y el unico casillero"
+    [ "Dado un histograma vacio con un casillero, cuando se consulta los casilleros, entonces se obtienen los extremos y el unico casillero"
         ~: casilleros (vacio 1 (0, 10))
         ~?= [ Casillero infinitoNegativo 0 0 0,
               Casillero 0 10 0 0,
