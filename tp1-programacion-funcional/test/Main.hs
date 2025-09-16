@@ -219,7 +219,6 @@ testsHistograma =
               Casillero 4.5 5.5 0 0,
               Casillero 5.5 infinitoPositivo 0 0 
             ],
-      -- "Dado rango nulo, cuando se genera el histograma, entonces deberia dar error" -- test comentado
       "Dado datos fuera del rango, cuando se genera el histograma, entonces los datos se agregan a los extremos"
         ~: casilleros (histograma 4 (1, 5) [-10, 0, 6, 10])
         ~?= [ Casillero infinitoNegativo 1 2 50,

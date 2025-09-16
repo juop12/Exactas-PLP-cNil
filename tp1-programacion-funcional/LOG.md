@@ -31,7 +31,7 @@
     - [X] Checkear los tests testsActualizarElem Ej 2
     - [X] Checkear los tests testsVacio Ej 3
     - [X] Checkear los tests testsAgregar Ej 4
-    - [] Checkear los tests testsHistograma Ej 5
+    - [X] Checkear los tests testsHistograma Ej 5
         - [X] Cambiar los tests para que usen casillero
     - [] Checkear los tests testsCasilleros Ej 6
     - [] Checkear los tests testsRecr Ej 7
