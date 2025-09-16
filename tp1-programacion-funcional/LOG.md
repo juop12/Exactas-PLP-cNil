@@ -33,9 +33,9 @@
     - [X] Checkear los tests testsAgregar Ej 4
     - [X] Checkear los tests testsHistograma Ej 5
         - [X] Cambiar los tests para que usen casillero
-    - [] Checkear los tests testsCasilleros Ej 6
-    - [] Checkear los tests testsRecr Ej 7
-    - [] Checkear los tests testsFold Ej 7
+    - [X] Checkear los tests testsCasilleros Ej 6
+    - [X] Checkear los tests testsRecr Ej 7
+    - [X] Checkear los tests testsFold Ej 7
     - [] Checkear los tests testsEval Ej 8
     - [] Checkear los tests testsArmarHistograma Ej 9
     - [] Checkear los tests testsEvalHistograma Ej 10
