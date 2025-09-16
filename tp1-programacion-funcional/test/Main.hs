@@ -133,7 +133,7 @@ testsAgregar =
           "Dado un histograma de tamanio 1 y un valor en el limite superior, cuando se agrega el valor, entonces el último casillero incrementa su cantidad"
             ~: casilleros (agregar 2 histogramaDeTam1)
             ~?= [ Casillero infinitoNegativo 0 0 0,
-                  Casillero 0 2 0 0, 
+                  Casillero 0 2 0 0,
                   Casillero 2 infinitoPositivo 1 100 -- El 100% de los valores estan aca
                 ],
           "Dado un histograma de tamanio 3 y un valor en el limite inferior, cuando se agrega el valor, entonces el segundo casillero incrementa su cantidad"
@@ -180,35 +180,35 @@ testsHistograma =
               Casillero 2 3 0 0,
               Casillero 3 4 0 0,
               Casillero 4 5 0 0,
-              Casillero 5 infinitoPositivo 0 0 
+              Casillero 5 infinitoPositivo 0 0
             ],
       "Dado datos dentro de un rango positivo, cuando se genera el histograma, entonces los datos se agregan a los casilleros correspondientes"
-        ~: casilleros(histograma 4 (1, 5) [1, 2, 3])
+        ~: casilleros (histograma 4 (1, 5) [1, 2, 3])
         ~?= [ Casillero infinitoNegativo 1 0 0,
               Casillero 1 2 1 33.333336,
               Casillero 2 3 1 33.333336,
               Casillero 3 4 1 33.333336,
               Casillero 4 5 0 0,
-              Casillero 5 infinitoPositivo 0 0 
+              Casillero 5 infinitoPositivo 0 0
             ],
       "Dado datos dentro de un rango negativo, cuando se genera el histograma, entonces los datos se agregan a los casilleros correspondientes"
         ~: casilleros (histograma 4 (-11, -3) [-10, -7, -2])
         ~?= [ Casillero infinitoNegativo (-11) 0 0,
               Casillero (-11) (-9) 1 33.333336,
-              Casillero (-9)  (-7) 0 0,
-              Casillero (-7)  (-5) 1 33.333334,
-              Casillero (-5)  (-3) 0 0,
-              Casillero (-3) infinitoPositivo 1 33.333336 
+              Casillero (-9) (-7) 0 0,
+              Casillero (-7) (-5) 1 33.333334,
+              Casillero (-5) (-3) 0 0,
+              Casillero (-3) infinitoPositivo 1 33.333336
             ],
       "Dado datos dentro de un rango mixto, cuando se genera el histograma, entonces los datos se agregan a los casilleros correspondientes"
         ~: casilleros (histograma 5 (-10, 5) [-10, -7, 2])
         ~?= [ Casillero infinitoNegativo (-10) 0 0,
               Casillero (-10) (-7) 1 33.333336,
-              Casillero (-7)  (-4) 1 33.333336,
-              Casillero (-4)  (-1) 0 0,
-              Casillero (-1)    2  0 0,
-              Casillero   2     5  1 33.333336,
-              Casillero   5   infinitoPositivo 0 0 
+              Casillero (-7) (-4) 1 33.333336,
+              Casillero (-4) (-1) 0 0,
+              Casillero (-1) 2 0 0,
+              Casillero 2 5 1 33.333336,
+              Casillero 5 infinitoPositivo 0 0
             ],
       "Dado datos con extremos decimales, cuando se genera el histograma, entonces los datos se agregan a los casilleros correspondientes"
         ~: casilleros (histograma 4 (1.5, 5.5) [1.5, 2.5, 3.5])
@@ -217,7 +217,7 @@ testsHistograma =
               Casillero 2.5 3.5 1 33.333336,
               Casillero 3.5 4.5 1 33.333336,
               Casillero 4.5 5.5 0 0,
-              Casillero 5.5 infinitoPositivo 0 0 
+              Casillero 5.5 infinitoPositivo 0 0
             ],
       "Dado datos fuera del rango, cuando se genera el histograma, entonces los datos se agregan a los extremos"
         ~: casilleros (histograma 4 (1, 5) [-10, 0, 6, 10])
@@ -226,7 +226,7 @@ testsHistograma =
               Casillero 2 3 0 0,
               Casillero 3 4 0 0,
               Casillero 4 5 0 0,
-              Casillero 5 infinitoPositivo 2 50 
+              Casillero 5 infinitoPositivo 2 50
             ],
       "Dado varios datos en el mismo casillero, cuando se genera el histograma, entonces todos los datos se agregan al mismo casillero"
         ~: casilleros (histograma 4 (1, 5) [1, 1.5, 1.8])
@@ -235,7 +235,7 @@ testsHistograma =
               Casillero 2 3 0 0,
               Casillero 3 4 0 0,
               Casillero 4 5 0 0,
-              Casillero 5 infinitoPositivo 0 0 
+              Casillero 5 infinitoPositivo 0 0
             ],
       "Dado todos los datos iguales, cuando se genera el histograma, entonces todos los datos se agregan al mismo casillero"
         ~: casilleros (histograma 4 (1, 5) [3, 3, 3, 3])
@@ -244,7 +244,7 @@ testsHistograma =
               Casillero 2 3 0 0,
               Casillero 3 4 4 100,
               Casillero 4 5 0 0,
-              Casillero 5 infinitoPositivo 0 0 
+              Casillero 5 infinitoPositivo 0 0
             ]
     ]
 
@@ -379,31 +379,31 @@ testsFold :: Test
 testsFold =
   let rango x y = y - x
    in test
-    [ "Dado un expr Const 1, cuando se aplica foldExpr, entonces se obtiene Const 1"
-        ~: foldExpr id rango (+) (-) (*) (/) (Const 1)
-        ~?= 1,
-      "Dado un expr Rango 1 5, cuando se aplica foldExpr, entonces se obtiene 4"
-        ~: foldExpr id rango (+) (-) (*) (/) (Rango 1 5)
-        ~?= 4,
-      "Dado un expr Suma (Const 1) (Const 2), cuando se aplica foldExpr, entonces se obtiene 3"
-        ~: foldExpr id rango (+) (-) (*) (/) (Suma (Const 1) (Const 2))
-        ~?= 3,
-      "Dado un expr Resta (Const 5) (Const 2), cuando se aplica foldExpr, entonces se obtiene 3"
-        ~: foldExpr id rango (+) (-) (*) (/) (Resta (Const 5) (Const 2))
-        ~?= 3,
-      "Dado un expr Mult (Const 2) (Const 3), cuando se aplica foldExpr, entonces se obtiene 6"
-        ~: foldExpr id rango (+) (-) (*) (/) (Mult (Const 2) (Const 3))
-        ~?= 6,
-      "Dado un expr Div (Const 6) (Const 2), cuando se aplica foldExpr, entonces se obtiene 3"
-        ~: foldExpr id rango (+) (-) (*) (/) (Div (Const 6) (Const 2))
-        ~?= 3,
-      "Dado un expr Suma (Const 1) (Rango 1 5), cuando se aplica foldExpr, entonces se obtiene 5"
-        ~: foldExpr id rango (+) (-) (*) (/) (Suma (Const 1) (Rango 1 5))
-        ~?= 5,
-      "Dado un expr Suma (Rango 1 5) (Rango 1 5), cuando se aplica foldExpr, entonces se obtiene 8"
-        ~: foldExpr id rango (+) (-) (*) (/) (Suma (Rango 1 5) (Rango 1 5))
-        ~?= 8
-    ]
+        [ "Dado un expr Const 1, cuando se aplica foldExpr, entonces se obtiene Const 1"
+            ~: foldExpr id rango (+) (-) (*) (/) (Const 1)
+            ~?= 1,
+          "Dado un expr Rango 1 5, cuando se aplica foldExpr, entonces se obtiene 4"
+            ~: foldExpr id rango (+) (-) (*) (/) (Rango 1 5)
+            ~?= 4,
+          "Dado un expr Suma (Const 1) (Const 2), cuando se aplica foldExpr, entonces se obtiene 3"
+            ~: foldExpr id rango (+) (-) (*) (/) (Suma (Const 1) (Const 2))
+            ~?= 3,
+          "Dado un expr Resta (Const 5) (Const 2), cuando se aplica foldExpr, entonces se obtiene 3"
+            ~: foldExpr id rango (+) (-) (*) (/) (Resta (Const 5) (Const 2))
+            ~?= 3,
+          "Dado un expr Mult (Const 2) (Const 3), cuando se aplica foldExpr, entonces se obtiene 6"
+            ~: foldExpr id rango (+) (-) (*) (/) (Mult (Const 2) (Const 3))
+            ~?= 6,
+          "Dado un expr Div (Const 6) (Const 2), cuando se aplica foldExpr, entonces se obtiene 3"
+            ~: foldExpr id rango (+) (-) (*) (/) (Div (Const 6) (Const 2))
+            ~?= 3,
+          "Dado un expr Suma (Const 1) (Rango 1 5), cuando se aplica foldExpr, entonces se obtiene 5"
+            ~: foldExpr id rango (+) (-) (*) (/) (Suma (Const 1) (Rango 1 5))
+            ~?= 5,
+          "Dado un expr Suma (Rango 1 5) (Rango 1 5), cuando se aplica foldExpr, entonces se obtiene 8"
+            ~: foldExpr id rango (+) (-) (*) (/) (Suma (Rango 1 5) (Rango 1 5))
+            ~?= 8
+        ]
 
 testsEval :: Test
 testsEval =
@@ -436,21 +436,18 @@ testsEval =
         ~: fst (eval (Mult (Resta (Rango (-10) 10) (Rango 100 1000)) (Rango 1 5)) (genNormalConSemilla 0))
         ~?= -3164.4377, -- el primer rango evalua a -1.0097542, el segundo a 578.1319 y el tercero a 5.464013
         -- rango 1 5 recibe misma semilla 2
-        
       "Dado tres rangos distintos con genNormalConSemilla 0, cuando se aplica eval en cadena, entonces se obtienen los valores esperados"
-        ~: let  (x, gen)  = eval (Rango (-10) 10) (genNormalConSemilla 0)
-                (y, gen') = eval (Rango 100 1000) gen
-                (z, gen'')= eval (Rango 1 5) gen'
-           in (x, y, z) ~?= (-1.0097542, 578.1319, 5.464013),
-
+        ~: let (x, gen) = eval (Rango (-10) 10) (genNormalConSemilla 0)
+               (y, gen') = eval (Rango 100 1000) gen
+               (z, gen'') = eval (Rango 1 5) gen'
+            in (x, y, z) ~?= (-1.0097542, 578.1319, 5.464013),
       "Dado tres rangos iguales con genNormalConSemilla 0, cuando se aplica eval en cadena, entonces se obtienen los valores esperados"
-        ~: let  (x, gen)  = eval (Rango 1 5) (genNormalConSemilla 0)
-                (y, gen') = eval (Rango 1 5) gen
-                (z, gen'')= eval (Rango 1 5) gen'
-           in (x, y, z) ~?= (2.7980492, 3.1250308, 5.464013),
-
+        ~: let (x, gen) = eval (Rango 1 5) (genNormalConSemilla 0)
+               (y, gen') = eval (Rango 1 5) gen
+               (z, gen'') = eval (Rango 1 5) gen'
+            in (x, y, z) ~?= (2.7980492, 3.1250308, 5.464013),
       "Dado tres rangos iguales con genNormalConSemilla 0, cuando se aplica eval en cadena, entonces se obtienen los valores esperados"
-        ~: let (x, gen)  = eval (Rango 5 (1)) (genNormalConSemilla 0)
+        ~: let (x, gen) = eval (Rango 5 (1)) (genNormalConSemilla 0)
             in x ~?= 3.2019508
     ]
 
@@ -488,43 +485,43 @@ testsArmarHistograma =
 testsEvalHistograma :: Test
 testsEvalHistograma =
   test
-    [""
-     ~: casilleros (fst (evalHistograma 1 1000 (Mult (Rango 1 5) (Const 2)) (genNormalConSemilla 0)))
-     ~?= [Casillero infinitoNegativo 2.0273714 25 2.5,Casillero 2.0273714 9.932702 955 95.5,Casillero 9.932702 infinitoPositivo 20 2.0]
-     ]
-     
+    [ ""
+        ~: casilleros (fst (evalHistograma 1 1000 (Mult (Rango 1 5) (Const 2)) (genNormalConSemilla 0)))
+        ~?= [Casillero infinitoNegativo 2.0273714 25 2.5, Casillero 2.0273714 9.932702 955 95.5, Casillero 9.932702 infinitoPositivo 20 2.0]
+
+    ]
+
 {- Casos de test posibles:
 
 - Considerar Expresiones, cantCasilleros, cantidadDeMuestras y generador
 
--- Expresión sin rango    
+-- Expresión sin rango
       -- Probarlo con un genFijo y un genConSemilla
       -- Cantidad de casilleros es indistinta
 
-      -- Solamente un const 
+      -- Solamente un const
       evalHistograma 1 5 (Const 2) genFijo
-      evalHistograma 1 5 (Const 2) (genNormalConSemilla 0) 
+      evalHistograma 1 5 (Const 2) (genNormalConSemilla 0)
 
-      -- Cuenta con solo const 
+      -- Cuenta con solo const
       evalHistograma 7 5 (Suma (Const 2) (Const 10)) genFijo
 
 -- Solamente un rango -> Deberia devolver un histograma como los de ArmarHistograma (agarrar un ejemplo de ahi) (aca testear tambien con varios casilleros)
 evalHistograma 1 10 (Rango 1 5) (genNormalConSemilla 0)
 evalHistograma 1 5  (Rango -10 10) (genNormalConSemilla 0)
 
--- De aca en adelante testear con 7 casilleros, 1 5 10 15 muestras 
--- Una multiplicacion entre rango y una constante usando genConSemilla 
+-- De aca en adelante testear con 7 casilleros, 1 5 10 15 muestras
+-- Una multiplicacion entre rango y una constante usando genConSemilla
 evalHstograma 1 1 (Mult (Rango 1 5) (Const 2)) (genNormalconSemilla 0)
 evalHstograma 1 10 (Mult (Rango 1 5) (Const 2)) (genNormalconSemilla 0)
 
--- Una suma 
+-- Una suma
 
--- Una resta 
+-- Una resta
 
 -- Un div
 
--- Calculo muy largo (final) este (1.0~5.0 + (3.0 * 100.0~105.0)) / 2.0? 
-
+-- Calculo muy largo (final) este (1.0~5.0 + (3.0 * 100.0~105.0)) / 2.0?
 
  -}
 
@@ -601,11 +598,9 @@ testsMostrarHistograma =
                   "2.00 - 4.00 |▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ 66.67%",
                   "0.00 - 2.00 |▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒",
                   "-inf - 0.00 |"
-
-  -- En el Test original estaba mal el caracter : esperaba \9618 pero obtenía \9617
-  -- \9617 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-  -- \9618 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-                  
+                  -- En el Test original estaba mal el caracter : esperaba \9618 pero obtenía \9617
+                  -- \9617 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+                  -- \9618 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
                 ],
           lines (mostrarHistograma (agregar 1 (vacio 3 (0, 1000))))
             ~?= [ "  1000.00 - +inf |",

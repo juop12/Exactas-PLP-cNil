@@ -58,7 +58,7 @@ incierticalc> 10000 * 0.7∼0.8 + 2000∼5000
 - [X] **Ejercicio 11**: `mostrar` - Pretty printing de expresiones
 
 ### Demostración Formal
-- [] **Ejercicio 12**: Demostración por inducción estructural
+- [X] **Ejercicio 12**: Demostración por inducción estructural
 
 ## Comandos Disponibles
 
@@ -134,9 +134,9 @@ Cada función implementada incluye casos de prueba que verifican:
 ## Estado del Proyecto
 
 - [X] Ejercicios 1-11 implementados
-- [] Demostración formal completada  
-- [] Tests unitarios agregados
-- [] Aplicación funcional
+- [X] Demostración formal completada  
+- [X] Tests unitarios agregados
+- [X] Aplicación funcional
 
 
 **Fecha de entrega**: 16 de septiembre
