@@ -66,4 +66,4 @@
 
 - [] Terminar Ejercicio 12
     - [X] Hacer la demostracion
-    - [X] Chequear la demostración
+    - [x] Chequear la demostración

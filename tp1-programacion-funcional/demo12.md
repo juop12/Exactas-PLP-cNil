@@ -60,12 +60,13 @@ $\quad\forall e :: Expr\ ·\ cantLit\ \ e=S\ \ (cantOp\ \ e)$
 
 ## Demostración
 ### a) Predicado Unario
-Dado que la propiedad opera sobre expresiones `Expr` tiene sentido definir el *predicadio unario* correspondiente a la demostracion por induccion estructural en una expresión `e 
+Dado que la propiedad opera sobre expresiones `Expr` tiene sentido definir el *predicado unario* correspondiente a la demostracion por inducción estructural en una expresión `e 
 :: Expr`. Queda definido como: $$\begin{aligned} P(e):=\ cantList\ \ e=S\ \ (cantOp\ \ e) \end{aligned}$$
 
-### b) Esquema formal de induccion estructural
-Declaramos el principio de inducción estructural sobre $Expr$: 
--   Sea $P$ un propiedad acerca las expresiones de tipo $Expr$ **tal que**
+### b) Esquema formal de inducción estructural
+Declaramos el principio de inducción estructural sobre $Expr$:
+
+-   Sea $P$ un propiedad acerca de las expresiones de tipo $Expr$ **tal que**
 
 $$
 \begin{aligned}
@@ -100,7 +101,7 @@ cantList (Const x) = S Z -- por {L1}
 S cantOp (Const x) = S Z -- por {O1}  
 ```
 
-Como ambos lados son iguales y $x$ era cualquiera, el caso queda probado. 
+Como ambos lados son iguales y $x$ es fijo, el caso queda probado para todo $x$.
 
 \makebox[\linewidth][r]{$\square$}
 
@@ -127,7 +128,7 @@ cantList (Rango x y) = S Z -- por {L2}
 S cantOp (Rango x y) = S Z -- por {02} 
 ```
 
-Como ambos lados son iguales y $x$ e $y$ eran cualquiera, el caso general queda probado. 
+Como ambos lados son iguales y $x$ e $y$ son fijos, el caso general queda probado para todo $x$ e $y$. 
 
 \makebox[\linewidth][r]{$\square$}
 
@@ -170,7 +171,7 @@ cantList (Suma e1 e2)
 -- Como se quería probar.
 ```
 
-Como $e1$ y $e2$ eran cualquiera, el caso queda demostrado.
+Como $e1$ y $e2$ son fijos, el caso queda demostrado para todo $e1$ y $e2$.
 
 \makebox[\linewidth][r]{$\square$}
 
