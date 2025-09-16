@@ -66,10 +66,10 @@ testsActualizarElem =
       "Dado una lista y un indice valido, cuando se actualiza el segundo elemento, entonces el elemento se modifica"
         ~: actualizarElem 1 (+ 10) [1, 2, 3]
         ~?= [1, 12, 3],
-      "Dado una lista y un indice mayor a la longitud, cuando se intenta actualizar, entonces la lista permanece igual"
+      "Dado una lista y un indice invalido (mayor a la longitud), cuando se intenta actualizar, entonces la lista permanece igual"
         ~: actualizarElem 3 (+ 10) [1, 2, 3]
         ~?= [1, 2, 3],
-      "Dado una lista y un indice negativo, cuando se intenta actualizar, entonces la lista permanece igual"
+      "Dado una lista y un indice invalido (negativo), cuando se intenta actualizar, entonces la lista permanece igual"
         ~: actualizarElem (-1) (+ 10) [1, 2, 3]
         ~?= [1, 2, 3],
       "Dado una lista de strings y un indice valido, cuando se actualiza el cuarto elemento, entonces el elemento se modifica"
