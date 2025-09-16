@@ -4,8 +4,8 @@ author: Grupo cNil
 date: 2025-09-16
 ---
 
-## Ejercicio 12
-### Descripción del problema de demostracion
+# Ejercicio 12
+## Descripción del problema de demostracion
 Necesitamos demostrar que *toda la expresión tiene un literal más que su cantidad de operadores*. Los literales son las constantes y los rangos. Para esto se dispone de las siguientes definiciones.
 
 ```haskell
@@ -43,7 +43,7 @@ $\quad\{CONMUT\}\quad \forall n,\ m ::Nat\ ·\ suma\ \ n\ \ m = suma\ \ m\ \ n$
 \
 Dado que `cantList` y `cantOp` reciben un tipo de dato `Expr` haríamos bien en recordar cómo está compuesta su estructura.
 
-#### Expr
+### Expr
 ```haskell
 data Expr = Const Float
           | Rango Float Float  
@@ -53,89 +53,131 @@ data Expr = Const Float
           | Div Expr Expr
 ```
 
-#### Propiedad a Demostrar
+### Propiedad a Demostrar
 
 $\quad\forall e :: Expr\ ·\ cantLit\ \ e=S\ \ (cantOp\ \ e)$
 
 
-### Demostración
-#### a) Predicado Unario
+## Demostración
+### a) Predicado Unario
 Dado que la propiedad opera sobre expresiones `Expr` tiene sentido definir el *predicadio unario* correspondiente a la demostracion por induccion estructural en una expresión `e 
-:: Expr`. Queda definido como: $P(e):=\ cantList\ \ e=S\ \ (cantOp\ \ e)$
+:: Expr`. Queda definido como: $$\begin{aligned} P(e):=\ cantList\ \ e=S\ \ (cantOp\ \ e) \end{aligned}$$
 
-#### b) Esquema formal de induccion estructural
-Por el principio de inducción estructural sobre `Expr` **[declarar teorema]**, **si**
+### b) Esquema formal de induccion estructural
+Declaramos el principio de inducción estructural sobre $Expr$: 
+-   Sea $P$ un propiedad acerca las expresiones de tipo $Expr$ **tal que**
 
 $$
 \begin{aligned}
 & (\forall x::Float.\ P(Const\ x) \\
 & \land\ \ \forall \ x::Float.\ \forall \ y::Float.\ P(Rango\ x\ y) \\
-& \land\ \ \forall \ e1::Expr.\ \forall \ e2::Expr.\ ((P(e1)\ \land\ P(e2))\ \rightarrow\ Suma\ e1\ e2) \\
-& \land\ \ \forall \ e1::Expr.\ \forall \ e2::Expr.\ ((P(e1)\ \ \land\ P(e2))\ \rightarrow\ Resta\ e1\ e2) \\
-& \land\ \ \forall \ e1::Expr.\ \forall \ e2::Expr.\ ((P(e1)\ \land\ P(e2))\ \rightarrow\ Mult\ e1\ e2) \\
-& \land\ \ \forall \ e1::Expr.\ \forall \ e2::Expr.\ ((P(e1)\ \land\ P(e2))\ \rightarrow\ Div\ e1\ e2))
+& \land\ \ \forall \ e1::Expr.\ \forall \ e2::Expr.\ ((P(e1)\ \land\ P(e2))\ \rightarrow\ P(Suma\ e1\ e2)) \\
+& \land\ \ \forall \ e1::Expr.\ \forall \ e2::Expr.\ ((P(e1)\ \ \land\ P(e2))\ \rightarrow\ P(Resta\ e1\ e2)) \\
+& \land\ \ \forall \ e1::Expr. \ \forall \ e2::Expr.\ ((P(e1)\ \land\ P(e2))\ \rightarrow\ P(Mult\ e1\ e2)) \\
+& \land\ \ \forall \ e1::Expr.\ \forall \ e2::Expr.\ ((P(e1)\ \land\ P(e2))\ \rightarrow\  P(Div\ e1\ e2)))
 \end{aligned}
 $$
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **entonces** $\ \forall e::Expr.\ P(e).$
 
-#### c) Demostración
-```haskell
-Const Float -- Caso Base
-```
+### c) Demostración
+
+### Caso (base): Const Float
+
+Queremos ver que:
+
 $$
 \begin{aligned}
 & \forall \ x::Float.\ P(Const\ x):=\\& cantList\ (Const\ x)=S\ (cantOp\ (Const\ x))
 \end{aligned}
 $$
+Sea $x$ fijo veamos:
 ```haskell
-cantList (Const x) = S Z -- {L1} por un lado
-S cantOp (Const x) = S Z -- {O1} por otro. 
+-- Por un lado
+cantList (Const x) = S Z -- por {L1}
+
+-- Por otro lado
+S cantOp (Const x) = S Z -- por {O1}  
 ```
+
+Como ambos lados son iguales y $x$ era cualquiera, el caso queda probado. 
+
 \makebox[\linewidth][r]{$\square$}
 
 ---
 
-```haskell
-Rango Float Float -- Caso Base
-```
+
+### Caso (base): Rango Float Float
+
+Queremos ver que:
 
 $$
 \begin{aligned}
 & \forall \ x::Float.\ \forall \ y::Float.\ P(Rango\ x\ y):=\\& cantList\ (Rango\ x\ y)=S\ (cantOp\ (Rango\ x\ y))
 \end{aligned}
 $$
+
+Fijemos $x$ e $y$ y veamos: 
+
 ```haskell
-cantList (Rango x y) = S Z -- {L2} por un lado
-S cantOp (Rango x y) = S Z -- {O2} por otro. 
+-- Por un lado
+cantList (Rango x y) = S Z -- por {L2}
+
+-- Por otro lado
+S cantOp (Rango x y) = S Z -- por {02} 
 ```
+
+Como ambos lados son iguales y $x$ e $y$ eran cualquiera, el caso general queda probado. 
+
 \makebox[\linewidth][r]{$\square$}
 
 ---
 
-```haskell
-Suma Expr Expr -- Caso Inductivo
-```
+
+### Caso (inductivo): Suma Expr Expr
+
+Queremos ver que: 
 
 $$
 \begin{aligned}
-& \forall \ e1::Expr.\ \forall \ e2::Expr.\ ((P(e1)\ \land\ P(e2))\ \rightarrow\ Suma\ e1\ e2)\\& donde\ P(Suma\ e1\ e2):=cantList\ (Suma\ e1\ e2)=S\ (cantOp\ (Suma\ e1\ e2))
+& \forall \ e1::Expr.\ \forall \ e2::Expr.\ ((P(e1)\ \land\ P(e2))\ \rightarrow\ P(Suma\ e1\ e2))
 \end{aligned}
 $$
+
+Fijemos $e1$ y $e2$. Supongamos que vale la $HI:$ $P(e1) \land P(e2)$, donde: 
+
+$$
+\begin{aligned}
+P(e1) := cantList\ e1 =S\ (cantOp\ e1)  \\
+P(e2) := cantList\ e2 =S\ (cantOp\ e2)
+\end{aligned}
+$$
+
+Ahora veamos que se cumple nuestra $TI$: 
+
+$$\begin{aligned}\ P(Suma\ e1\ e2):=cantList\ (Suma\ e1\ e2)=S\ (cantOp\ (Suma\ e1\ e2)) \end{aligned}$$
+
 ```haskell
-cantList (Suma e1 e2) = suma (cantList e1) (cantList e2)        -- {L3}
-                      = suma (S (cantOp e1)) (S (cantOp e2))    --  HI
-                      = S (suma (cantOp e1)) (S (cantOp e2))    -- {S2}
-                      = S (suma (S (cantOp e2)) (cantOp e1))    -- {CONMUT}
-                      = S (S (suma (cantOp e2) (cantOp e1)))    -- {S2}
-                      = S (S (suma (cantOp e1) (cantOp e2)))    -- {CONMUT}
-                      = S (cantOp (Suma e1 e2))                 -- {O3} 
-                      -- Como se quería probar.
+cantList (Suma e1 e2) 
+= suma (cantList e1) (cantList e2)        -- por {L3}
+= suma (S (cantOp e1)) (cantOp e2)        -- por HI pues se cumple P(e1)
+= suma (S (cantOp e1)) (S (cantOp e2))    -- por HI pues se cumple P(e2)
+= S (suma (cantOp e1)) (S (cantOp e2))    -- por {S2} donde m = S (cantOp e2) 
+= S (suma (S (cantOp e2)) (cantOp e1))    -- por {CONMUT}
+= S (S (suma (cantOp e2) (cantOp e1)))    -- por {S2} donde m = cantOp e1
+= S (S (suma (cantOp e1) (cantOp e2)))    -- por {CONMUT}
+= S (cantOp (Suma e1 e2))                 -- por {O3} 
+-- Como se quería probar.
 ```
+
+Como $e1$ y $e2$ eran cualquiera, el caso queda demostrado.
+
 \makebox[\linewidth][r]{$\square$}
 
-Los demás casos inductivos son análogos a este último (cambiar "Suma" por "Mult", "Resta" y "Div" usando {L4}, {L5}, {L6} y {O4}, {O5}, {O6} en vez de {L3} y {O3} respectivamente en cada caso).
+---
 
-Por lo tanto. $\forall\ e::Expr.\ P(e).$
+Los demás casos inductivos son análogos a este último (cambiar "Suma" por "Mult", "Resta" y "Div" usando {L4}, {L5}, {L6} y {O4}, {O5}, {O6} en vez de {L3} y {O3} respectivamente en cada caso). 
+
+Por lo tanto: $\forall\ e::Expr.\ P(e).$
 
 \makebox[\linewidth][r]{$\blacksquare$}
