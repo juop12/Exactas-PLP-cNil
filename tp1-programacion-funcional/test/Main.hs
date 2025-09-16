@@ -408,12 +408,18 @@ testsFold =
 testsEval :: Test
 testsEval =
   test
-    [ "Dado un expr Suma (Rango 1 5) (Const 1) con genFijo, cuando se aplica fst . eval, entonces se obtiene 4.0"
+    [ "Dado un expr Suma (Rango 5 1) (Const 1) con genFijo, cuando se aplica fst . eval, entonces se obtiene 4.0"
+        ~: fst (eval (Suma (Rango 5 1) (Const 1)) genFijo)
+        ~?= 4.0,
+      "Dado un expr Suma (Rango 1 5) (Const 1) con genFijo, cuando se aplica fst . eval, entonces se obtiene 4.0"
         ~: fst (eval (Suma (Rango 1 5) (Const 1)) genFijo)
         ~?= 4.0,
       "Dado un expr Suma (Rango 1 5) (Const 1) con genNormalConSemilla 0, cuando se aplica fst . eval, entonces se obtiene 3.7980492"
         ~: fst (eval (Suma (Rango 1 5) (Const 1)) (genNormalConSemilla 0))
         ~?= 3.7980492, -- el primer rango evalua a 2.7980492
+      "Dado un expr Suma (Rango 5 1) (Const 1) con genNormalConSemilla 0, cuando se aplica fst . eval, entonces se obtiene 4.201951"
+        ~: fst (eval (Suma (Rango 5 1) (Const 1)) (genNormalConSemilla 0))
+        ~?= 4.201951, -- el primer rango evalua a 3.2019508
       "Dado un expr Suma (Rango 1 5) (Rango 1 5) con genNormalConSemilla 0, cuando se aplica fst . eval, entonces se obtiene 5.92308"
         ~: fst (eval (Suma (Rango 1 5) (Rango 1 5)) (genNormalConSemilla 0))
         ~?= 5.92308, -- el primer rango evalua a 2.7980492 y el segundo a 3.1250308
@@ -441,19 +447,23 @@ testsEval =
         ~: let  (x, gen)  = eval (Rango 1 5) (genNormalConSemilla 0)
                 (y, gen') = eval (Rango 1 5) gen
                 (z, gen'')= eval (Rango 1 5) gen'
-           in (x, y, z) ~?= (2.7980492, 3.1250308, 5.464013)
+           in (x, y, z) ~?= (2.7980492, 3.1250308, 5.464013),
+
+      "Dado tres rangos iguales con genNormalConSemilla 0, cuando se aplica eval en cadena, entonces se obtienen los valores esperados"
+        ~: let (x, gen)  = eval (Rango 5 (1)) (genNormalConSemilla 0)
+            in x ~?= 3.2019508
     ]
 
 testsArmarHistograma :: Test
 testsArmarHistograma =
   test
-    [ "Dado 1 casillero, 3 experimentos, funcion que use dameUno con generador Fijo, cuando se aplica armarHistograma, entonces se obtiene casillero único completo"
+    [ "Dado 1 casillero, 3 experimentos y una funcion que use dameUno con generador Fijo, cuando se aplica armarHistograma, entonces se obtiene casillero único completo"
         ~: casilleros (fst (armarHistograma 1 3 (curry dameUno 1 5) genFijo))
         ~?= [ Casillero infinitoNegativo 2 0 0.0,
               Casillero 2 4 3 100.0, -- El 100% de los valores estan aca
               Casillero 4 infinitoPositivo 0 0.0
             ], -- el primer rango evalua a 3, el segundo a 3 y el tercero a 3
-      "Dado 3 casilleros, 10 experimentos, funcion que use dameUno con generador Fijo, cuando se aplica armarHistograma, entonces se obtiene un casillero completo"
+      "Dado 3 casilleros, 10 experimentos y una funcion que use dameUno con generador Fijo, cuando se aplica armarHistograma, entonces se obtiene un casillero completo"
         ~: casilleros (fst (armarHistograma 3 10 (curry dameUno 1 5) genFijo))
         ~?= [ Casillero infinitoNegativo 2 0 0.0,
               Casillero 2 2.6666667 0 0.0,
@@ -461,56 +471,18 @@ testsArmarHistograma =
               Casillero 3.3333335 4 0 0.0,
               Casillero 4 infinitoPositivo 0 0.0
             ], -- el primer rango evalua a 3, el segundo a 3 y análogamente todos los experimentos
-      "Dado 1 casillero, 3 experimentos, funcion que use dameUno con generador Normal con Semilla, cuando se aplica armarHistograma, entonces se obtiene "
+      "Dado 1 casillero, 3 experimentos y una funcion que use dameUno con generador Normal con Semilla, cuando se aplica armarHistograma, entonces se obtiene "
         ~: casilleros (fst (armarHistograma 1 3 (curry dameUno 1 5) (genNormalConSemilla 0)))
         ~?= [ Casillero infinitoNegativo 1.4687741 0 0.0,
               Casillero 1.4687741 6.1226206 3 100.0, -- El 100% de los valores estan aca (pocas muestras)
               Casillero 6.1226206 infinitoPositivo 0 0.0
             ], -- el primer rango evalua a 2.7980492, el segundo a 3.1250308 y el tercero a 5.464013
-      "Dado 1 casillero, 20 experimentos, funcion que use dameUno con generador Normal con Semilla, cuando se aplica armarHistograma, entonces se obtiene "
+      "Dado 1 casillero, 20 experimentos y una funcion que use dameUno con generador Normal con Semilla, cuando se aplica armarHistograma, entonces se obtiene "
         ~: casilleros (fst (armarHistograma 1 20 (curry dameUno 1 5) (genNormalConSemilla 0)))
         ~?= [ Casillero infinitoNegativo 0.9621854 0 0.0,
               Casillero 0.9621854 5.279082 19 95.0,
               Casillero 5.279082 infinitoPositivo 1 5.0
             ]
-    
-    
-      {- "Dado 1 casillero, 1000 experimentos, funcion que use dameUno, cuando se aplica armarHistograma, entonces se obtiene muestras bien distribuidas"
-        ~: casilleros (fst (armarHistograma 1 1000 (curry dameUno 1 5) (genNormalConSemilla 0)))
-        ~?= [ Casillero infinitoNegativo 1.0136857 25 2.5,
-              Casillero 1.0136857 4.966351 955 95.5, -- El ~95% de los valores estan aca (bastantes muestras)
-              Casillero 4.966351 infinitoPositivo 20 2.0
-            ],
-      "Dado 4 casilleros, 1000 experimentos, funcion que use dameUno, cuando se aplica armarHistograma, entonces vemos la distribución"
-        ~: casilleros (fst (armarHistograma 4 1000 (curry dameUno 1 5) (genNormalConSemilla 0)))
-        ~?= [ Casillero infinitoNegativo 1.0136857 25 2.5, -- El ~2.5% de los valores estan aca
-              Casillero 1.0136857 2.001852 129 12.9,
-              Casillero 2.001852 2.9900184 338 33.8,
-              Casillero 2.9900184 3.9781847 347 34.7,
-              Casillero 3.9781847 4.966351 141 14.1,
-              Casillero 4.966351 infinitoPositivo 20 2.0 -- El ~2.5% de los valores estan aca
-            ],
-      "Dado 11 casilleros, 100000 experimentos, funcion que use dameUno, cuando se aplica armarHistograma, entonces vemos la distribución"
-        ~: casilleros (fst (armarHistograma 10 100000 (curry dameUno 1 5) (genNormalConSemilla 0)))
-        ~?= [ Casillero infinitoNegativo 1.0097816 2464 2.464, -- El ~2.5% de los valores estan aca
-              Casillero 1.0097816 1.4086598 3299 3.299,
-              Casillero 1.4086598 1.807538 6074 6.0740004,
-              Casillero 1.807538 2.2064161 9798 9.798,
-              Casillero 2.2064161 2.6052945 13276 13.276,
-              Casillero 2.6052945 3.0041728 15229 15.229,
-              Casillero 3.0041728 3.403051 15200 15.2,
-              Casillero 3.403051 3.8019292 13068 13.068,
-              Casillero 3.8019292 4.2008076 9608 9.608,
-              Casillero 4.2008076 4.5996857 6074 6.0740004,
-              Casillero 4.5996857 4.998564 3365 3.365,
-              Casillero 4.998564 infinitoPositivo 2545 2.545 -- El ~2.5% de los valores estan aca
-            ] -}
-    {-  "Dado 11 casilleros, 100000 experimentos, funcion que use dameUno, cuando se aplica armarHistograma, entonces vemos la distribución"
-        ~: casilleros (fst (armarHistograma 10 100000 (operadorBinarioGen (*) (curry dameUno 1 5) (curry dameUno 5 30)) (genNormalConSemilla 0)))
-        ~?= [ Casillero infinitoNegativo 1.0097816 2464 2.464, -- El ~2.5% de los valores estan aca
-              Casillero 0 0 0 0,
-              Casillero 4.998564 infinitoPositivo 2545 2.545 -- El ~2.5% de los valores estan aca
-            ]-}
     ]
 
 testsEvalHistograma :: Test
@@ -521,8 +493,6 @@ testsEvalHistograma =
      ~?= [Casillero infinitoNegativo 2.0273714 25 2.5,Casillero 2.0273714 9.932702 955 95.5,Casillero 9.932702 infinitoPositivo 20 2.0]
      ]
      
-
-
 {- Casos de test posibles:
 
 - Considerar Expresiones, cantCasilleros, cantidadDeMuestras y generador
@@ -599,7 +569,9 @@ testsMostrar =
       mostrar (Suma (Mult (Suma (Const 1) (Const 2)) (Const 3)) (Const 4))
         ~?= "((1.0 + 2.0) * 3.0) + 4.0",
       mostrar (Mult (Suma (Suma (Const 1) (Const 2)) (Const 3)) (Const 4))
-        ~?= "(1.0 + 2.0 + 3.0) * 4.0"
+        ~?= "(1.0 + 2.0 + 3.0) * 4.0",
+      mostrar (Mult (Mult (Mult (Rango (-10) 100) (Const 2)) (Rango (-20) (-10))) (Const 4))
+        ~?= "-10.0~100.0 * 2.0 * -20.0~-10.0 * 4.0"
     ]
 
 testsMostrarFloat :: Test

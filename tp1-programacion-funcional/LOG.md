@@ -49,12 +49,12 @@
     - [X] Checkear los tests testsRecr Ej 7
     - [X] Checkear los tests testsFold Ej 7
     - [X] Checkear los tests testsEval Ej 8
-    - [] Checkear los tests testsArmarHistograma Ej 9
+    - [X] Checkear los tests testsArmarHistograma Ej 9
     - [] Checkear los tests testsEvalHistograma Ej 10
-    - [] Checkear los tests testsMostrar Ej 11
-    - [] Checkear los tests testsParse 
-    - [] Checkear los tests testsMostrarFloat 
-    - [] Checkear los tests testsMostrarHistograma 
+    - [X] Checkear los tests testsMostrar Ej 11
+    - [X] Checkear los tests testsParse 
+    - [X] Checkear los tests testsMostrarFloat 
+    - [X] Checkear los tests testsMostrarHistograma 
 
 - [] Correr hlint
     - Aplique el linter a util y reduje calcularPorcentaje
@@ -66,4 +66,4 @@
 
 - [] Terminar Ejercicio 12
     - [X] Hacer la demostracion
-    - [] Chequear la demostración
+    - [X] Chequear la demostración
