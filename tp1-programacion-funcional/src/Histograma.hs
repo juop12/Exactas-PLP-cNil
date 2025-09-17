@@ -37,7 +37,7 @@ vacio cantDeCasilleros (inicioDeHist, finDeHist) = Histograma inicio tamInterval
   where
     inicio = inicioDeHist
     tamIntervalo = (finDeHist - inicioDeHist) / fromIntegral cantDeCasilleros
-    cantElemPorCasillero = [0 | i <- [1 .. (cantDeCasilleros + 2)]]               -- cantDeCasilleros + 2 pue debo contar los casilleros de -inf y +inf
+    cantElemPorCasillero = [0 | i <- [1 .. (cantDeCasilleros + 2)]]               -- cantDeCasilleros + 2 pues debo contar los casilleros de -inf y +inf
 
 -- | Agrega un valor al histograma.
 agregar :: Float -> Histograma -> Histograma

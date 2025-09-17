@@ -90,8 +90,8 @@ eval = foldExpr fConst fRango fSuma fResta fMult fDiv
 -- a partir del resultado de tomar @cantDeMuestras@ muestras de @f@ usando el generador @gen@.
 armarHistograma :: Int -> Int -> G Float -> G Histograma
 armarHistograma cantDeCasilleros cantDeMuestras f gen =
-  let (datos, genFinal) = muestra f cantDeMuestras gen
-   in (histograma cantDeCasilleros (rango95 datos) datos, genFinal)
+  let (datos, genFinal) = muestra f cantDeMuestras gen -- Se obtienen los datos a partir de la funcion muestra del modulo Generadores
+   in (histograma cantDeCasilleros (rango95 datos) datos, genFinal) -- y, con estos, se arma el histograma.
 
 -- | @evalHistograma cantDeCasilleros cantDeMuestras expr gen@ evalúa la expresión @expr@ usando el generador @gen@ @cantDeMuestras@ veces
 -- devuelve un histograma con @cantDeCasilleros@ casilleros y rango calculado con @rango95@ para abarcar el 95% de confianza de los valores.
@@ -134,5 +134,8 @@ mostrar = recrExpr fConst fRango fSuma fResta fMult fDiv
     fResta e1 r1 e2 r2 = maybeParenParaExpr e1 [] r1 ++ " - " ++ maybeParenParaExpr e2 [] r2
     fMult e1 r1 e2 r2 = maybeParenParaExpr e1 [CEMult] r1 ++ " * " ++ maybeParenParaExpr e2 [CEMult] r2
     fDiv e1 r1 e2 r2 = maybeParenParaExpr e1 [] r1 ++ " / " ++ maybeParenParaExpr e2 [] r2
-
+-- | Verifica que el constructor de la expresión no esté en una lista de constructores.
+-- Y agrega paréntesis en función de esa condición.
+-- Cada función de mostrar le agrega los constructores correspondientes a la lista
+-- para cumplir con la asociatividad de la operación.
     maybeParenParaExpr expresion consExpr = maybeParen (constructor expresion `notElem` ([CEConst, CERango] ++ consExpr))

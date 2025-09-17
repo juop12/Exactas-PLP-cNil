@@ -12,9 +12,9 @@ alinearDerecha longitudDeseada s = [ ' ' | _ <- [1 .. cantEspacios] ] ++ s -- [1
 -- de la lista, devuelve la lista sin cambios.
 -- El primer elemento de la lista es el índice 0.
 actualizarElem :: Int -> (a -> a) -> [a] -> [a]
-actualizarElem indice f = zipWith aplicaEnIndice [0 ..]
+actualizarElem indice f = zipWith aplicarFuncionEnIndice [0 ..]
   where
-    aplicaEnIndice indiceElemento elemento = if indiceElemento == indice then f elemento else elemento
+    aplicarFuncionEnIndice indiceElemento elemento = if indiceElemento == indice then f elemento else elemento
 
 -- | infinito positivo (Haskell no tiene literal para +infinito)
 infinitoPositivo :: Float
