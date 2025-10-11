@@ -6,7 +6,6 @@ module Expr
     armarHistograma,
     evalHistograma,
     mostrar,
-    operadorBinarioGen,
   )
 where
 
@@ -65,26 +64,22 @@ recrExpr fConst fRango fSuma fResta fMult fDiv expr =
   where
     r = recrExpr fConst fRango fSuma fResta fMult fDiv
 
--- | @operadorBinarioGen operador r1 r2@ devuelve una función que al
+
+
+-- | Evaluar expresiones dado un generador de números aleatorios
+
+-- | @opBinarioGen operador r1 r2@ devuelve una función que al
 -- tomar un generador @gen@ aplica el operador binario @operador@
 -- a los resultados de: la aplicación de @gen@ a @r1@ y la aplicación
 -- del generador @gen'@ (resultante de la aplicación anterior) a @r2@
-operadorBinarioGen :: (a -> a -> a) -> G a -> G a -> G a
-operadorBinarioGen operador r1 r2 gen =
-  let (x, gen') = r1 gen
-      (y, gen'') = r2 gen' -- uso gen' para que no repetir generador
-   in (operador x y, gen'')
-
--- | Evaluar expresiones dado un generador de números aleatorios
 eval :: Expr -> G Float -- Expr -> Gen -> (Float, Gen)
-eval = foldExpr fConst fRango fSuma fResta fMult fDiv
+eval = foldExpr (,) (curry dameUno) (opBinarioGen (+)) (opBinarioGen (-)) (opBinarioGen (*)) (opBinarioGen (/))
   where
-    fConst = (,) -- Const x gen ~> (x, gen)
-    fRango = curry dameUno -- Rango x y gen ~> (Float \in (x,y), gen')
-    fSuma = operadorBinarioGen (+) -- Suma e1 e2 gen ~> operadorBinarioGen (+) (foldExpr e1) (foldExpr e2) gen ~> (+) (foldExpr e1 gen) (foldExpr e2 gen') ~> (Float, gen'')
-    fResta = operadorBinarioGen (-) -- Analogo fSuma
-    fMult = operadorBinarioGen (*) -- Analogo fSuma
-    fDiv = operadorBinarioGen (/) -- Analogo fSuma
+    opBinarioGen :: (a -> a -> a) -> G a -> G a -> G a
+    opBinarioGen operador r1 r2 gen =
+        let (x, gen')   = r1 gen
+            (y, gen'')  = r2 gen' -- uso gen' para que no repetir generador
+        in  (operador x y, gen'')
 
 -- | @armarHistograma cantDeCasilleros cantDeMuestras f gen@ arma un histograma con @cantDeCasilleros@ casilleros
 -- a partir del resultado de tomar @cantDeMuestras@ muestras de @f@ usando el generador @gen@.
@@ -126,16 +121,19 @@ maybeParen False s = s
 -- | Mostrar las expresiones, pero evitando algunos paréntesis innecesarios.
 -- En particular queremos evitar paréntesis en sumas y productos anidados.
 mostrar :: Expr -> String
-mostrar = recrExpr fConst fRango fSuma fResta fMult fDiv
+mostrar = recrExpr show fRango fSuma fResta fMult fDiv
   where
-    fConst x = show x
-    fRango x y = show x ++ "~" ++ show y
-    fSuma e1 r1 e2 r2 = maybeParenParaExpr e1 [CESuma] r1 ++ " + " ++ maybeParenParaExpr e2 [CESuma] r2
-    fResta e1 r1 e2 r2 = maybeParenParaExpr e1 [] r1 ++ " - " ++ maybeParenParaExpr e2 [] r2
-    fMult e1 r1 e2 r2 = maybeParenParaExpr e1 [CEMult] r1 ++ " * " ++ maybeParenParaExpr e2 [CEMult] r2
-    fDiv e1 r1 e2 r2 = maybeParenParaExpr e1 [] r1 ++ " / " ++ maybeParenParaExpr e2 [] r2
 -- | Verifica que el constructor de la expresión no esté en una lista de constructores.
 -- Y agrega paréntesis en función de esa condición.
 -- Cada función de mostrar le agrega los constructores correspondientes a la lista
--- para cumplir con la asociatividad de la operación.
+-- para cumplir con la asociatividad de la operación. 
+
     maybeParenParaExpr expresion consExpr = maybeParen (constructor expresion `notElem` ([CEConst, CERango] ++ consExpr))
+    armarExpresion operador xs = (\e1 r1 e2 r2 -> maybeParenParaExpr e1 xs r1 ++ operador ++ maybeParenParaExpr e2 xs r2)
+    
+    fRango x y  = show x ++ "~" ++ show y
+    fSuma       = armarExpresion " + " [CESuma]
+    fResta      = armarExpresion " - " []
+    fMult       = armarExpresion " * " [CEMult]
+    fDiv        = armarExpresion " / " []
+    

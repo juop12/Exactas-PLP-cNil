@@ -33,11 +33,10 @@ data Histograma = Histograma Float Float [Int]
 -- valores en el rango y 2 casilleros adicionales para los valores fuera del rango.
 -- Require que @limiteInferior < limiteSuperior@ y @n >= 1@.
 vacio :: Int -> (Float, Float) -> Histograma
-vacio cantDeCasilleros (inicioDeHist, finDeHist) = Histograma inicio tamIntervalo cantElemPorCasillero
+vacio cantDeCasilleros (inicioDeHist, finDeHist) = Histograma inicioDeHist tamIntervalo cantElemPorCasillero
   where
-    inicio = inicioDeHist
     tamIntervalo = (finDeHist - inicioDeHist) / fromIntegral cantDeCasilleros
-    cantElemPorCasillero = [0 | i <- [1 .. (cantDeCasilleros + 2)]]               -- cantDeCasilleros + 2 pues debo contar los casilleros de -inf y +inf
+    cantElemPorCasillero = replicate (cantDeCasilleros + 2) 0 
 
 -- | Agrega un valor al histograma.
 agregar :: Float -> Histograma -> Histograma
@@ -83,7 +82,7 @@ casPorcentaje (Casillero _ _ _ p) = p
 casilleros :: Histograma -> [Casillero]
 casilleros (Histograma inicio tamIntervalo cantElemPorCasillero) = zipWith4 Casillero minimosPorCasillero maximosPorCasillero cantElemPorCasillero porcentajesPorCasillero
   where
-    indices = [0 .. (length cantElemPorCasillero - 2)]                                                  -- Sea n+1 la longitud de indices entonces:
-    minimosPorCasillero = infinitoNegativo : [inicio + tamIntervalo * fromIntegral i | i <- indices]    -- [ -inf, inicio, inicio + tamIntervalo, ..., inicio + n * tamIntervalo ] 
-    maximosPorCasillero = [inicio + tamIntervalo * fromIntegral i | i <- indices] ++ [infinitoPositivo] -- [ inicio, inicio + tamIntervalo, ..., inicio + n * tamIntervalo, +inf ]
-    porcentajesPorCasillero = calcularPorcentajes cantElemPorCasillero
+    limitesFinitos = [inicio + tamIntervalo * fromIntegral i | i <- [0..(length cantElemPorCasillero - 2)]]
+    minimosPorCasillero = infinitoNegativo : limitesFinitos
+    maximosPorCasillero = limitesFinitos ++ [infinitoPositivo]
+    porcentajesPorCasillero = let total = sum cantElemPorCasillero in map (\x -> if total==0 then 0 else fromIntegral x / fromIntegral total * 100) cantElemPorCasillero
