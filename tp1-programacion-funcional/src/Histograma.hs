@@ -85,4 +85,5 @@ casilleros (Histograma inicio tamIntervalo cantElemPorCasillero) = zipWith4 Casi
     limitesFinitos = [inicio + tamIntervalo * fromIntegral i | i <- [0..(length cantElemPorCasillero - 2)]]
     minimosPorCasillero = infinitoNegativo : limitesFinitos
     maximosPorCasillero = limitesFinitos ++ [infinitoPositivo]
-    porcentajesPorCasillero = let total = sum cantElemPorCasillero in map (\x -> if total==0 then 0 else fromIntegral x / fromIntegral total * 100) cantElemPorCasillero
+    total = sum cantElemPorCasillero
+    porcentajesPorCasillero = map (\x -> if total==0 then 0 else fromIntegral x / fromIntegral total * 100) cantElemPorCasillero
