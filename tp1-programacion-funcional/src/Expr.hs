@@ -64,8 +64,6 @@ recrExpr fConst fRango fSuma fResta fMult fDiv expr =
   where
     r = recrExpr fConst fRango fSuma fResta fMult fDiv
 
-
-
 -- | Evaluar expresiones dado un generador de números aleatorios
 
 -- | @opBinarioGen operador r1 r2@ devuelve una función que al
@@ -123,17 +121,15 @@ maybeParen False s = s
 mostrar :: Expr -> String
 mostrar = recrExpr show fRango fSuma fResta fMult fDiv
   where
--- | Verifica que el constructor de la expresión no esté en una lista de constructores.
--- Y agrega paréntesis en función de esa condición.
--- Cada función de mostrar le agrega los constructores correspondientes a la lista
--- para cumplir con la asociatividad de la operación. 
+    -- | Devuelve una función que agrega paréntesis si la expresión lo requiere según los constructores asociativos
+    aplicarParentesisSiNecesario expresion constAsociativos = maybeParen (constructor expresion `notElem` ([CEConst, CERango] ++ constAsociativos)) 
+    
+    -- | Arma la expresión binaria con el operador y aplica paréntesis si es necesario (según los constructores asociativos)
+    armarExpresionBinaria operador constAsociativos e1 r1 e2 r2 = 
+      aplicarParentesisSiNecesario e1 constAsociativos r1 ++ operador ++ aplicarParentesisSiNecesario e2 constAsociativos r2
 
-    maybeParenParaExpr expresion consExpr = maybeParen (constructor expresion `notElem` ([CEConst, CERango] ++ consExpr))
-    armarExpresion operador xs = (\e1 r1 e2 r2 -> maybeParenParaExpr e1 xs r1 ++ operador ++ maybeParenParaExpr e2 xs r2)
-    
     fRango x y  = show x ++ "~" ++ show y
-    fSuma       = armarExpresion " + " [CESuma]
-    fResta      = armarExpresion " - " []
-    fMult       = armarExpresion " * " [CEMult]
-    fDiv        = armarExpresion " / " []
-    
+    fSuma       = armarExpresionBinaria " + " [CESuma]
+    fResta      = armarExpresionBinaria " - " []
+    fMult       = armarExpresionBinaria " * " [CEMult]
+    fDiv        = armarExpresionBinaria " / " []
