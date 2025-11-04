@@ -1,13 +1,34 @@
 
 
 % Ejercicio 1
-matriz(F, C, M) :- completar("Ejercicio 1").
+%! matriz(+F, +C, -M) es verdadero si M es una matriz de F filas y C columnas. 
+%! Cuando M no está instanciada el predicado debe generar una matriz con variables no instanciadas en las celdas
+%  matriz(F, C, M) :- completar("Ejercicio 1"). 
+%  nth1(?index, ?lista, ?elem)
+
+matriz(0,C,[]).
+matriz(F,C,[F1|Fs]) :- F > 0, C >= 0, Fp is F - 1, length(F1, C), matriz(Fp, C, Fs).
 
 % Ejercicio 2
-replicar(X, N, L) :- completar("Ejercicio 2").
+%! replicar(+Elem, +N, -Lista) es cierto cuando Lista es una lista de longitud N, 
+%! donde cada elemento es igual a Elem.
+replicar(X, 0, []).
+replicar(X, N, [X|T]) :- N > 0, Np is N-1, replicar(X, Np, T).
 
 % Ejercicio 3
-transponer(_, _) :- completar("Ejercicio 3").
+
+%! posicion(I,J,M,Elem) es True si M[I][J] == Elem, con I y J en rango.
+posicion(I,J,M,Elem) :- nth1(I, M, Fiesima), nth1(J, Fiesima, Elem).
+
+%! swap nos dice si M[F][C] == Mt[C][F]
+swap(F,C,M,Mt) :- posicion(F,C,M,Elem), posicion(C,F,Mt,Elem).
+
+chequearPosiciones(1,1,M,Mt) :- swap(1,1,M,Mt).
+chequearPosiciones(1,C,M,Mt) :- C > 1, swap(1,C,M,Mt), Cp is C-1, chequearPosiciones(1,Cp,M,Mt).
+chequearPosiciones(F,1,M,Mt) :- F > 1, swap(F,1,M,Mt), Fp is F-1, chequearPosiciones(Fp,1,M,Mt).
+chequearPosiciones(F,C,M,Mt) :- F > 1, C > 1, swap(F,C,M,Mt), Fp is F-1, chequearPosiciones(Fp,C,M,Mt), Cp is C-1, chequearPosiciones(F,Cp,M,Mt).
+
+transponer(M, Mt) :- length(M, F), nth1(1,M,F1), length(F1, C), chequearPosiciones(F,C,M,Mt).
 
 % Predicado dado armarNono/3
 armarNono(RF, RC, nono(M, RS)) :-
