@@ -41,41 +41,41 @@ test(transponer, [nondet]) :-
                 [3]],
                [[1, 2, 3]]).
 
-% test(pintadasValidas, [nondet]) :-
-%     L = [_, _, _],
-%     soluciones(L, 
-%         pintadasValidas(r([], L)),
-%         [[o,o,o]]).
+test(pintadasValidas, [nondet]) :-
+    L = [_, _, _],
+    soluciones(L, 
+        pintadasValidas(r([], L)),
+        [[o,o,o]]).
 
-% test(pintadasValidas, [nondet]) :-
-%     L = [_, _, _],
-%     soluciones(L, 
-%         pintadasValidas(r([3], L)),
-%         [[x,x,x]]).
+test(pintadasValidas, [nondet]) :-
+    L = [_, _, _],
+    soluciones(L, 
+        pintadasValidas(r([3], L)),
+        [[x,x,x]]).
 
-% test(pintadasValidas, [nondet]) :-
-%     L = [_, _, _],
-%     soluciones(L, 
-%         pintadasValidas(r([1], L)),
-%         [[o,o,x],[o,x,o],[x,o,o]]).
+test(pintadasValidas, [nondet]) :-
+    L = [_, _, _],
+    soluciones(L, 
+        pintadasValidas(r([1], L)),
+        [[o,o,x],[o,x,o],[x,o,o]]).
 
-% test(pintadasValidas, [nondet]) :-
-%     L = [_, _, _],
-%     soluciones(L, 
-%         pintadasValidas(r([1,1], L)),
-%         [[x,o,x]]).
+test(pintadasValidas, [nondet]) :-
+    L = [_, _, _],
+    soluciones(L, 
+        pintadasValidas(r([1,1], L)),
+        [[x,o,x]]).
 
-% test(pintadasValidas, [nondet]) :-
-%     L = [_, _, _],
-%     soluciones(L, 
-%         pintadasValidas(r([2,1], L)), 
-%         []).
+test(pintadasValidas, [nondet]) :-
+    L = [_, _, _],
+    soluciones(L, 
+        pintadasValidas(r([2,1], L)), 
+        []).
 
-% test(pintadasValidas, [nondet]) :-
-%     L = [_, _, _],
-%     soluciones(L, 
-%         pintadasValidas(r([2], L)), 
-%         [[x,x,o],[o,x,x]]).
+test(pintadasValidas, [nondet]) :-
+    L = [_, _, _],
+    soluciones(L, 
+        pintadasValidas(r([2], L)), 
+        [[x,x,o],[o,x,x]]).
 
 % test(resolverNaive, [nondet]) :-
 %     armarNono([[1],[1]], [[1],[1]], NN), NN=nono(M, _),
