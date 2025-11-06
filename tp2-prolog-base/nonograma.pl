@@ -67,25 +67,26 @@ pintadasValidas(r([R|RS], L)) :-
 	pintadasValidas(r(RS,Resto)).		 % Resto esta bien pintado sujeto a las demás restricciones  
 
 % Ejercicio 5
-% Asumo que ya es un nonograma valido -> Matriz bien formada.
+% Asumo que ya es un nonograma valido -> Matriz y restricciones bien formadas.
 
-resolverFilasNaive([],[]). 
+resolverNaive(nono(_,Restricciones)) :- maplist(pintadasValidas, Restricciones). 
 
-resolverFilasNaive([F|Fs], [r(R,F)|Rs]) :- 
-	pintadasValidas(r(R,F)), 				% La Fila esta bien pintada
-	resolverFilasNaive(Fs, Rs). 			% El resto de las filas estan bien pintadas
+% Solucion mas a manopla
+% resolverFilasNaive([],[]). 
 
-resolverNaive(nono([F|Fs],Restricciones)) :- 
-	length([F|Fs], _nroFilas), 											% Conseguir cantidad de filas
-	length(F, _nroColumnas), 											% Conseguir cantidad de columnas
-	length(RestriccionesFilas, _nroFilas), 								% Asegurar de tener la cantidad correcta de restricciones para las filas
-	length(RestriccionesColumnas, _nroColumnas), 						% Asegurar de tener la cantidad correcta de restricciones para las columnas
-	append(RestriccionesFilas, RestriccionesColumnas, Restricciones), 	% Restricciones = RestriccionesFilas ++ RestriccionesColumnas
-	resolverFilasNaive([F|Fs],RestriccionesFilas), 						% Esta bien pintado segun las restricciones de las filas
-	transponer([F|Fs], NNt),											% Conseguir el tablero traspuesto
-	resolverFilasNaive(NNt,RestriccionesColumnas).						% El tablero traspuesto esta bien pintado segun las restricciones de las columnas
+% resolverFilasNaive([F|Fs], [r(R,F)|Rs]) :- 
+% 	pintadasValidas(r(R,F)), 				% La Fila esta bien pintada
+% 	resolverFilasNaive(Fs, Rs). 			% El resto de las filas estan bien pintadas
 
-% resolverNaive(nono(_,Restricciones)) :- maplist(pintadasValidas, Restricciones). ESTO DA SOLUCIONES REPETIDAS
+% resolverNaive(nono([F|Fs],Restricciones)) :- 
+% 	length([F|Fs], _nroFilas), 											% Conseguir cantidad de filas
+% 	length(F, _nroColumnas), 											% Conseguir cantidad de columnas
+% 	length(RestriccionesFilas, _nroFilas), 								% Asegurar de tener la cantidad correcta de restricciones para las filas
+% 	length(RestriccionesColumnas, _nroColumnas), 						% Asegurar de tener la cantidad correcta de restricciones para las columnas
+% 	append(RestriccionesFilas, RestriccionesColumnas, Restricciones), 	% Restricciones = RestriccionesFilas ++ RestriccionesColumnas
+% 	resolverFilasNaive([F|Fs],RestriccionesFilas), 						% Esta bien pintado segun las restricciones de las filas
+% 	transponer([F|Fs], NNt),											% Conseguir el tablero traspuesto
+% 	resolverFilasNaive(NNt,RestriccionesColumnas).						% El tablero traspuesto esta bien pintado segun las restricciones de las columnas
 
 % Ejercicio 6
 interseccion([L|[]],L).
@@ -150,7 +151,7 @@ nn(5,  NN) :- armarNono([[], [1, 1], [], [1, 1], [3]], [[1], [1, 1], [1], [1, 1]
 nn(6,  NN) :- armarNono([[5], [1], [1], [1], [5]], [[1, 1], [2, 2], [1, 1, 1], [1, 1], [1, 1]], NN).
 nn(7,  NN) :- armarNono([[1, 1], [4], [1, 3, 1], [5, 1], [3, 2], [4, 2], [5, 1], [6, 1], [2, 3, 2], [2, 6]], [[2, 1], [1, 2, 3], [9], [7, 1], [4, 5], [5], [4], [2, 1], [1, 2, 2], [4]], NN).
 nn(8,  NN) :- armarNono([[5], [1, 1], [1, 1, 1], [5], [7], [8, 1], [1, 8], [1, 7], [2, 5], [7]], [[4], [2, 2, 2], [1, 4, 1], [1, 5, 1], [1, 8], [1, 7], [1, 7], [2, 6], [3], [3]], NN).
-nn(9,  NN) :- armarNono([[4], [1, 3], [2, 2], [1, 1, 1], [3]], [[3], [1, 1, 1], [2, 2], [3, 1], [4]], NN).
+nn(9,  NN) :- armarNono([[4], [1, 3], [2, 2], [1, 1, 1], [3]], [[3], [1, 1, 1], [2, 2], [3, 1], [4]], NN). % Tiene varias soluciones
 nn(10, NN) :- armarNono([[1], [1], [1], [1, 1], [1, 1]], [[1, 1], [1, 1], [1], [1], [ 1]], NN).
 nn(11, NN) :- armarNono([[1, 1, 1, 1], [3, 3], [1, 1], [1, 1, 1, 1], [8], [6], [10], [6], [2, 4, 2], [1, 1]], [[2, 1, 2], [4, 1, 1], [2, 4], [6], [5], [5], [6], [2, 4], [4, 1, 1], [2, 1, 2]], NN).
 nn(12, NN) :- armarNono([[9], [1, 1, 1, 1], [10], [2, 1, 1], [1, 1, 1, 1], [1, 10], [1, 1, 1], [1, 1, 1], [1, 1, 1, 1, 1], [1, 9], [1, 2, 1, 1, 2], [2, 1, 1, 1, 1], [2, 1, 3, 1], [3, 1], [10]], [[], [9], [2, 2], [3, 1, 2], [1, 2, 1, 2], [3, 11], [1, 1, 1, 2, 1], [1, 1, 1, 1, 1, 1], [3, 1, 3, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 3, 1, 1], [3, 1, 1, 1, 1], [1, 1, 2, 1], [11], []], NN).
