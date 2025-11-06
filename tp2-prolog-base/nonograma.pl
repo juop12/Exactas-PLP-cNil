@@ -85,7 +85,6 @@ resolverNaive(nono([F|Fs],Restricciones)) :-
 	transponer([F|Fs], NNt),											% Conseguir el tablero traspuesto
 	resolverFilasNaive(NNt,RestriccionesColumnas).						% El tablero traspuesto esta bien pintado segun las restricciones de las columnas
 
-
 % Ejercicio 6
 interseccion([L|[]],L).
 interseccion([P1,P2|P], L) :- 
@@ -104,7 +103,8 @@ combinarCelda(A, B, A) :- nonvar(A), nonvar(B), A = B.
 combinarCelda(A, B, _) :- nonvar(A), nonvar(B), A \== B.
 
 % Ejercicio 7
-deducir1Pasada(_) :- completar("Ejercicio 7").
+% TODO: REVISAR (salió de taquito, por eso.)
+deducir1Pasada(nono(_,R)) :- maplist(pintarObligatorias,R).
 
 % Predicado dado
 cantidadVariablesLibres(T, N) :- term_variables(T, LV), length(LV, N).
