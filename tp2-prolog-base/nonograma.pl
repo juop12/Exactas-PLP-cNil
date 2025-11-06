@@ -85,6 +85,8 @@ resolverNaive(nono([F|Fs],Restricciones)) :-
 	transponer([F|Fs], NNt),											% Conseguir el tablero traspuesto
 	resolverFilasNaive(NNt,RestriccionesColumnas).						% El tablero traspuesto esta bien pintado segun las restricciones de las columnas
 
+% resolverNaive(nono(_,Restricciones)) :- maplist(pintadasValidas, Restricciones). ESTO DA SOLUCIONES REPETIDAS
+
 % Ejercicio 6
 interseccion([L|[]],L).
 interseccion([P1,P2|P], L) :- 
