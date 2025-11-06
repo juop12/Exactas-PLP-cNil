@@ -3,25 +3,35 @@
 % matriz(+F, +C, -M) es verdadero si M es una matriz de F filas y C columnas. 
 % Cuando M no está instanciada el predicado debe generar una matriz con variables no instanciadas en las celdas
 matriz(0,_,[]).
-matriz(F,C,[F1|Fs]) :- F > 0, C >= 0, Fp is F - 1, length(F1, C), matriz(Fp, C, Fs).
+matriz(F,C,[F1|Fs]) :- 
+	F > 0, 					% F es una cantidad positiva de filas
+	C >= 0, 				% C es una cantidad no negativa de columnas
+	Fp is F - 1, 			
+	length(F1, C), 			% La primer fila tiene C columnas
+	matriz(Fp, C, Fs).		% La matriz Fs es de dimension Fp x C
 
 % Ejercicio 2
 
 % replicar(+Elem, +N, -Lista) es cierto cuando Lista es una lista de longitud N, 
 % donde cada elemento es igual a Elem.
-replicar(X,N,L) :- length(L, N), maplist(=(X),L).
+
+replicar(Elem,N,L) :- 
+	length(L, N),		% L es de longitud N
+	maplist(=(Elem),L).	% Todos los elementos de L son Elem
 
 
 % Ejercicio 3
+
+%! TODO: Documentar 
+appendColumnas([],[],[]). 
+appendColumnas([F1|TH],[T|TC],[[F1|T]|TS]) :- appendColumnas(TH, TC, TS). 
+
 %! transponer(+M, -MT) es cierto cuando MT es la matriz transpuesta de M. La transpuesta,
 %! MT, tiene como filas las columnas de M y viceversa. Asumir que M es una matriz bien formada (todas las filas tienen
 %! la misma longitud)
-separarPrimerColumna([],[],[]).
-separarPrimerColumna([[F1|T]|TS],[F1|TH],[T|TC]) :- separarPrimerColumna(TS, TH, TC).
-
 transponer([],[]).
 transponer([[]|_], []).
-transponer(M, [Mt1|Mts]) :- separarPrimerColumna(M, Mt1, Ms), transponer(Ms, Mts).
+transponer(M, [Mt1|Mts]) :- appendColumnas(Mt1, Ms, M), transponer(Ms, Mts).
 
 
 % Predicado dado armarNono/3
@@ -39,12 +49,42 @@ zipR([R|RT], [L|LT], [r(R,L)|T]) :- zipR(RT, LT, T).
 
 % Ejercicio 4
 
-pintadasValidas(r([],L)) :- replicar(o,_,L).
-pintadasValidas(r([R|[]], L)) :- append(Prefijo,Sufijo, L), replicar(o,_,Prefijo), replicar(x,R,BloqueX), append(BloqueX, Resto, Sufijo), pintadasValidas(r([],Resto)).
-pintadasValidas(r([R|RS], L)) :- RS \= [], append(Prefijo,Sufijo, L), replicar(o,_,Prefijo), replicar(x,R,BloqueX), append(BloqueX, [o|Resto], Sufijo), pintadasValidas(r(RS,Resto)).
+pintadasValidas(r([],L)) :- replicar(o,_,L).  % Cuando no hay restricciones, L es toda blanca
+
+pintadasValidas(r([R|[]], L)) :- 		
+	append(Prefijo,Sufijo, L),  		 % L es la concatenacion de Prefijo con Sufijo
+	replicar(o,_,Prefijo), 				 % Todos los elementos de Prefijo son blancos
+	replicar(x,R,BloqueX), 				 % BloqueX es lista de longitud R que tiene todas las celdas pintadas de negro
+	append(BloqueX, Resto, Sufijo), 	 % Sufijo es la concatenacion de BloqueX con Resto
+	pintadasValidas(r([],Resto)).		 % Resto esta bien pintada (como no hay restricciones, tiene que ser todo blanco)
+ 
+pintadasValidas(r([R|RS], L)) :- 		 
+	RS \= [], 							 % Hay mas de 1 restriccion
+	append(Prefijo,Sufijo, L), 			 % L es concatenacion de Prefijo con Sufijo
+	replicar(o,_,Prefijo), 				 % Todos los elementos de Prefijo son blancos
+	replicar(x,R,BloqueX), 				 % BloqueX es lista de longitud R con todas las celdas pintadas de negro
+	append(BloqueX, [o|Resto], Sufijo),	 % Sufijo es  BloqueX ++ [o] ++ Resto
+	pintadasValidas(r(RS,Resto)).		 % Resto esta bien pintado sujeto a las demás restricciones  
 
 % Ejercicio 5
-resolverNaive(_) :-  completar("Ejercicio 5").
+% Asumo que ya es un nonograma valido -> Matriz bien formada.
+
+resolverFilasNaive([],[]). 
+
+resolverFilasNaive([F|Fs], [r(R,F)|Rs]) :- 
+	pintadasValidas(r(R,F)), 				% La Fila esta bien pintada
+	resolverFilasNaive(Fs, Rs). 			% El resto de las filas estan bien pintadas
+
+resolverNaive(nono([F|Fs],Restricciones)) :- 
+	length([F|Fs], _nroFilas), 											% Conseguir cantidad de filas
+	length(F, _nroColumnas), 											% Conseguir cantidad de columnas
+	length(RestriccionesFilas, _nroFilas), 								% Asegurar de tener la cantidad correcta de restricciones para las filas
+	length(RestriccionesColumnas, _nroColumnas), 						% Asegurar de tener la cantidad correcta de restricciones para las columnas
+	append(RestriccionesFilas, RestriccionesColumnas, Restricciones), 	% Restricciones = RestriccionesFilas ++ RestriccionesColumnas
+	resolverFilasNaive([F|Fs],RestriccionesFilas), 						% Esta bien pintado segun las restricciones de las filas
+	transponer([F|Fs], NNt),											% Conseguir el tablero traspuesto
+	resolverFilasNaive(NNt,RestriccionesColumnas).						% El tablero traspuesto esta bien pintado segun las restricciones de las columnas
+
 
 % Ejercicio 6
 pintarObligatorias(_) :- completar("Ejercicio 6").
@@ -92,16 +132,16 @@ solucionUnica(NN) :- completar("Ejercicio 10").
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Fáciles
-nn(0, NN) :- armarNono([[1],[2]],[[],[2],[1]], NN).
-nn(1, NN) :- armarNono([[4],[2,1],[2,1],[1,1],[1]],[[4],[3],[1],[2],[3]], NN).
-nn(2, NN) :- armarNono([[4],[3,1],[1,1],[1],[1,1]],[[4],[2],[2],[1],[3,1]], NN).
-nn(3, NN) :- armarNono([[2,1],[4],[3,1],[3],[3,3],[2,1],[2,1],[4],[4,4],[4,2]], [[1,2,1],[1,1,2,2],[2,3],[1,3,3],[1,1,1,1],[2,1,1],[1,1,2],[2,1,1,2],[1,1,1],[1]], NN).
-nn(4, NN) :- armarNono([[1, 1], [5], [5], [3], [1]], [[2], [4], [4], [4], [2]], NN).
-nn(5, NN) :- armarNono([[], [1, 1], [], [1, 1], [3]], [[1], [1, 1], [1], [1, 1], [1]], NN).
-nn(6, NN) :- armarNono([[5], [1], [1], [1], [5]], [[1, 1], [2, 2], [1, 1, 1], [1, 1], [1, 1]], NN).
-nn(7, NN) :- armarNono([[1, 1], [4], [1, 3, 1], [5, 1], [3, 2], [4, 2], [5, 1], [6, 1], [2, 3, 2], [2, 6]], [[2, 1], [1, 2, 3], [9], [7, 1], [4, 5], [5], [4], [2, 1], [1, 2, 2], [4]], NN).
-nn(8, NN) :- armarNono([[5], [1, 1], [1, 1, 1], [5], [7], [8, 1], [1, 8], [1, 7], [2, 5], [7]], [[4], [2, 2, 2], [1, 4, 1], [1, 5, 1], [1, 8], [1, 7], [1, 7], [2, 6], [3], [3]], NN).
-nn(9, NN) :- armarNono([[4], [1, 3], [2, 2], [1, 1, 1], [3]], [[3], [1, 1, 1], [2, 2], [3, 1], [4]], NN).
+nn(0,  NN) :- armarNono([[1],[2]],[[],[2],[1]], NN).
+nn(1,  NN) :- armarNono([[4],[2,1],[2,1],[1,1],[1]],[[4],[3],[1],[2],[3]], NN).
+nn(2,  NN) :- armarNono([[4],[3,1],[1,1],[1],[1,1]],[[4],[2],[2],[1],[3,1]], NN).
+nn(3,  NN) :- armarNono([[2,1],[4],[3,1],[3],[3,3],[2,1],[2,1],[4],[4,4],[4,2]], [[1,2,1],[1,1,2,2],[2,3],[1,3,3],[1,1,1,1],[2,1,1],[1,1,2],[2,1,1,2],[1,1,1],[1]], NN).
+nn(4,  NN) :- armarNono([[1, 1], [5], [5], [3], [1]], [[2], [4], [4], [4], [2]], NN).
+nn(5,  NN) :- armarNono([[], [1, 1], [], [1, 1], [3]], [[1], [1, 1], [1], [1, 1], [1]], NN).
+nn(6,  NN) :- armarNono([[5], [1], [1], [1], [5]], [[1, 1], [2, 2], [1, 1, 1], [1, 1], [1, 1]], NN).
+nn(7,  NN) :- armarNono([[1, 1], [4], [1, 3, 1], [5, 1], [3, 2], [4, 2], [5, 1], [6, 1], [2, 3, 2], [2, 6]], [[2, 1], [1, 2, 3], [9], [7, 1], [4, 5], [5], [4], [2, 1], [1, 2, 2], [4]], NN).
+nn(8,  NN) :- armarNono([[5], [1, 1], [1, 1, 1], [5], [7], [8, 1], [1, 8], [1, 7], [2, 5], [7]], [[4], [2, 2, 2], [1, 4, 1], [1, 5, 1], [1, 8], [1, 7], [1, 7], [2, 6], [3], [3]], NN).
+nn(9,  NN) :- armarNono([[4], [1, 3], [2, 2], [1, 1, 1], [3]], [[3], [1, 1, 1], [2, 2], [3, 1], [4]], NN).
 nn(10, NN) :- armarNono([[1], [1], [1], [1, 1], [1, 1]], [[1, 1], [1, 1], [1], [1], [ 1]], NN).
 nn(11, NN) :- armarNono([[1, 1, 1, 1], [3, 3], [1, 1], [1, 1, 1, 1], [8], [6], [10], [6], [2, 4, 2], [1, 1]], [[2, 1, 2], [4, 1, 1], [2, 4], [6], [5], [5], [6], [2, 4], [4, 1, 1], [2, 1, 2]], NN).
 nn(12, NN) :- armarNono([[9], [1, 1, 1, 1], [10], [2, 1, 1], [1, 1, 1, 1], [1, 10], [1, 1, 1], [1, 1, 1], [1, 1, 1, 1, 1], [1, 9], [1, 2, 1, 1, 2], [2, 1, 1, 1, 1], [2, 1, 3, 1], [3, 1], [10]], [[], [9], [2, 2], [3, 1, 2], [1, 2, 1, 2], [3, 11], [1, 1, 1, 2, 1], [1, 1, 1, 1, 1, 1], [3, 1, 3, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 3, 1, 1], [3, 1, 1, 1, 1], [1, 1, 2, 1], [11], []], NN).

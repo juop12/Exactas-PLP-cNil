@@ -77,21 +77,21 @@ test(pintadasValidas, [nondet]) :-
         pintadasValidas(r([2], L)), 
         [[x,x,o],[o,x,x]]).
 
-% test(resolverNaive, [nondet]) :-
-%     armarNono([[1],[1]], [[1],[1]], NN), NN=nono(M, _),
-%     soluciones(M, resolverNaive(NN), 
-%         [[[o,x], % solución A
-%           [x,o]],
-%          [[x,o], % solución B
-%           [o,x]]
-%         ]).
+test(resolverNaive, [nondet]) :-
+    armarNono([[1],[1]], [[1],[1]], NN), NN=nono(M, _),
+    soluciones(M, resolverNaive(NN), 
+        [[[o,x], % solución A
+          [x,o]],
+         [[x,o], % solución B
+          [o,x]]
+        ]).
 
-% test(resolverNaive, [nondet]) :-
-%     nn(0, NN), NN=nono(M, _),
-%     soluciones(M, resolverNaive(NN), 
-%         [[[o,x,o], % única solución
-%           [o,x,x]]
-%         ]).
+test(resolverNaive, [nondet]) :-
+    nn(0, NN), NN=nono(M, _),
+    soluciones(M, resolverNaive(NN), 
+        [[[o,x,o], % única solución
+          [o,x,x]]
+        ]).
 
 % test(pintarObligatorias, [nondet]) :-
 %     L = [_, _, _],
