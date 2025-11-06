@@ -95,8 +95,15 @@ interseccion([P1,P2|P], L) :-
 	interseccion([Lp|P], L).			% L es la interseccion entre Lp y el resto de las pintadas
 
 pintarObligatorias(r(R,L)) :-
-	findall(L, pintadasValidas(r(R,L)), ListaDePintadasValidas), % Conseguimos todas las formas de pintar validas.
+	findall(L, pintadasValidas(r(R,L)), ListaDePintadasValidas), % Conseguimos todas las formas de pintar validas la L que me pasaron.
 	interseccion(ListaDePintadasValidas, L).					 % Veamos que L sea la interseccion entre todas las formas de pintar validas. 
+
+% pintarObligatorias2(r(R,L)) :-
+% 	length(L,N),
+% 	findall(Pintada, (length(Pintada,N),pintadasValidas(r(R,Pintada))), ListaDePintadasValidas), % Conseguimos todas las formas de pintar validas.
+% 	interseccion(ListaDePintadasValidas, L).
+% L asi esta bien? O deberia reemplazar el L de findall con uno "fresco" y luego hacer que la interseccion sea pintada.
+% Problema si hago eso: Si L esta semi-instanciada entonces pierdo la instanciacion.  
 
 % Predicado dado combinarCelda/3
 combinarCelda(A, B, _) :- var(A), var(B).
