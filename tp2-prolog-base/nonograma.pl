@@ -22,13 +22,13 @@ replicar(Elem,N,L) :-
 
 % Ejercicio 3
 
-%! TODO: Documentar 
+% TODO: Documentar 
 appendColumnas([],[],[]). 
 appendColumnas([F1|TH],[T|TC],[[F1|T]|TS]) :- appendColumnas(TH, TC, TS). 
 
-%! transponer(+M, -MT) es cierto cuando MT es la matriz transpuesta de M. La transpuesta,
-%! MT, tiene como filas las columnas de M y viceversa. Asumir que M es una matriz bien formada (todas las filas tienen
-%! la misma longitud)
+% transponer(+M, -MT) es cierto cuando MT es la matriz transpuesta de M. La transpuesta,
+% MT, tiene como filas las columnas de M y viceversa. Asumir que M es una matriz bien formada (todas las filas tienen
+% la misma longitud)
 transponer([],[]).
 transponer([[]|_], []).
 transponer(M, [Mt1|Mts]) :- appendColumnas(Mt1, Ms, M), transponer(Ms, Mts).
@@ -87,7 +87,14 @@ resolverNaive(nono([F|Fs],Restricciones)) :-
 
 
 % Ejercicio 6
-pintarObligatorias(_) :- completar("Ejercicio 6").
+interseccion([L|[]],L).
+interseccion([P1,P2|P], L) :- 
+	maplist(combinarCelda, P1, P2, Lp), % Lp es la interseccion entre P1 y P2
+	interseccion([Lp|P], L).			% L es la interseccion entre Lp y el resto de las pintadas
+
+pintarObligatorias(r(R,L)) :-
+	findall(L, pintadasValidas(r(R,L)), ListaDePintadasValidas), % Conseguimos todas las formas de pintar validas.
+	interseccion(ListaDePintadasValidas, L).					 % Veamos que L sea la interseccion entre todas las formas de pintar validas. 
 
 % Predicado dado combinarCelda/3
 combinarCelda(A, B, _) :- var(A), var(B).

@@ -93,23 +93,23 @@ test(resolverNaive, [nondet]) :-
           [o,x,x]]
         ]).
 
-% test(pintarObligatorias, [nondet]) :-
-%     L = [_, _, _],
-%     soluciones(L, 
-%         pintarObligatorias(r([3], L)), 
-%         [[x,x,x]]).
+test(pintarObligatorias, [nondet]) :-
+    L = [_, _, _],
+    soluciones(L, 
+        pintarObligatorias(r([3], L)), 
+        [[x,x,x]]).
 
-% test(pintarObligatorias, [nondet]) :-
-%     L = [_, _, _],
-%     soluciones(L, 
-%         pintarObligatorias(r([], L)), 
-%         [[o,o,o]]).
+test(pintarObligatorias, [nondet]) :-
+    L = [_, _, _],
+    soluciones(L, 
+        pintarObligatorias(r([], L)), 
+        [[o,o,o]]).
 
-% test(pintarObligatorias, [nondet]) :-
-%     L = [A, _, C],
-%     soluciones(L, 
-%         pintarObligatorias(r([2], L)), 
-%         [[A,x,C]]).
+test(pintarObligatorias, [nondet]) :-
+    L = [A, _, C],
+    soluciones(L, 
+        pintarObligatorias(r([2], L)), 
+        [[A,x,C]]).
 
 % test(deducir1Pasada, [nondet]) :-
 %     armarNono([[2],[3],[2]], [[2],[3],[2]], NN), NN=nono(M, _),
