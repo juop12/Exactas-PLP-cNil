@@ -1,38 +1,39 @@
 % Ejercicio 1
 
-% matriz(+F, +C, -M) es verdadero si M es una matriz de F filas y C columnas. 
+%! matriz(+F, +C, -M) 
+% Es verdadero si M es una matriz de F filas y C columnas. 
 % Cuando M no está instanciada el predicado debe generar una matriz con variables no instanciadas en las celdas
 matriz(0,_,[]).
 matriz(F,C,[F1|Fs]) :- 
-	F > 0, 					% F es una cantidad positiva de filas
-	C >= 0, 				% C es una cantidad no negativa de columnas
+	F > 0, 					
+	C >= 0, 				
 	Fp is F - 1, 			
-	length(F1, C), 			% La primer fila tiene C columnas
-	matriz(Fp, C, Fs).		% La matriz Fs es de dimension Fp x C
+	length(F1, C), 			
+	matriz(Fp, C, Fs).
 
 % Ejercicio 2
 
-% replicar(+Elem, +N, -Lista) es cierto cuando Lista es una lista de longitud N, 
-% donde cada elemento es igual a Elem.
-
+%! replicar(-Elem, ?N, ?Lista) 
+% Es cierto cuando Lista es una lista de longitud N, donde cada elemento unifica con Elem.
 replicar(Elem,N,L) :- 
-	length(L, N),		% L es de longitud N
-	maplist(=(Elem),L).	% Todos los elementos de L son Elem
-
+	length(L, N),		
+	maplist(=(Elem),L).	
 
 % Ejercicio 3
 
-% TODO: Documentar 
-appendColumnas([],[],[]). 
-appendColumnas([F1|TH],[T|TC],[[F1|T]|TS]) :- appendColumnas(TH, TC, TS). 
+%! unirCabezasAFilas(-Cabezas, -Filas, +Matriz) 
+% Es verdadero cuando los elementos de Cabezas son los primeros elementos de cada fila de Filas en la Matriz (i.e: la primera columna)
+unirCabezasAFilas([],[],[]). 
+unirCabezasAFilas([C1|CT],[F|FT],[[C1|F]|M]) :- unirCabezasAFilas(CT, FT, M).
 
-% transponer(+M, -MT) es cierto cuando MT es la matriz transpuesta de M. La transpuesta,
-% MT, tiene como filas las columnas de M y viceversa. Asumir que M es una matriz bien formada (todas las filas tienen
-% la misma longitud)
+%! transponer(+M, -MT) 
+% Cierto cuando MT es la matriz transpuesta de M. La transpuesta, MT, tiene como filas las columnas de M y viceversa. 
+% Asumir que M es una matriz bien formada (todas las filas tienen la misma longitud)
 transponer([],[]).
 transponer([[]|_], []).
-transponer(M, [Mt1|Mts]) :- appendColumnas(Mt1, Ms, M), transponer(Ms, Mts).
+transponer(M, [Mt1|Mst]) :- unirCabezasAFilas(Mt1, Ms, M), transponer(Ms, Mst).
 
+% TODO: Verificar la instanciación
 
 % Predicado dado armarNono/3
 armarNono(RF, RC, nono(M, RS)) :-
@@ -49,61 +50,54 @@ zipR([R|RT], [L|LT], [r(R,L)|T]) :- zipR(RT, LT, T).
 
 % Ejercicio 4
 
-pintadasValidas(r([],L)) :- replicar(o,_,L).  % Cuando no hay restricciones, L es toda blanca
+%! pintadaParcial(+L, +R, ?Resto)
+% Es verdadero cuando L = BloqueO ++ BloqueX ++ Resto, donde:
+% - BloqueX es lista de "x's" longitud R 
+% - BloqueO es una lista de todas "o's" (puede ser vacia)
+% - Resto es una lista por pintar o parcialmente pintada. (de cualquier color)
+pintadaParcial(L, R, Resto) :- 
+	append(Prefijo,Sufijo, L),  		 
+	replicar(o,_,Prefijo), 				 
+	replicar(x,R,BloqueX), 				 
+	append(BloqueX, Resto, Sufijo).
 
+%! pintadasValidas(+R)
+% Genera las posibles pintadas válidas para una restricción R.
+% R será de la forma r(Res, Celdas) donde Res es una lista de enteros que representan las restricciones y
+% Celdas es una lista de variables (parcialmente no instanciadas) que representan las celdas
+pintadasValidas(r([],L)) :- 
+	replicar(o,_,L).					  % Cuando no hay restricciones, L es toda blanca
+	
 pintadasValidas(r([R|[]], L)) :- 		
-	append(Prefijo,Sufijo, L),  		 % L es la concatenacion de Prefijo con Sufijo
-	replicar(o,_,Prefijo), 				 % Todos los elementos de Prefijo son blancos
-	replicar(x,R,BloqueX), 				 % BloqueX es lista de longitud R que tiene todas las celdas pintadas de negro
-	append(BloqueX, Resto, Sufijo), 	 % Sufijo es la concatenacion de BloqueX con Resto
+	pintadaParcial(L, R, Resto),
 	pintadasValidas(r([],Resto)).		 % Resto esta bien pintada (como no hay restricciones, tiene que ser todo blanco)
- 
+		
 pintadasValidas(r([R|RS], L)) :- 		 
-	RS \= [], 							 % Hay mas de 1 restriccion
-	append(Prefijo,Sufijo, L), 			 % L es concatenacion de Prefijo con Sufijo
-	replicar(o,_,Prefijo), 				 % Todos los elementos de Prefijo son blancos
-	replicar(x,R,BloqueX), 				 % BloqueX es lista de longitud R con todas las celdas pintadas de negro
-	append(BloqueX, [o|Resto], Sufijo),	 % Sufijo es  BloqueX ++ [o] ++ Resto
+	RS \= [], 					
+	pintadaParcial(L,R,[o|Resto]),
 	pintadasValidas(r(RS,Resto)).		 % Resto esta bien pintado sujeto a las demás restricciones  
-
+	
 % Ejercicio 5
-% Asumo que ya es un nonograma valido -> Matriz y restricciones bien formadas.
 
+%! resolverNaive(+NN)
+% Resuelve un nonograma NN usando backtracking, utilizando pintadas validas como auxiliar.
+% Asume que ya es un nonograma valido -> Matriz y restricciones bien formadas.
 resolverNaive(nono(_,Restricciones)) :- maplist(pintadasValidas, Restricciones). 
 
-% Solucion mas a manopla
-% resolverFilasNaive([],[]). 
-
-% resolverFilasNaive([F|Fs], [r(R,F)|Rs]) :- 
-% 	pintadasValidas(r(R,F)), 				% La Fila esta bien pintada
-% 	resolverFilasNaive(Fs, Rs). 			% El resto de las filas estan bien pintadas
-
-% resolverNaive(nono([F|Fs],Restricciones)) :- 
-% 	length([F|Fs], _nroFilas), 											% Conseguir cantidad de filas
-% 	length(F, _nroColumnas), 											% Conseguir cantidad de columnas
-% 	length(RestriccionesFilas, _nroFilas), 								% Asegurar de tener la cantidad correcta de restricciones para las filas
-% 	length(RestriccionesColumnas, _nroColumnas), 						% Asegurar de tener la cantidad correcta de restricciones para las columnas
-% 	append(RestriccionesFilas, RestriccionesColumnas, Restricciones), 	% Restricciones = RestriccionesFilas ++ RestriccionesColumnas
-% 	resolverFilasNaive([F|Fs],RestriccionesFilas), 						% Esta bien pintado segun las restricciones de las filas
-% 	transponer([F|Fs], NNt),											% Conseguir el tablero traspuesto
-% 	resolverFilasNaive(NNt,RestriccionesColumnas).						% El tablero traspuesto esta bien pintado segun las restricciones de las columnas
-
 % Ejercicio 6
-interseccion([L|[]],L).
-interseccion([P1,P2|P], L) :- 
-	maplist(combinarCelda, P1, P2, Lp), % Lp es la interseccion entre P1 y P2
-	interseccion([Lp|P], L).			% L es la interseccion entre Lp y el resto de las pintadas
 
+%! combinar(+Combinaciones, -Lista).
+% Lista es la lista donde cada posición está instanciada sii esa posición es igual en todas las listas de Combinaciones.
+combinar([L],L).
+combinar([P1,P2|P], L) :- 
+	maplist(combinarCelda, P1, P2, Lp), % Lp es la combinacion entre P1 y P2
+	combinar([Lp|P], L).		    	% L es la combinacion entre Lp y el resto de las pintadas
+
+%! pintarObligatorias(+R)
+% Pinta las celdas que son obligatoriamente "x" o "o". Esto es viendo todas las posibilidades de pintadas válidas para la restricción R
 pintarObligatorias(r(R,L)) :-
-	findall(L, pintadasValidas(r(R,L)), ListaDePintadasValidas), % Conseguimos todas las formas de pintar validas la L que me pasaron.
-	interseccion(ListaDePintadasValidas, L).					 % Veamos que L sea la interseccion entre todas las formas de pintar validas. 
-
-% pintarObligatorias2(r(R,L)) :-
-% 	length(L,N),
-% 	findall(Pintada, (length(Pintada,N),pintadasValidas(r(R,Pintada))), ListaDePintadasValidas), % Conseguimos todas las formas de pintar validas.
-% 	interseccion(ListaDePintadasValidas, L).
-% L asi esta bien? O deberia reemplazar el L de findall con uno "fresco" y luego hacer que la interseccion sea pintada.
-% Problema si hago eso: Si L esta semi-instanciada entonces pierdo la instanciacion.  
+	findall(L, pintadasValidas(r(R,L)), ListaDePintadasValidas), % Conseguimos todas las formas validas de pintar la L que me pasaron.
+	combinar(ListaDePintadasValidas, L).					     % Veamos que L sea la combinacion entre todas las formas de pintar validas. 
 
 % Predicado dado combinarCelda/3
 combinarCelda(A, B, _) :- var(A), var(B).
@@ -113,7 +107,9 @@ combinarCelda(A, B, A) :- nonvar(A), nonvar(B), A = B.
 combinarCelda(A, B, _) :- nonvar(A), nonvar(B), A \== B.
 
 % Ejercicio 7
-% TODO: REVISAR (salió de taquito, por eso.)
+
+%! deducir1Pasada(+NN)
+% Aplica el predicado pintarObligatorias/1 a todas las restricciones del nonograma NN.
 deducir1Pasada(nono(_,R)) :- maplist(pintarObligatorias,R).
 
 % Predicado dado
