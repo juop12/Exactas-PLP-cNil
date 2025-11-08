@@ -13,7 +13,7 @@ matriz(F,C,[F1|Fs]) :-
 
 % Ejercicio 2
 
-%! replicar(-Elem, ?N, ?Lista) 
+%! replicar(+Elem, +N, -Lista) 
 % Es cierto cuando Lista es una lista de longitud N, donde cada elemento unifica con Elem.
 replicar(Elem,N,L) :- 
 	length(L, N),		
@@ -77,7 +77,7 @@ pintadasValidas(r([R|RS], L)) :-
 	pintadaParcial(L,R,[o|Resto]),
 	pintadasValidas(r(RS,Resto)).		 % Resto esta bien pintado sujeto a las demás restricciones  
 	
-% Ejercicio 5
+% Ejercicio 5 (PREGUNTAR A BRIAN -> ¿Es esto backtracking?)
 
 %! resolverNaive(+NN)
 % Resuelve un nonograma NN usando backtracking, utilizando pintadas validas como auxiliar.
@@ -87,7 +87,7 @@ resolverNaive(nono(_,Restricciones)) :- maplist(pintadasValidas, Restricciones).
 % Ejercicio 6
 
 %! combinar(+Combinaciones, -Lista).
-% Lista es la lista donde cada posición está instanciada sii esa posición es igual en todas las listas de Combinaciones.
+% Es verdadero cuando Lista es la lista donde cada posición está instanciada sii esa posición es igual en todas las listas de Combinaciones.
 combinar([L],L).
 combinar([P1,P2|P], L) :- 
 	maplist(combinarCelda, P1, P2, Lp), % Lp es la combinacion entre P1 y P2
@@ -148,17 +148,18 @@ restriccionConMenosLibres(nono(_,RS), R) :-
 
 % Ejercicio 9
 
-resolverDeduciendoCont(_, A, A). % Si VI = VF entonces no hubo más cambios y frenamos.
-resolverDeduciendoCont(NN, A, B) :- A =\= B, resolverDeduciendo(NN).
-
-resolverDeduciendo(NN) :- cantidadVariablesLibres(NN, 0).
-resolverDeduciendo(NN) :- 
+%! resolverDeduciendo(+NN)
+% Resuelve un nonograma NN de manera más eficiente que resolverNaive/1.
+resolverDeduciendo(NN):- 
 	deducirVariasPasadas(NN), 
-	cantidadVariablesLibres(NN, VI),
-	restriccionConMenosLibres(NN,R), 
-	pintadasValidas(R), 
-	cantidadVariablesLibres(NN, VF),
-	resolverDeduciendoCont(NN,VI,VF).
+	cantidadVariablesLibres(NN, 0). 
+resolverDeduciendo(NN):-
+	deducirVariasPasadas(NN),
+	restriccionConMenosLibres(NN,R),
+	!,
+	pintadasValidas(R),
+	resolverDeduciendo(NN).
+
 
 % Ejercicio 10
 solucionUnica(NN) :- completar("Ejercicio 10").
