@@ -141,10 +141,10 @@ hayUnaRestriccionConCantidadDeLibresMenorQue(RS, N):-
 % Es verdadero cuando R es la restricción (o una de las restricciones) del nonograma NN que tiene la menor cantidad de celdas no instanciadas,
 % pero que tenga al menos una celda no instanciada
 restriccionConMenosLibres(nono(_,RS), R) :- 
-	member(R, RS),									
-	cantidadVariablesLibres(R, N), 					
-	N > 0, 											
-	not(hayUnaRestriccionConCantidadDeLibresMenorQue(RS,N)).	
+	member(R, RS),												% | 
+	cantidadVariablesLibres(R, N), 								% | Generar algun candidato con mis requisitos
+	N > 0, 														% |
+	not(hayUnaRestriccionConCantidadDeLibresMenorQue(RS,N)).	% 	Testear que sea de los que tienen "menos libres"
 
 % Ejercicio 9
 
@@ -152,7 +152,7 @@ restriccionConMenosLibres(nono(_,RS), R) :-
 % Resuelve un nonograma NN de manera más eficiente que resolverNaive/1.
 resolverDeduciendo(NN):- 
 	deducirVariasPasadas(NN), 
-	cantidadVariablesLibres(NN, 0). 
+	cantidadVariablesLibres(NN, 0).
 resolverDeduciendo(NN):-
 	deducirVariasPasadas(NN),
 	restriccionConMenosLibres(NN,R),
@@ -162,7 +162,13 @@ resolverDeduciendo(NN):-
 
 
 % Ejercicio 10
-solucionUnica(NN) :- completar("Ejercicio 10").
+
+% solucionUnica(NN) :- 
+% 	not((findall(NN, resolverDeduciendo(NN), L), length(L,N), N =\= 1)).
+
+
+solucionUnica(NN) :- 
+	findall(NN, resolverDeduciendo(NN), L), length(L,N), N =:= 1.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                              %

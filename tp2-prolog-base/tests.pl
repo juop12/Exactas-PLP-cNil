@@ -186,11 +186,11 @@ test(resolverDeduciendo, [nondet]) :-
     length(MS, N),
     assertion(N == 36). % no se listan soluciones repetidas
 
-% test(solucionUnica, [nondet]) :-
-%     nn(0, NN), solucionUnica(NN).
+test(solucionUnica, [nondet]) :-
+    nn(0, NN), solucionUnica(NN).
 
-% test(solucionUnica, fail) :-
-%     nn(10, NN), solucionUnica(NN).
+test(solucionUnica, fail) :-
+    nn(10, NN), solucionUnica(NN).
 
 % Similar a findall/3 pero compara con un conjunto 
 % esperado independientemente del orden.
