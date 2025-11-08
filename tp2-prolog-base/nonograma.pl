@@ -160,15 +160,15 @@ resolverDeduciendo(NN):-
 	pintadasValidas(R),
 	resolverDeduciendo(NN).
 
-
 % Ejercicio 10
 
 % solucionUnica(NN) :- 
 % 	not((findall(NN, resolverDeduciendo(NN), L), length(L,N), N =\= 1)).
 
+% solucionUnica(NN) :- 
+% 	findall(NN, resolverDeduciendo(NN), L), length(L,N), N =:= 1.
 
-solucionUnica(NN) :- 
-	findall(NN, resolverDeduciendo(NN), L), length(L,N), N =:= 1.
+% solucionUnica(NN):- nn(ID, NN), resolverDeduciendo(NN), !, not((nn(ID, NN2), resolverDeduciendo(NN2), NN2 \= NN)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                              %
