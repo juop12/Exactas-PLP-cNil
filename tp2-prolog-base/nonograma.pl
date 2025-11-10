@@ -176,63 +176,63 @@ solucionUnica(NN) :-
 % solucionUnica(NN):- nn(ID, NN), resolverDeduciendo(NN), !, not((nn(ID, NN2), resolverDeduciendo(NN2), NN2 \= NN)).
 % TODO: Preguntar que solucionUnica hacer
 
-% Ejercicio 11- Analisis de Nonos 👴
-
 /*
+Ejercicio 11- Analisis de Nonos 👴
+
 Las consultas hechas para completar esta tabla fueron las siguiente:
 
 Para que Prolog no acorte las listas al mostrarlas en consola hicimos la siguiente query:
-?- set_prolog_flag(answer_write_options, [maxdepth(0)]).
+?- set_prolog_flag(answer_write_options, [max_depth(0)]).
 
 Para completar la columna de dimensiones hicimos la siguiente query que nos da una lista de tuplas (ID, F, C)
 donde ID es el numero de nono, F es la cantidad de filas de la matriz del nono y C la cantidad de columnas.
 
-?- findall((ID,F,C), (between(0,14,ID), nn(ID, nono(M,)), matriz(F,C,M)), L). % para dimensiones
+?- findall((ID,F,C), (between(0,14,ID), nn(ID, nono(M,_)), matriz(F,C,M)), L). 
 
 Para completar la columna de "¿Tiene solucion unica?" hicimos la siguiente query que nos da una lista de los ID de los nonos
 cuya solucion es unica. Aquellos que no estan deducimos que no tienen solucion unica. 
 
-?- findall(ID, (between(0,14,ID), nn(ID,NN), solucionUnica(NN)), L). % para encontrar los que tienen solucion unica.
+?- findall(ID, (between(0,14,ID), nn(ID,NN), solucionUnica(NN)), L). 
 
 Para completar la columna de "¿Es deducible sin backtracking?" hicimos la siguiente query que nos da una lista de los ID de los nonos
 resolubles con solo la logica de deducirVariasPasadas. Aquellos que no estan deducimos que no son deducibles (🦆) sin backtracking. 
 
-?- findall(ID, (between(0,14,ID), nn(ID, NN), nn(ID,NN2), deducirVariasPasadas(NN), resolverDeduciendo(NN2), NN2 == NN, mostrarNono(NN)), L). % Darme los que no si se pueden solucionar sin backtracking
+?- findall(ID, (between(0,14,ID), nn(ID, NN), nn(ID,NN2), deducirVariasPasadas(NN), resolverDeduciendo(NN2), NN2 == NN), L).
 
-El resultado final es esta tabla
+El resultado final es esta tabla:
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%	N	%% 	Tamaño	%%	¿Tiene solucion unica?	%%	¿Es deducible sin backtracking?	%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	0	%% 	2x3		%%			Si				%%				No					%%
+%%	0	%% 	2x3		%%			Si				%%				Si					%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	1	%% 	2x3		%%			Si				%%				No					%%
+%%	1	%% 	5x5		%%			Si				%%				Si					%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	2	%% 	2x3		%%			Si				%%				No					%%
+%%	2	%% 	5x5		%%			Si				%%				Si					%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	3	%% 	2x3		%%			Si				%%				No					%%
+%%	3	%% 	10x10	%%			Si				%%				Si					%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	4	%% 	2x3		%%			Si				%%				No					%%
+%%	4	%% 	5x5		%%			Si				%%				Si					%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	5	%% 	2x3		%%			Si				%%				No					%%
+%%	5	%% 	5x5		%%			Si				%%				No					%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	6	%% 	2x3		%%			Si				%%				No					%%
+%%	6	%% 	5x5		%%			Si				%%				Si					%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	7	%% 	2x3		%%			Si				%%				No					%%
+%%	7	%% 	10x10	%%			Si				%%				Si					%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	8	%% 	2x3		%%			Si				%%				No					%%
+%%	8	%% 	10x10	%%			Si				%%				Si					%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	9	%% 	2x3		%%			Si				%%				No					%%
+%%	9	%% 	5x5		%%			Si				%%				Si					%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	10	%% 	2x3		%%			Si				%%				No					%%
+%%	10	%% 	5x5		%%			No				%%				No					%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	11	%% 	2x3		%%			Si				%%				No					%%
+%%	11	%% 	10x10	%%			Si				%%				Si					%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	12	%% 	2x3		%%			Si				%%				No					%%
+%%	12	%% 	15x15	%%			Si				%%				Si					%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	13	%% 	2x3		%%			Si				%%				No					%%
+%%	13	%% 	11x5	%%			Si				%%				No					%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	14	%% 	2x3		%%			Si				%%				No					%%
+%%	14	%% 	4x4		%%			Si				%%				No					%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 */
