@@ -4,12 +4,11 @@
 % Es verdadero si M es una matriz de F filas y C columnas. 
 % Cuando M no está instanciada el predicado debe generar una matriz con variables no instanciadas en las celdas
 % Se asume F y C 
-matriz(F,C,[F1|T]):- 
-	length([F1|T], F),
-	length(F1,C),
+matriz(F,C,M):- 
+	length(M, F),
 	length(Cs, F),
 	maplist(=(C), Cs), 
-	maplist(length, [F1|T], Cs). 
+	maplist(length, M, Cs). 
 
 % Ejercicio 2
 
@@ -22,6 +21,7 @@ replicar(Elem,N,L) :-
 % Ejercicio 3
 
 %! unirCabezasAFilas(-Cabezas, -Filas, +Matriz) 
+% TODO: REVISAR INSTANCIACION
 % Es verdadero cuando los elementos de Cabezas son los primeros elementos de cada fila de Filas en la Matriz (i.e: la primera columna)
 unirCabezasAFilas([],[],[]). 
 unirCabezasAFilas([C|CT],[F|FT],[[C|F]|M]) :- unirCabezasAFilas(CT, FT, M).
@@ -51,6 +51,7 @@ zipR([R|RT], [L|LT], [r(R,L)|T]) :- zipR(RT, LT, T).
 % Ejercicio 4
 
 %! pintadaParcial(+L, +R, ?Resto)
+% TODO: REVISAR INSTANCIACION
 % Es verdadero cuando L = BloqueO ++ BloqueX ++ Resto, donde:
 % - BloqueX es lista de "x's" longitud R 
 % - BloqueO es una lista de todas "o's" (puede ser vacia)
@@ -77,7 +78,7 @@ pintadasValidas(r([R|RS], L)) :-
 	pintadaParcial(L,R,[o|Resto]),
 	pintadasValidas(r(RS,Resto)).		 % Resto esta bien pintado sujeto a las demás restricciones  
 	
-% Ejercicio 5 (PREGUNTAR A BRIAN -> ¿Es esto backtracking?)
+% Ejercicio 5 (TODO: PREGUNTAR A BRIAN -> ¿Es esto backtracking?)
 
 %! resolverNaive(+NN)
 % Resuelve un nonograma NN usando backtracking, utilizando pintadas validas como auxiliar.
@@ -87,6 +88,7 @@ resolverNaive(nono(_,Restricciones)) :- maplist(pintadasValidas, Restricciones).
 % Ejercicio 6
 
 %! combinar(+Combinaciones, -Lista).
+% TODO: REVISAR INSTANCIACION
 % Es verdadero cuando Lista es la lista donde cada posición está instanciada sii esa posición es igual en todas las listas de Combinaciones.
 combinar([L],L).
 combinar([P1,P2|P], L) :- 
@@ -130,6 +132,7 @@ deducirVariasPasadasCont(NN, A, B) :- A =\= B, deducirVariasPasadas(NN).
 % Ejercicio 8
 
 %! hayUnaRestriccionConCantidadDeLibresMenorQue(+RS,-N)
+% TODO: REVISAR INSTANCIACION
 % Es verdadero cuando existe una restriccion en RS con alguna variable libre pero menor cantidad de variables libres que N. 
 hayUnaRestriccionConCantidadDeLibresMenorQue(RS, N):- 
 	member(R2, RS),
@@ -162,6 +165,8 @@ resolverDeduciendo(NN):-
 
 % Ejercicio 10
 
+%! solucionUnica(+NN).
+% Es verdadero cuando el nonograma NN tiene una unica solucion.
 solucionUnica(NN) :- 
 	not((findall(NN, resolverDeduciendo(NN), L), length(L,N), N =\= 1)).
 
@@ -169,6 +174,69 @@ solucionUnica(NN) :-
 % 	findall(NN, resolverDeduciendo(NN), L), length(L,N), N =:= 1.
 
 % solucionUnica(NN):- nn(ID, NN), resolverDeduciendo(NN), !, not((nn(ID, NN2), resolverDeduciendo(NN2), NN2 \= NN)).
+% TODO: Preguntar que solucionUnica hacer
+
+% Ejercicio 11- Analisis de Nonos 👴
+
+/*
+Las consultas hechas para completar esta tabla fueron las siguiente:
+
+Para que Prolog no acorte las listas al mostrarlas en consola hicimos la siguiente query:
+?- set_prolog_flag(answer_write_options, [maxdepth(0)]).
+
+Para completar la columna de dimensiones hicimos la siguiente query que nos da una lista de tuplas (ID, F, C)
+donde ID es el numero de nono, F es la cantidad de filas de la matriz del nono y C la cantidad de columnas.
+
+?- findall((ID,F,C), (between(0,14,ID), nn(ID, nono(M,)), matriz(F,C,M)), L). % para dimensiones
+
+Para completar la columna de "¿Tiene solucion unica?" hicimos la siguiente query que nos da una lista de los ID de los nonos
+cuya solucion es unica. Aquellos que no estan deducimos que no tienen solucion unica. 
+
+?- findall(ID, (between(0,14,ID), nn(ID,NN), solucionUnica(NN)), L). % para encontrar los que tienen solucion unica.
+
+Para completar la columna de "¿Es deducible sin backtracking?" hicimos la siguiente query que nos da una lista de los ID de los nonos
+resolubles con solo la logica de deducirVariasPasadas. Aquellos que no estan deducimos que no son deducibles (🦆) sin backtracking. 
+
+?- findall(ID, (between(0,14,ID), nn(ID, NN), nn(ID,NN2), deducirVariasPasadas(NN), resolverDeduciendo(NN2), NN2 == NN, mostrarNono(NN)), L). % Darme los que no si se pueden solucionar sin backtracking
+
+El resultado final es esta tabla
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	N	%% 	Tamaño	%%	¿Tiene solucion unica?	%%	¿Es deducible sin backtracking?	%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	0	%% 	2x3		%%			Si				%%				No					%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	1	%% 	2x3		%%			Si				%%				No					%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	2	%% 	2x3		%%			Si				%%				No					%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	3	%% 	2x3		%%			Si				%%				No					%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	4	%% 	2x3		%%			Si				%%				No					%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	5	%% 	2x3		%%			Si				%%				No					%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	6	%% 	2x3		%%			Si				%%				No					%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	7	%% 	2x3		%%			Si				%%				No					%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	8	%% 	2x3		%%			Si				%%				No					%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	9	%% 	2x3		%%			Si				%%				No					%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	10	%% 	2x3		%%			Si				%%				No					%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	11	%% 	2x3		%%			Si				%%				No					%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	12	%% 	2x3		%%			Si				%%				No					%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	13	%% 	2x3		%%			Si				%%				No					%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	14	%% 	2x3		%%			Si				%%				No					%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+*/
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                              %
