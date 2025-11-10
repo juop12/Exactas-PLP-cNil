@@ -3,13 +3,13 @@
 %! matriz(+F, +C, -M) 
 % Es verdadero si M es una matriz de F filas y C columnas. 
 % Cuando M no está instanciada el predicado debe generar una matriz con variables no instanciadas en las celdas
-matriz(0,_,[]).
-matriz(F,C,[F1|Fs]) :- 
-	F > 0, 					
-	C >= 0, 				
-	Fp is F - 1, 			
-	length(F1, C), 			
-	matriz(Fp, C, Fs).
+% Se asume F y C 
+matriz(F,C,[F1|T]):- 
+	length([F1|T], F),
+	length(F1,C),
+	length(Cs, F),
+	maplist(=(C), Cs), 
+	maplist(length, [F1|T], Cs). 
 
 % Ejercicio 2
 
@@ -24,7 +24,7 @@ replicar(Elem,N,L) :-
 %! unirCabezasAFilas(-Cabezas, -Filas, +Matriz) 
 % Es verdadero cuando los elementos de Cabezas son los primeros elementos de cada fila de Filas en la Matriz (i.e: la primera columna)
 unirCabezasAFilas([],[],[]). 
-unirCabezasAFilas([C1|CT],[F|FT],[[C1|F]|M]) :- unirCabezasAFilas(CT, FT, M).
+unirCabezasAFilas([C|CT],[F|FT],[[C|F]|M]) :- unirCabezasAFilas(CT, FT, M).
 
 %! transponer(+M, -MT) 
 % Cierto cuando MT es la matriz transpuesta de M. La transpuesta, MT, tiene como filas las columnas de M y viceversa. 
@@ -162,8 +162,8 @@ resolverDeduciendo(NN):-
 
 % Ejercicio 10
 
-% solucionUnica(NN) :- 
-% 	not((findall(NN, resolverDeduciendo(NN), L), length(L,N), N =\= 1)).
+solucionUnica(NN) :- 
+	not((findall(NN, resolverDeduciendo(NN), L), length(L,N), N =\= 1)).
 
 % solucionUnica(NN) :- 
 % 	findall(NN, resolverDeduciendo(NN), L), length(L,N), N =:= 1.
@@ -179,22 +179,27 @@ resolverDeduciendo(NN):-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Fáciles
-nn(0,  NN) :- armarNono([[1],[2]],[[],[2],[1]], NN).
-nn(1,  NN) :- armarNono([[4],[2,1],[2,1],[1,1],[1]],[[4],[3],[1],[2],[3]], NN).
-nn(2,  NN) :- armarNono([[4],[3,1],[1,1],[1],[1,1]],[[4],[2],[2],[1],[3,1]], NN).
+nn(0,  NN) :- armarNono([[1],[2]],[[],[2],[1]], NN). % SI
+nn(1,  NN) :- armarNono([[4],[2,1],[2,1],[1,1],[1]],[[4],[3],[1],[2],[3]], NN). % SI
+nn(2,  NN) :- armarNono([[4],[3,1],[1,1],[1],[1,1]],[[4],[2],[2],[1],[3,1]], NN). % SI
 nn(3,  NN) :- armarNono([[2,1],[4],[3,1],[3],[3,3],[2,1],[2,1],[4],[4,4],[4,2]], [[1,2,1],[1,1,2,2],[2,3],[1,3,3],[1,1,1,1],[2,1,1],[1,1,2],[2,1,1,2],[1,1,1],[1]], NN).
-nn(4,  NN) :- armarNono([[1, 1], [5], [5], [3], [1]], [[2], [4], [4], [4], [2]], NN).
-nn(5,  NN) :- armarNono([[], [1, 1], [], [1, 1], [3]], [[1], [1, 1], [1], [1, 1], [1]], NN).
-nn(6,  NN) :- armarNono([[5], [1], [1], [1], [5]], [[1, 1], [2, 2], [1, 1, 1], [1, 1], [1, 1]], NN).
+ %SI
+nn(4,  NN) :- armarNono([[1, 1], [5], [5], [3], [1]], [[2], [4], [4], [4], [2]], NN).%SI
+nn(5,  NN) :- armarNono([[], [1, 1], [], [1, 1], [3]], [[1], [1, 1], [1], [1, 1], [1]], NN).%NO
+nn(6,  NN) :- armarNono([[5], [1], [1], [1], [5]], [[1, 1], [2, 2], [1, 1, 1], [1, 1], [1, 1]], NN).%SI
 nn(7,  NN) :- armarNono([[1, 1], [4], [1, 3, 1], [5, 1], [3, 2], [4, 2], [5, 1], [6, 1], [2, 3, 2], [2, 6]], [[2, 1], [1, 2, 3], [9], [7, 1], [4, 5], [5], [4], [2, 1], [1, 2, 2], [4]], NN).
+%SI
 nn(8,  NN) :- armarNono([[5], [1, 1], [1, 1, 1], [5], [7], [8, 1], [1, 8], [1, 7], [2, 5], [7]], [[4], [2, 2, 2], [1, 4, 1], [1, 5, 1], [1, 8], [1, 7], [1, 7], [2, 6], [3], [3]], NN).
-nn(9,  NN) :- armarNono([[4], [1, 3], [2, 2], [1, 1, 1], [3]], [[3], [1, 1, 1], [2, 2], [3, 1], [4]], NN). 
-nn(10, NN) :- armarNono([[1], [1], [1], [1, 1], [1, 1]], [[1, 1], [1, 1], [1], [1], [ 1]], NN).% Tiene varias soluciones
-nn(11, NN) :- armarNono([[1, 1, 1, 1], [3, 3], [1, 1], [1, 1, 1, 1], [8], [6], [10], [6], [2, 4, 2], [1, 1]], [[2, 1, 2], [4, 1, 1], [2, 4], [6], [5], [5], [6], [2, 4], [4, 1, 1], [2, 1, 2]], NN).
+%SI
+nn(9,  NN) :- armarNono([[4], [1, 3], [2, 2], [1, 1, 1], [3]], [[3], [1, 1, 1], [2, 2], [3, 1], [4]], NN). %SI
+nn(10, NN) :- armarNono([[1], [1], [1], [1, 1], [1, 1]], [[1, 1], [1, 1], [1], [1], [ 1]], NN).% Tiene varias soluciones , %NO
+nn(11, NN) :- armarNono([[1, 1, 1, 1], [3, 3], [1, 1], [1, 1, 1, 1], [8], [6], [10], [6], [2, 4, 2], [1, 1]], [[2, 1, 2], [4, 1, 1], [2, 4], [6], [5], [5], [6], [2, 4], [4, 1, 1], [2, 1, 2]], NN). 
+%SI
 nn(12, NN) :- armarNono([[9], [1, 1, 1, 1], [10], [2, 1, 1], [1, 1, 1, 1], [1, 10], [1, 1, 1], [1, 1, 1], [1, 1, 1, 1, 1], [1, 9], [1, 2, 1, 1, 2], [2, 1, 1, 1, 1], [2, 1, 3, 1], [3, 1], [10]], [[], [9], [2, 2], [3, 1, 2], [1, 2, 1, 2], [3, 11], [1, 1, 1, 2, 1], [1, 1, 1, 1, 1, 1], [3, 1, 3, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 3, 1, 1], [3, 1, 1, 1, 1], [1, 1, 2, 1], [11], []], NN).
 nn(13, NN) :- armarNono([[2], [1,1], [1,1], [1,1], [1], [], [2], [1,1], [1,1], [1,1], [1]], [[1], [1,3], [3,1,1], [1,1,3], [3]], NN).
+%NO
 nn(14, NN) :- armarNono([[1,1], [1,1], [1,1], [2]], [[2], [1,1], [1,1], [1,1]], NN).
-
+%NO
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                              %
 %    Predicados auxiliares     %
