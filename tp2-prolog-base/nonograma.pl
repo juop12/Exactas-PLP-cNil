@@ -18,12 +18,9 @@ replicar(Elem,N,L) :-
 	length(L, N),		
 	maplist(=(Elem),L).	
 
-% TODO: Justificar reversibilidad en el segundo argumento. MARTES.
-
 % Ejercicio 3
 
 %! unirCabezasAFilas(-Cabezas, -Filas, +Matriz) 
-% TODO: REVISAR INSTANCIACION
 % Es verdadero cuando los elementos de Cabezas son los primeros elementos de cada fila de Filas en la Matriz (i.e: la primera columna)
 unirCabezasAFilas([],[],[]). 
 unirCabezasAFilas([C|CT],[F|FT],[[C|F]|M]) :- unirCabezasAFilas(CT, FT, M).
@@ -51,7 +48,6 @@ zipR([R|RT], [L|LT], [r(R,L)|T]) :- zipR(RT, LT, T).
 % Ejercicio 4
 
 %! pintadaParcial(+L, +R, ?Resto)
-% TODO: REVISAR INSTANCIACION
 % Es verdadero cuando L = BloqueO ++ BloqueX ++ Resto, donde:
 % - BloqueX es lista de "x's" longitud R 
 % - BloqueO es una lista de todas "o's" (puede ser vacia)
@@ -78,7 +74,7 @@ pintadasValidas(r([R|RS], L)) :-
 	pintadaParcial(L,R,[o|Resto]),
 	pintadasValidas(r(RS,Resto)).		 % Resto esta bien pintado sujeto a las demás restricciones  
 	
-% Ejercicio 5 (TODO: PREGUNTAR A BRIAN -> ¿Es esto backtracking?)
+% Ejercicio 5
 
 %! resolverNaive(+NN)
 % Resuelve un nonograma NN usando backtracking, utilizando pintadas validas como auxiliar.
@@ -87,9 +83,8 @@ resolverNaive(nono(_,Restricciones)) :- maplist(pintadasValidas, Restricciones).
 
 % Ejercicio 6
 
-%! combinar(+Combinaciones, -Lista).
-% TODO: REVISAR INSTANCIACION
-% Es verdadero cuando Lista es la lista donde cada posición está instanciada sii esa posición es igual en todas las listas de Combinaciones.
+%! combinar(+Combinaciones, +Lista).
+% Es verdadero cuando Lista es la lista donde cada posición está instanciada sii esa posición es igual en todas las listas de Combinaciones. 
 combinar([L],L).
 combinar([P1,P2|P], L) :- 
 	maplist(combinarCelda, P1, P2, Lp), % Lp es la combinacion entre P1 y P2
@@ -131,8 +126,7 @@ deducirVariasPasadasCont(NN, A, B) :- A =\= B, deducirVariasPasadas(NN).
 
 % Ejercicio 8
 
-%! hayUnaRestriccionConCantidadDeLibresMenorQue(+RS,-N)
-% TODO: REVISAR INSTANCIACION
+%! hayUnaRestriccionConCantidadDeLibresMenorQue(+RS,+N)
 % Es verdadero cuando existe una restriccion en RS con alguna variable libre pero menor cantidad de variables libres que N. 
 hayUnaRestriccionConCantidadDeLibresMenorQue(RS, N):- 
 	member(R2, RS),
@@ -168,72 +162,69 @@ resolverDeduciendo(NN):-
 %! solucionUnica(+NN).
 % Es verdadero cuando el nonograma NN tiene una unica solucion.
 solucionUnica(NN) :- 
-	not((findall(NN, resolverDeduciendo(NN), L), length(L,N), N =\= 1)).
-
-% solucionUnica(NN) :- 
-% 	findall(NN, resolverDeduciendo(NN), L), length(L,N), N =:= 1.
-
-% solucionUnica(NN):- nn(ID, NN), resolverDeduciendo(NN), !, not((nn(ID, NN2), resolverDeduciendo(NN2), NN2 \= NN)).
-% TODO: Preguntar que solucionUnica hacer
+ 	findall(NN, resolverDeduciendo(NN), L), length(L,N), N =:= 1.
 
 /*
 Ejercicio 11- Analisis de Nonos 👴
 
-Las consultas hechas para completar esta tabla fueron las siguiente:
-
 Para que Prolog no acorte las listas al mostrarlas en consola hicimos la siguiente query:
-?- set_prolog_flag(answer_write_options, [max_depth(0)]).
+
+	?- set_prolog_flag(answer_write_options, [max_depth(0)]).
 
 Para completar la columna de dimensiones hicimos la siguiente query que nos da una lista de tuplas (ID, F, C)
 donde ID es el numero de nono, F es la cantidad de filas de la matriz del nono y C la cantidad de columnas.
 
-?- findall((ID,F,C), (between(0,14,ID), nn(ID, nono(M,_)), matriz(F,C,M)), L). 
+	?- findall((ID,F,C), (between(0,14,ID), nn(ID, nono(M,_)), matriz(F,C,M)), L). 
 
 Para completar la columna de "¿Tiene solucion unica?" hicimos la siguiente query que nos da una lista de los ID de los nonos
-cuya solucion es unica. Aquellos que no estan deducimos que no tienen solucion unica. 
+cuya solucion es unica. Aquellos que no estan deducimos que tienen mas de una solucion (ya sabemos que todos tienen solucion). 
 
-?- findall(ID, (between(0,14,ID), nn(ID,NN), solucionUnica(NN)), L). 
+	?- findall(ID, (between(0,14,ID), nn(ID,NN), solucionUnica(NN)), L). 
 
 Para completar la columna de "¿Es deducible sin backtracking?" hicimos la siguiente query que nos da una lista de los ID de los nonos
-resolubles con solo la logica de deducirVariasPasadas. Aquellos que no estan deducimos que no son deducibles (🦆) sin backtracking. 
+resolubles con solo la logica de deducirVariasPasadas. Aquellos que no estan, deducimos que no son deducibles (🦆) sin backtracking. 
 
-?- findall(ID, (between(0,14,ID), nn(ID, NN), nn(ID,NN2), deducirVariasPasadas(NN), resolverDeduciendo(NN2), NN2 == NN), L).
+	?- findall(ID, (between(0,14,ID), nn(ID, NN), nn(ID,NN2), deducirVariasPasadas(NN), resolverDeduciendo(NN2), NN2 == NN), L).
 
 El resultado final es esta tabla:
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	N	%% 	Tamaño	%%	¿Tiene solucion unica?	%%	¿Es deducible sin backtracking?	%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	0	%% 	2x3		%%			Si				%%				Si					%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	1	%% 	5x5		%%			Si				%%				Si					%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	2	%% 	5x5		%%			Si				%%				Si					%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	3	%% 	10x10	%%			Si				%%				Si					%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	4	%% 	5x5		%%			Si				%%				Si					%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	5	%% 	5x5		%%			Si				%%				No					%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	6	%% 	5x5		%%			Si				%%				Si					%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	7	%% 	10x10	%%			Si				%%				Si					%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	8	%% 	10x10	%%			Si				%%				Si					%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	9	%% 	5x5		%%			Si				%%				Si					%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	10	%% 	5x5		%%			No				%%				No					%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	11	%% 	10x10	%%			Si				%%				Si					%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	12	%% 	15x15	%%			Si				%%				Si					%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	13	%% 	11x5	%%			Si				%%				No					%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%	14	%% 	4x4		%%			Si				%%				No					%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+======================================================================================
+||	N	|| 	Tamaño	||	¿Tiene solucion unica?	||	¿Es deducible sin backtracking?	||
+======================================================================================
+||	0	|| 	2x3		||			Si				||				Si					||
+--------------------------------------------------------------------------------------
+||	1	|| 	5x5		||			Si				||				Si					||
+--------------------------------------------------------------------------------------
+||	2	|| 	5x5		||			Si				||				Si					||
+--------------------------------------------------------------------------------------
+||	3	|| 	10x10	||			Si				||				Si					||
+--------------------------------------------------------------------------------------
+||	4	|| 	5x5		||			Si				||				Si					||
+--------------------------------------------------------------------------------------
+||	5	|| 	5x5		||			Si				||				No					||
+--------------------------------------------------------------------------------------
+||	6	|| 	5x5		||			Si				||				Si					||
+--------------------------------------------------------------------------------------
+||	7	|| 	10x10	||			Si				||				Si					||
+--------------------------------------------------------------------------------------
+||	8	|| 	10x10	||			Si				||				Si					||
+--------------------------------------------------------------------------------------
+||	9	|| 	5x5		||			Si				||				Si					||
+--------------------------------------------------------------------------------------
+||	10	|| 	5x5		||			No				||				No					||
+--------------------------------------------------------------------------------------
+||	11	|| 	10x10	||			Si				||				Si					||
+--------------------------------------------------------------------------------------
+||	12	|| 	15x15	||			Si				||				Si					||
+--------------------------------------------------------------------------------------
+||	13	|| 	11x5	||			Si				||				No					||
+--------------------------------------------------------------------------------------
+||	14	|| 	4x4		||			Si				||				No					||
+--------------------------------------------------------------------------------------
+
+% Ejercicio 12.
+Indicar si el predicado replicar/3 es reversible en el segundo argumento. En concreto se pide analizar si replicar(+Elem, -N, -Lista) funciona correctamente
+
 
 */
 
