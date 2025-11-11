@@ -12,7 +12,7 @@ matriz(F,C,M):-
 
 % Ejercicio 2
 
-%! replicar(+Elem, +N, -Lista) 
+%! replicar(+Elem, +N, -Lista)* 
 % Es cierto cuando Lista es una lista de longitud N, donde cada elemento unifica con Elem.
 replicar(Elem,N,L) :- 
 	length(L, N),		
@@ -86,9 +86,9 @@ resolverNaive(nono(_,Restricciones)) :- maplist(pintadasValidas, Restricciones).
 %! combinar(+Combinaciones, +Lista).
 % Es verdadero cuando Lista es la lista donde cada posición está instanciada sii esa posición es igual en todas las listas de Combinaciones. 
 combinar([L],L).
-combinar([P1,P2|P], L) :- 
-	maplist(combinarCelda, P1, P2, Lp), % Lp es la combinacion entre P1 y P2
-	combinar([Lp|P], L).		    	% L es la combinacion entre Lp y el resto de las pintadas
+combinar([C1,C2|P], L) :- 
+	maplist(combinarCelda, C1, C2, Lc), % Lc es la combinacion entre C1 y C2
+	combinar([Lc|P], L).		    	% L es la combinacion entre Lc y el resto de las pintadas
 
 %! pintarObligatorias(+R)
 % Pinta las celdas que son obligatoriamente "x" o "o". Esto es viendo todas las posibilidades de pintadas válidas para la restricción R
@@ -153,9 +153,12 @@ resolverDeduciendo(NN):-
 resolverDeduciendo(NN):-
 	deducirVariasPasadas(NN),
 	restriccionConMenosLibres(NN,R),
-	!,
+	!,									%***
 	pintadasValidas(R),
 	resolverDeduciendo(NN).
+
+% ***)  Si tengo mas de una restricción, elijo una y, en caso de conseguir alguna solucion del nono, no vuelvo atrás en mi decision. 
+%		La razón? Hacer eso me evita obtener soluciones repetidas. Eventualmente las otras restricciones van a ser pintadas.
 
 % Ejercicio 10
 
@@ -165,7 +168,9 @@ solucionUnica(NN) :-
  	findall(NN, resolverDeduciendo(NN), L), length(L,N), N =:= 1.
 
 /*
-Ejercicio 11- Analisis de Nonos 👴
+Ejercicio 11- Analisis de Nonos 👴	
+	| Completar la tabla con el analisis de los nonogramas predefinidos.
+	| Indicar qué consultas se usaron para averiguar cada uno de los datos
 
 Para que Prolog no acorte las listas al mostrarlas en consola hicimos la siguiente query:
 
@@ -176,13 +181,13 @@ donde ID es el numero de nono, F es la cantidad de filas de la matriz del nono y
 
 	?- findall((ID,F,C), (between(0,14,ID), nn(ID, nono(M,_)), matriz(F,C,M)), L). 
 
-Para completar la columna de "¿Tiene solucion unica?" hicimos la siguiente query que nos da una lista de los ID de los nonos
-cuya solucion es unica. Aquellos que no estan deducimos que tienen mas de una solucion (ya sabemos que todos tienen solucion). 
+Para completar la columna de "¿Tiene solucion única?" hicimos la siguiente query que nos da una lista de los ID de los nonos
+cuya solucion es única. Aquellos que no estan deducimos que tienen mas de una solucion (ya sabemos que todos tienen solucion). 
 
 	?- findall(ID, (between(0,14,ID), nn(ID,NN), solucionUnica(NN)), L). 
 
 Para completar la columna de "¿Es deducible sin backtracking?" hicimos la siguiente query que nos da una lista de los ID de los nonos
-resolubles con solo la logica de deducirVariasPasadas. Aquellos que no estan, deducimos que no son deducibles (🦆) sin backtracking. 
+resolubles con solo la lógica de deducirVariasPasadas. Aquellos que no están, deducimos que no son deducibles (🦆) sin backtracking. 
 
 	?- findall(ID, (between(0,14,ID), nn(ID, NN), nn(ID,NN2), deducirVariasPasadas(NN), resolverDeduciendo(NN2), NN2 == NN), L).
 
@@ -222,9 +227,27 @@ El resultado final es esta tabla:
 ||	14	|| 	4x4		||			Si				||				No					||
 --------------------------------------------------------------------------------------
 
-% Ejercicio 12.
-Indicar si el predicado replicar/3 es reversible en el segundo argumento. En concreto se pide analizar si replicar(+Elem, -N, -Lista) funciona correctamente
+Ejercicio 12.
+	| Indicar si el predicado replicar/3 es reversible en el segundo argumento.
+	| En concreto se pide analizar si replicar(+Elem, -N, -Lista) funciona correctamente
 
+Recordemos como esta implementado:
+
+replicar(Elem,N,L) :- 
+	length(L, N),		
+	maplist(=(Elem),L).	
+
+Si N está instanciada entonces length(L,N) se encarga de unificar a L con una lista de todos 
+elementos no instanciados de la longitud deseada y luego maplist(...) unifica cada elemento de L con Elem.
+
+Si N no está instanciada entonces length(L,N) se encarga de generar todas las posibles listas no instanciadas de longitud >= 0 
+e instancia en la variable L dichas listas y en la variable N dichas longitudes. 
+Por cada posible L y N que length genere, maplist(...) unifica los elementos de esos L como en el caso anterior. 
+
+Notar que la generación es infinita, entonces al querer usarlo dentro de otro predicado uno debería tener cuidado. 
+Si desea una cantidad acotada de listas debería acotar la N o la L luego de llamar replicar(Elem, N, L).
+
+Hicimos provecho de la reversibilidad en N en el ejercicio de pintadasValidas, por ejemplo. 
 
 */
 
