@@ -77,7 +77,7 @@ pintadasValidas(r([R|RS], L)) :-
 % Ejercicio 5
 
 %! resolverNaive(+NN)
-% Resuelve un nonograma NN usando backtracking, utilizando pintadas validas como auxiliar.
+% Resuelve un nonograma NN usando backtracking, utilizando pintadas válidas como auxiliar.
 % Asume que ya es un nonograma valido -> Matriz y restricciones bien formadas.
 resolverNaive(nono(_,Restricciones)) :- maplist(pintadasValidas, Restricciones). 
 
@@ -87,14 +87,14 @@ resolverNaive(nono(_,Restricciones)) :- maplist(pintadasValidas, Restricciones).
 % Es verdadero cuando Lista es la lista donde cada posición está instanciada sii esa posición es igual en todas las listas de Combinaciones. 
 combinar([L],L).
 combinar([C1,C2|P], L) :- 
-	maplist(combinarCelda, C1, C2, Lc), % Lc es la combinacion entre C1 y C2
-	combinar([Lc|P], L).		    	% L es la combinacion entre Lc y el resto de las pintadas
+	maplist(combinarCelda, C1, C2, Lc), % Lc es la combinación entre C1 y C2
+	combinar([Lc|P], L).		    	% L es la combinación entre Lc y el resto de las pintadas
 
 %! pintarObligatorias(+R)
 % Pinta las celdas que son obligatoriamente "x" o "o". Esto es viendo todas las posibilidades de pintadas válidas para la restricción R
 pintarObligatorias(r(R,L)) :-
-	findall(L, pintadasValidas(r(R,L)), ListaDePintadasValidas), % Conseguimos todas las formas validas de pintar la L que me pasaron.
-	combinar(ListaDePintadasValidas, L).					     % Veamos que L sea la combinacion entre todas las formas de pintar validas. 
+	findall(L, pintadasValidas(r(R,L)), ListaDePintadasValidas), % Conseguimos todas las formas válidas de pintar la L que me pasaron.
+	combinar(ListaDePintadasValidas, L).					     % Veamos que L sea la combinación entre todas las formas de pintar válidas. 
 
 % Predicado dado combinarCelda/3
 combinarCelda(A, B, _) :- var(A), var(B).
@@ -127,7 +127,7 @@ deducirVariasPasadasCont(NN, A, B) :- A =\= B, deducirVariasPasadas(NN).
 % Ejercicio 8
 
 %! hayUnaRestriccionConCantidadDeLibresMenorQue(+RS,+N)
-% Es verdadero cuando existe una restriccion en RS con alguna variable libre pero menor cantidad de variables libres que N. 
+% Es verdadero cuando existe una restricción en RS con alguna variable libre pero menor cantidad de variables libres que N. 
 hayUnaRestriccionConCantidadDeLibresMenorQue(RS, N):- 
 	member(R2, RS),
 	cantidadVariablesLibres(R2, N2),
@@ -139,7 +139,7 @@ hayUnaRestriccionConCantidadDeLibresMenorQue(RS, N):-
 % pero que tenga al menos una celda no instanciada
 restriccionConMenosLibres(nono(_,RS), R) :- 
 	member(R, RS),												% | 
-	cantidadVariablesLibres(R, N), 								% | Generar algun candidato con mis requisitos
+	cantidadVariablesLibres(R, N), 								% | Generar algún candidato con mis requisitos
 	N > 0, 														% |
 	not(hayUnaRestriccionConCantidadDeLibresMenorQue(RS,N)).	% 	Testear que sea de los que tienen "menos libres"
 
@@ -157,18 +157,18 @@ resolverDeduciendo(NN):-
 	pintadasValidas(R),
 	resolverDeduciendo(NN).
 
-% ***)  Si tengo mas de una restricción, elijo una y, en caso de conseguir alguna solucion del nono, no vuelvo atrás en mi decision. 
+% ***)  Si tengo más de una restricción, elijo una y, en caso de conseguir alguna solución del nono, no vuelvo atrás en mi decision. 
 %		La razón? Hacer eso me evita obtener soluciones repetidas. Eventualmente las otras restricciones van a ser pintadas.
 
 % Ejercicio 10
 
 %! solucionUnica(+NN).
-% Es verdadero cuando el nonograma NN tiene una unica solucion.
+% Es verdadero cuando el nonograma NN tiene una única solucion.
 solucionUnica(NN) :- 
  	findall(NN, resolverDeduciendo(NN), L), length(L,N), N =:= 1.
 
 /*
-Ejercicio 11- Analisis de Nonos 👴	
+Ejercicio 11- Análisis de Nonos 👴	
 	| Completar la tabla con el analisis de los nonogramas predefinidos.
 	| Indicar qué consultas se usaron para averiguar cada uno de los datos
 
@@ -177,24 +177,24 @@ Para que Prolog no acorte las listas al mostrarlas en consola hicimos la siguien
 	?- set_prolog_flag(answer_write_options, [max_depth(0)]).
 
 Para completar la columna de dimensiones hicimos la siguiente query que nos da una lista de tuplas (ID, F, C)
-donde ID es el numero de nono, F es la cantidad de filas de la matriz del nono y C la cantidad de columnas.
+donde ID es el número de nono, F es la cantidad de filas de la matriz del nono y C la cantidad de columnas.
 
 	?- findall((ID,F,C), (between(0,14,ID), nn(ID, nono(M,_)), matriz(F,C,M)), L). 
 
-Para completar la columna de "¿Tiene solucion única?" hicimos la siguiente query que nos da una lista de los ID de los nonos
-cuya solucion es única. Aquellos que no estan deducimos que tienen mas de una solucion (ya sabemos que todos tienen solucion). 
+Para completar la columna de "¿Tiene solución única?" hicimos la siguiente query que nos da una lista de los ID de los nonos
+cuya solucion es única. Aquellos que no están deducimos que tienen más de una solución (ya sabemos que todos tienen solución). 
 
 	?- findall(ID, (between(0,14,ID), nn(ID,NN), solucionUnica(NN)), L). 
 
 Para completar la columna de "¿Es deducible sin backtracking?" hicimos la siguiente query que nos da una lista de los ID de los nonos
-resolubles con solo la lógica de deducirVariasPasadas. Aquellos que no están, deducimos que no son deducibles (🦆) sin backtracking. 
+resolubles únicamente con la lógica de deducirVariasPasadas. Aquellos que no están, deducimos que no son deducibles (🦆) sin backtracking. 
 
 	?- findall(ID, (between(0,14,ID), nn(ID, NN), nn(ID,NN2), deducirVariasPasadas(NN), resolverDeduciendo(NN2), NN2 == NN), L).
 
 El resultado final es esta tabla:
 
 ======================================================================================
-||	N	|| 	Tamaño	||	¿Tiene solucion unica?	||	¿Es deducible sin backtracking?	||
+||	N	|| 	Tamaño	||	¿Tiene solución única?	||	¿Es deducible sin backtracking?	||
 ======================================================================================
 ||	0	|| 	2x3		||			Si				||				Si					||
 --------------------------------------------------------------------------------------
@@ -229,15 +229,15 @@ El resultado final es esta tabla:
 
 Ejercicio 12.
 	| Indicar si el predicado replicar/3 es reversible en el segundo argumento.
-	| En concreto se pide analizar si replicar(+Elem, -N, -Lista) funciona correctamente
+	| En concreto se pide analizar si replicar(+Elem, -N, -Lista) funciona correctamente.
 
-Recordemos como esta implementado:
+Recordemos cómo está implementado:
 
 replicar(Elem,N,L) :- 
 	length(L, N),		
 	maplist(=(Elem),L).	
 
-Si N está instanciada entonces length(L,N) se encarga de unificar a L con una lista de todos 
+Si N está instanciada entonces length(L,N) se encarga de unificar a L con una lista de todos [los]? % TODO
 elementos no instanciados de la longitud deseada y luego maplist(...) unifica cada elemento de L con Elem.
 
 Si N no está instanciada entonces length(L,N) se encarga de generar todas las posibles listas no instanciadas de longitud >= 0 
